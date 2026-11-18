@@ -1,7 +1,7 @@
 import type { Macros } from '@/hooks/queries/useMacros'
 import { Flame } from 'lucide-react'
-import type { CSSProperties } from 'react'
-import { ProgressBar } from './ProgressBar'
+import { ProgressBar } from '@/components/ProgressBar'
+import { ProgressRing } from '@/components/ProgressRing'
 import { card, cardLabel, cardSurface, muted } from './ui'
 
 /** null = nothing logged that day. */
@@ -14,8 +14,6 @@ const MACROS = [
 ] as const
 
 export const CaloriesCard = ({ calories, macros }: Props) => {
-  const pct = calories ? Math.min(100, (calories.eaten / calories.target) * 100) : 0
-
   return (
     <section
       className={`${card} ${cardSurface} [grid-area:cal] lg:px-5.5 lg:py-4.5 lg:[grid-area:auto]`}
@@ -26,18 +24,19 @@ export const CaloriesCard = ({ calories, macros }: Props) => {
         Calories and macros
       </h2>
       <div className="flex items-center gap-4 lg:gap-7">
-        {/* Ring: conic fill, with an inner disc that leaves an 11px (15px desktop) stroke */}
-        <div
-          className="grid size-28 flex-none rounded-full bg-[conic-gradient(var(--color-primary)_var(--pct),var(--color-primary-50)_0)] p-2.75 lg:size-37.5 lg:p-3.75"
-          style={{ '--pct': `${pct}%` } as CSSProperties}
-          role="img"
-          aria-label={
+        <ProgressRing
+          className="size-28 flex-none lg:size-37.5"
+          value={calories?.eaten ?? 0}
+          max={calories?.target ?? 1}
+          color="var(--color-primary)"
+          trackColor="var(--color-primary-50)"
+          label={
             calories
               ? `${calories.eaten.toLocaleString()} of ${calories.target.toLocaleString()} kcal eaten`
               : 'No calories logged'
           }
         >
-          <div className="grid place-content-center rounded-full bg-surface text-center">
+          <span className="grid place-content-center text-center">
             {calories ? (
               <>
                 <div className="text-[23px] leading-none font-extrabold tracking-[-0.8px] tabular-nums lg:text-[31px]">
@@ -51,8 +50,8 @@ export const CaloriesCard = ({ calories, macros }: Props) => {
             ) : (
               <div className={`${muted} px-3 italic`}>Nothing logged</div>
             )}
-          </div>
-        </div>
+          </span>
+        </ProgressRing>
         <div className="flex min-w-0 flex-1 flex-col gap-2.5 lg:gap-3.25">
           {MACROS.map(({ key, label, color }) => {
             const m = macros?.[key]

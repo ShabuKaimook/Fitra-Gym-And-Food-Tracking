@@ -1,17 +1,16 @@
-import { addDays, mondayOf } from '@/utils/date'
+import { useCalories } from '@/hooks/queries/useCalories'
+import { addDays, mondayOf, toDateKey } from '@/utils/date'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
-import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { ProgressRing } from '../ProgressRing'
 
 // The caller owns the selected date; this component only shows it and reports taps.
+// Each day's ring is calories eaten vs target, fetched here for every loaded week.
 type Props = {
   date: Date
   /** Days after this are future: disabled, empty ring. */
   today: Date
   onSelect: (d: Date) => void
-  /** 0–1 calorie progress for a day. */
-  progressOf: (d: Date) => number
-  /** First and last day the strip has loaded (oldest Monday → this Sunday). Fetch progress for this range. */
-  onRangeChange?: (from: Date, to: Date) => void
 }
 
 const arrow = 'grid h-11 w-6 place-items-center text-ink-2 hover:enabled:text-ink disabled:text-line'
@@ -30,7 +29,7 @@ const weekWidth = (el: HTMLElement) => (el.firstElementChild as HTMLElement).off
 //
 // Weeks are identified by "ago": 0 = this week, 1 = last week, …
 // They render oldest first, so the week at index i has ago = count - 1 - i.
-export const WeekStrip = ({ date, today, onSelect, progressOf, onRangeChange }: Props) => {
+export const WeekStrip = ({ date, today, onSelect }: Props) => {
   const track = useRef<HTMLDivElement>(null)
   const prevWidth = useRef(0) // track width before the last render, for effect ①
   const thisMonday = mondayOf(today)
@@ -42,6 +41,14 @@ export const WeekStrip = ({ date, today, onSelect, progressOf, onRangeChange }: 
   // Mondays oldest → newest; the last one is this week.
   const mondays = Array.from({ length: count }, (_, i) => addDays(thisMonday, -7 * (count - 1 - i)))
 
+  // Calories for every loaded week (oldest Monday → this Sunday). keepPrevious: when older weeks
+  // load, the rings on screen keep their data until the bigger range arrives instead of blanking.
+  const calories = useCalories(mondays[0], addDays(thisMonday, 6), { keepPrevious: true })
+  const progressOf = (d: Date) => {
+    const c = calories.data?.byDay.get(toDateKey(d))
+    return c ? c.eaten / c.target : 0
+  }
+
   // ① Weeks were prepended: everything shifted right, so shift scroll by the added width.
   // Layout effect so the fix lands before paint and the view never visibly jumps.
   useLayoutEffect(() => {
@@ -52,12 +59,6 @@ export const WeekStrip = ({ date, today, onSelect, progressOf, onRangeChange }: 
       el.style.scrollSnapType = ''
     }
     prevWidth.current = el.scrollWidth
-  }, [count])
-
-  // Report the loaded range whenever weeks are added, before paint so rings fill with the first frame.
-  useLayoutEffect(() => {
-    onRangeChange?.(mondays[0], addDays(thisMonday, 6))
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- only when the loaded weeks change
   }, [count])
 
   // ② Keep the selected week on screen (first render, or a date from the URL / back button).
@@ -120,8 +121,6 @@ export const WeekStrip = ({ date, today, onSelect, progressOf, onRangeChange }: 
               const d = addDays(monday, j)
               const future = d > today
               const selected = d.getTime() === date.getTime()
-              const pct = future ? 0 : Math.min(1, progressOf(d)) * 100
-              // Ring: conic-gradient fills pct% orange, the rest track grey; the inner disc makes it a stroke.
               return (
                 <button
                   key={j}
@@ -132,14 +131,19 @@ export const WeekStrip = ({ date, today, onSelect, progressOf, onRangeChange }: 
                   disabled={future}
                   onClick={() => onSelect(d)}
                 >
-                  <span
-                    className="grid aspect-square min-h-0 w-full max-w-10 rounded-full bg-[conic-gradient(var(--color-primary)_var(--pct),var(--color-track)_0)] p-1.25 text-sm leading-none"
-                    style={{ '--pct': `${pct}%` } as CSSProperties}
+                  {/* The light disc behind the letter keeps it readable on the grey selected pill. */}
+                  <ProgressRing
+                    className="aspect-square min-h-0 w-full max-w-10 text-sm leading-none"
+                    value={future ? 0 : progressOf(d)}
+                    max={1}
+                    color="var(--color-primary)"
+                    trackColor="var(--color-track)"
+                    thickness={0.25}
                   >
-                    <span className="grid place-items-center rounded-full bg-canvas">
+                    <span className="grid size-3/4 place-items-center rounded-full bg-canvas">
                       {d.toLocaleDateString('en-GB', { weekday: 'narrow' })}
                     </span>
-                  </span>
+                  </ProgressRing>
                   {d.getDate()}
                 </button>
               )

@@ -1,5 +1,5 @@
 import { Plus, type LucideIcon } from 'lucide-react'
-import { ProgressBar } from './ProgressBar'
+import { ProgressBar } from '@/components/ProgressBar'
 import { btnBase, card, cardSurface, muted } from './ui'
 
 type Tone = 'activity' | 'water' | 'sleep'
