@@ -1,111 +1,71 @@
-:root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+@import 'tailwindcss';
 
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
+/* Design tokens: ai-docs/design-system.md. Each --color-x gives bg-x, text-x, border-x…
+   `static` emits every variable, even ones only built at runtime like var(--color-${tone}). */
+@theme static {
+  --font-sans: 'Nunito', system-ui, sans-serif;
 
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color-scheme: light dark;
-  color: var(--text);
-  background: var(--bg);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  --color-primary: #ff7a1a;
+  --color-primary-hover: #ff8a33;
+  --color-primary-ink: #b84300;
+  --color-primary-50: #fff1e6;
+  --color-primary-100: #ffe0c7;
+  --color-on-primary: #ffffff;
 
-  @media (max-width: 1024px) {
-    font-size: 16px;
+  --color-canvas: #f3f4f6;
+  --color-surface: #ffffff;
+  --color-surface-2: #f7f8f9;
+  --color-line: #e4e6ea;
+  --color-line-soft: #f0f1f3;
+  --color-track: #d3d6dc; /* empty part of progress rings; shows on canvas and on line */
+  --color-ink: #1a1c20;
+  --color-ink-2: #5b6170;
+  --color-ink-3: #8a909c;
+
+  --color-protein: #2f6feb;
+  --color-carbs: #e8a800;
+  --color-fat: #a24bd9;
+  --color-activity: #16a34a;
+  --color-activity-tint: #e6f6ec;
+  --color-activity-ink: #137a39;
+  --color-water: #0ea5c6;
+  --color-water-tint: #e2f6fa;
+  --color-water-ink: #0b7f99;
+  --color-sleep: #5b5bd6;
+  --color-sleep-tint: #ececfb;
+  --color-sleep-ink: #4646b8;
+
+  --color-avatar: #f5d9c5;
+  --color-avatar-ink: #86431d;
+
+  --color-danger: #d92d20;
+  --color-success: #16a34a;
+}
+/* Desktop breakpoint is Tailwind's lg (1024px). */
+
+@layer base {
+  body {
+    background: var(--color-canvas);
+    color: var(--color-ink);
+    font: 500 15px/22px var(--font-sans);
+    -webkit-font-smoothing: antialiased;
   }
-}
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
+  button:not(:disabled) {
+    cursor: pointer;
   }
 
-  #social .button-icon {
-    filter: invert(1) brightness(2);
+  :focus-visible {
+    outline: 3px solid var(--color-primary);
+    outline-offset: 2px;
   }
-}
 
-#root {
-  width: 1126px;
-  max-width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
-  min-height: 100svh;
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-}
-
-h1,
-h2 {
-  font-family: var(--heading);
-  font-weight: 500;
-  color: var(--text-h);
-}
-
-h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      transition: none !important;
+      animation: none !important;
+    }
   }
-}
-h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
-  }
-}
-p {
-  margin: 0;
-}
-
-code,
-.counter {
-  font-family: var(--mono);
-  display: inline-flex;
-  border-radius: 4px;
-  color: var(--text-h);
-}
-
-code {
-  font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
 }

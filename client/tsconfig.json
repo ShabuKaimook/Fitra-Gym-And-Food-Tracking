@@ -1,7 +1,6 @@
 {
   "files": [],
-  "references": [
-    { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" }
-  ]
+  "references": [{ "path": "./tsconfig.app.json" }, { "path": "./tsconfig.node.json" }],
+  // Bun's test runner reads the alias from here, not from tsconfig.app.json; keep the three in sync.
+  "compilerOptions": { "paths": { "@/*": ["./src/*"] } }
 }

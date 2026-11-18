@@ -1,5 +1,7 @@
 /ai-docs
 /example
+.claude
+.vscode
 
 # ==== CLIENT START =====
 # Logs
