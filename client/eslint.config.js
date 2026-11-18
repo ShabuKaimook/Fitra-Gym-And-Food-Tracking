@@ -18,5 +18,17 @@ export default defineConfig([
     languageOptions: {
       globals: globals.browser,
     },
+    rules: {
+      // Arrow functions only (ai-docs/frontend-overview.md §6)
+      'func-style': ['error', 'expression'],
+      // func-style skips `export default function`, so catch it here
+      'no-restricted-syntax': [
+        'error',
+        {
+          selector: 'ExportDefaultDeclaration > FunctionDeclaration',
+          message: 'Use an arrow function, then `export default Name`.',
+        },
+      ],
+    },
   },
 ])
