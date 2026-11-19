@@ -10,4 +10,8 @@ export const QUERY_KEYS = {
   weight: (date: DateKey) => ['weight', date] as const,
   activity: (date: DateKey) => ['activity', date] as const,
   plannedWorkout: (date: DateKey) => ['planned-workout', date] as const,
+  foods: ['foods'] as const,
+  foodSearch: (query: string) => ['foods', 'search', query] as const,
+  recentFoods: ['foods', 'recent'] as const,
+  food: (id: string) => ['foods', 'id', id] as const,
 }

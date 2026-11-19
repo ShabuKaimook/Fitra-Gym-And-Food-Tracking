@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 224" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#F8D9C8"/>
+      <stop offset="1" stop-color="#FBE6DA"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Sky, sun blob and floating dots -->
+  <rect width="400" height="224" fill="url(#sky)"/>
+  <circle cx="352" cy="46" r="38" fill="#F4C7B2" opacity="0.55"/>
+  <circle cx="300" cy="92" r="5" fill="#EFB49C"/>
+  <circle cx="62" cy="84" r="4" fill="#EFB49C"/>
+  <circle cx="236" cy="52" r="3" fill="#EFB49C"/>
+
+  <!-- Hills -->
+  <path d="M0 152 C 80 122 160 136 232 160 S 360 192 400 168 V224 H0 Z" fill="#F5D0BE"/>
+  <path d="M0 192 C 100 176 220 202 400 184 V224 H0 Z" fill="#FBE9E0"/>
+
+  <!-- Herb sprig, far left -->
+  <path d="M46 196 C 50 170 58 150 70 132" stroke="#DDA58A" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <path d="M58 162 C 40 158 34 146 36 136 C 50 138 60 148 58 162 Z" fill="#E6B39A"/>
+  <path d="M64 146 C 78 136 90 138 96 146 C 86 156 72 156 64 146 Z" fill="#EDC2AC"/>
+  <path d="M52 180 C 36 178 28 168 28 158 C 42 158 52 168 52 180 Z" fill="#EDC2AC"/>
+
+  <!-- Steam -->
+  <path d="M146 104 c -9 -10 9 -16 0 -28 c -6 -8 2 -14 4 -18" stroke="#EDB49C" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <path d="M172 98 c -7 -9 7 -14 0 -24" stroke="#EDB49C" stroke-width="4" fill="none" stroke-linecap="round"/>
+
+  <!-- Rice bowl -->
+  <ellipse cx="165" cy="203" rx="80" ry="10" fill="#EDBBA5"/>
+  <path d="M106 150 C 112 127 136 117 165 117 C 194 117 218 127 224 150 Z" fill="#FDF6F0"/>
+  <ellipse cx="138" cy="138" rx="3.5" ry="2" fill="#F1E1D4"/>
+  <ellipse cx="152" cy="128" rx="3.5" ry="2" fill="#F1E1D4"/>
+  <ellipse cx="128" cy="146" rx="3.5" ry="2" fill="#F1E1D4"/>
+  <ellipse cx="170" cy="143" rx="3.5" ry="2" fill="#F1E1D4"/>
+  <!-- Fried egg -->
+  <path d="M174 133 C 172 122 184 117 196 120 C 210 122 214 132 208 140 C 202 147 186 146 180 142 C 176 140 175 137 174 133 Z" fill="#FFFDF9"/>
+  <circle cx="193" cy="131" r="6.5" fill="#F4C46C"/>
+  <!-- Greens -->
+  <path d="M146 124 C 140 116 144 108 152 106 C 156 114 154 121 146 124 Z" fill="#E3AE93"/>
+  <path d="M156 124 C 158 114 166 110 172 112 C 172 120 166 125 156 124 Z" fill="#EAB9A0"/>
+  <!-- Chopsticks -->
+  <path d="M150 116 L 254 72" stroke="#C88466" stroke-width="5" stroke-linecap="round"/>
+  <path d="M158 122 L 262 84" stroke="#D89A7C" stroke-width="5" stroke-linecap="round"/>
+  <!-- Bowl body and band -->
+  <path d="M100 150 H230 C 228 186 200 203 165 203 C 130 203 102 186 100 150 Z" fill="#E8A589"/>
+  <path d="M103 162 H227 C 226 167 225 170 223 174 H107 C 105 170 104 167 103 162 Z" fill="#DC8C6D"/>
+  <circle cx="134" cy="186" r="3" fill="#F2C2AB"/>
+  <circle cx="165" cy="190" r="3" fill="#F2C2AB"/>
+  <circle cx="196" cy="186" r="3" fill="#F2C2AB"/>
+
+  <!-- Iced milk tea -->
+  <ellipse cx="297" cy="203" rx="32" ry="5" fill="#EDBBA5"/>
+  <path d="M296 126 L 312 64 L 319 66 L 304 127 Z" fill="#FDF6F0"/>
+  <path d="M309 76 L 316 78 L 314 86 L 307 84 Z" fill="#E8A589"/>
+  <path d="M305 94 L 312 96 L 310 104 L 303 102 Z" fill="#E8A589"/>
+  <path d="M270 132 H324 L 317 201 H277 Z" fill="#E9AA84"/>
+  <path d="M268 120 H326 L 324 134 H270 Z" fill="#FBEAD2"/>
+  <rect x="279" y="142" width="15" height="15" rx="4" fill="#FFFFFF" opacity="0.45" transform="rotate(-12 286 150)"/>
+  <rect x="299" y="158" width="13" height="13" rx="4" fill="#FFFFFF" opacity="0.4" transform="rotate(10 305 164)"/>
+  <path d="M276 140 L 281 192" stroke="#FFFFFF" stroke-width="3" opacity="0.35" stroke-linecap="round"/>
+
+  <!-- Orange slice -->
+  <circle cx="350" cy="190" r="17" fill="#F2BC66"/>
+  <circle cx="350" cy="190" r="13" fill="#F8D894"/>
+  <path d="M350 177 V203 M337 190 H363 M341 181 L359 199 M359 181 L341 199" stroke="#F2BC66" stroke-width="1.6"/>
+</svg>

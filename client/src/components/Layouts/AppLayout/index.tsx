@@ -12,8 +12,11 @@ import {
   Utensils,
   type LucideIcon,
 } from 'lucide-react'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { Link, NavLink, Outlet } from 'react-router-dom'
+import { useFullScreen } from '@/hooks/useFullScreen'
+import { LogMenu } from './partials/LogMenu'
+import { LogSheet } from './partials/LogSheet'
 
 type NavItem = { to: string; label: string; icon: LucideIcon }
 
@@ -72,6 +75,9 @@ const bottomLink = ({ to, label, icon: Icon }: NavItem) => (
 export const AppLayout = () => {
   // The top bar's left side is filled by the page (TopBarTitle portals into it).
   const [titleSlot, setTitleSlot] = useState<HTMLDivElement | null>(null)
+  const logSheetRef = useRef<HTMLDialogElement>(null)
+  // Full-screen pages (e.g. New food) hide the mobile bottom nav, so main needs no room for it.
+  const fullScreen = useFullScreen()
 
   return (
     <div className="min-h-dvh lg:grid lg:grid-cols-[220px_1fr]">
@@ -128,25 +134,21 @@ export const AppLayout = () => {
       <div className="min-w-0">
         <header className="sticky top-0 z-1 hidden h-14 items-center gap-3 border-b border-line bg-surface/85 px-8 backdrop-blur-sm lg:flex">
           <div ref={setTitleSlot} className="mr-auto flex min-w-0 items-baseline gap-2.5" />
-          <button
-            type="button"
-            className="inline-flex h-10 items-center gap-1.5 rounded-full bg-primary pr-4 pl-3 text-sm font-extrabold text-on-primary"
-          >
-            <Plus size={16} aria-hidden />
-            Log
-          </button>
+          <LogMenu />
           <div className={avatar} aria-hidden>
             {USER.initial}
           </div>
         </header>
-        <main className="mx-auto max-w-300 px-4 pt-5 pb-[calc(96px+env(safe-area-inset-bottom))] lg:px-8 lg:pt-6 lg:pb-8">
+        <main
+          className={`mx-auto max-w-300 px-4 pt-5 lg:px-8 lg:pt-6 lg:pb-8 ${fullScreen ? 'pb-[calc(16px+env(safe-area-inset-bottom))]' : 'pb-[calc(96px+env(safe-area-inset-bottom))]'}`}
+        >
           <Outlet context={{ titleSlot } satisfies AppLayoutContext} />
         </main>
       </div>
 
       {/* Bottom Bar Disappear when lg display*/}
       <nav
-        className="fixed inset-x-0 bottom-0 flex h-[calc(72px+env(safe-area-inset-bottom))] items-center border-t border-line bg-surface px-2 pb-[env(safe-area-inset-bottom)] lg:hidden"
+        className={`fixed inset-x-0 bottom-0 ${fullScreen ? 'hidden' : 'flex'} h-[calc(72px+env(safe-area-inset-bottom))] items-center border-t border-line bg-surface px-2 pb-[env(safe-area-inset-bottom)] lg:hidden`}
         aria-label="Main"
       >
         {BOTTOM_LEFT.map(bottomLink)}
@@ -154,11 +156,14 @@ export const AppLayout = () => {
           type="button"
           className="-mt-6 grid size-14 flex-none place-items-center rounded-full border-4 border-surface bg-primary text-on-primary"
           aria-label="Log something"
+          aria-haspopup="dialog"
+          onClick={() => logSheetRef.current?.showModal()}
         >
           <Plus size={26} aria-hidden />
         </button>
         {BOTTOM_RIGHT.map(bottomLink)}
       </nav>
+      <LogSheet ref={logSheetRef} />
     </div>
   )
 }

@@ -3,6 +3,8 @@ export const ROUTE_PATHS = {
   HOME: '/home',
   GYM: '/gym',
   FOOD: '/food',
+  FOOD_LOG: '/food/log',
+  FOOD_NEW: '/food/new',
   ACTIVITY: '/activity',
   RECOVERY: '/recovery',
   BODY: '/body',

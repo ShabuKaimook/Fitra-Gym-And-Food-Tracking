@@ -5,6 +5,8 @@ import type {
   DailyMacros,
   DailyMicronutrients,
   DailyWater,
+  Food,
+  FoodEntry,
   Micronutrient,
 } from './FoodService/types/Food'
 import type { DailyActivity, DailySleep, DailyWeight } from './HealthService/types/Health'
@@ -58,6 +60,84 @@ export const MICRONUTRIENTS: DailyMicronutrients[] = ['2026-11-16', '2026-11-17'
     })),
   }),
 )
+
+// Foods logged through the food log; the daily totals above stand in for older entries.
+export const FOOD_ENTRIES: FoodEntry[] = []
+
+export const FOODS: Food[] = [
+  {
+    id: 'khao-man-gai',
+    name: 'Khao man gai',
+    brand: null,
+    unit: 'g',
+    per: 350,
+    serving: { name: 'plate', size: 350 },
+    nutrients: { calories: 640, protein: 32, carbs: 70, fat: 24, fiber: 2, sodium: 1200 },
+  },
+  {
+    id: 'chicken-rice-bowl-7-eleven',
+    name: 'Chicken rice bowl',
+    brand: '7-Eleven',
+    unit: 'g',
+    per: 300,
+    serving: { name: 'pack', size: 300 },
+    nutrients: { calories: 480, protein: 28, carbs: 62, fat: 12, fiber: 1.5, sodium: 980 },
+  },
+  {
+    id: 'steamed-rice',
+    name: 'Steamed rice',
+    brand: null,
+    unit: 'g',
+    per: 100,
+    serving: null,
+    nutrients: { calories: 130, protein: 2.7, carbs: 28, fat: 0.3, fiber: 0.4, sodium: null },
+  },
+  {
+    id: 'hainanese-chicken',
+    name: 'Hainanese chicken',
+    brand: null,
+    unit: 'g',
+    per: 100,
+    serving: null,
+    nutrients: { calories: 215, protein: null, carbs: null, fat: null, fiber: null, sodium: null },
+  },
+  {
+    id: 'boiled-egg',
+    name: 'Boiled egg',
+    brand: null,
+    unit: 'g',
+    per: 100,
+    serving: { name: 'egg', size: 50 },
+    nutrients: { calories: 155, protein: 13, carbs: 1.1, fat: 11, fiber: 0, sodium: 124 },
+  },
+  {
+    id: 'pad-kra-pao',
+    name: 'Pad kra pao with rice',
+    brand: null,
+    unit: 'g',
+    per: 400,
+    serving: { name: 'plate', size: 400 },
+    nutrients: { calories: 620, protein: 30, carbs: 75, fat: 22, fiber: 3, sodium: 1500 },
+  },
+  {
+    id: 'thai-milk-tea',
+    name: 'Thai milk tea',
+    brand: null,
+    unit: 'ml',
+    per: 100,
+    serving: { name: 'glass', size: 350 },
+    nutrients: { calories: 75, protein: 1.2, carbs: 13, fat: 2, fiber: 0, sodium: null },
+  },
+  {
+    id: 'banana',
+    name: 'Banana',
+    brand: null,
+    unit: 'g',
+    per: 100,
+    serving: { name: 'banana', size: 120 },
+    nutrients: { calories: 89, protein: 1.1, carbs: 23, fat: 0.3, fiber: 2.6, sodium: 1 },
+  },
+]
 
 export const WATER: DailyWater[] = [
   { date: '2026-11-16', liters: 2.3, target: 2.5 },

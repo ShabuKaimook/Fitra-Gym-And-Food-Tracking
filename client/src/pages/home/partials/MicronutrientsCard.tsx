@@ -7,6 +7,20 @@ type Props = { micros: Micronutrient[] }
 
 const MOBILE_ROWS = 4 // wireframe 1a
 
+const row = ({ name, value, target, unit }: Micronutrient) => (
+  // border-t (not -b) so the first collapsible row gets its divider from the 4th.
+  <li key={name} className="flex justify-between gap-2 border-t border-line-soft py-1.25 text-[13px] font-bold">
+    <span>{name}</span>
+    {value === null ? (
+      <span className="font-medium whitespace-nowrap text-ink-2 italic">No data</span>
+    ) : (
+      <span className={`${muted} font-medium whitespace-nowrap`}>
+        {value.toLocaleString()} / {target.toLocaleString()} {unit}
+      </span>
+    )}
+  </li>
+)
+
 // Mobile: first 4 rows, a chevron expands the rest. Desktop: every row, scrolling inside the card.
 export const MicronutrientsCard = ({ micros }: Props) => {
   const [expanded, setExpanded] = useState(false)
@@ -26,23 +40,16 @@ export const MicronutrientsCard = ({ micros }: Props) => {
       {micros.length === 0 ? (
         <p className={`${muted} italic`}>No data for this day</p>
       ) : (
-        <ul id="micros-list" className="lg:-mr-2 lg:min-h-0 lg:flex-1 lg:overflow-y-auto lg:pr-2">
-          {micros.map(({ name, value, target, unit }) => (
-            <li
-              key={name}
-              className={`flex justify-between gap-2 border-b border-line-soft py-1.25 text-[13px] font-bold last:border-b-0 ${collapsed ? 'max-lg:nth-4:border-b-0 max-lg:nth-[n+5]:hidden' : ''}`}
-            >
-              <span>{name}</span>
-              {value === null ? (
-                <span className="font-medium whitespace-nowrap text-ink-2 italic">No data</span>
-              ) : (
-                <span className={`${muted} font-medium whitespace-nowrap`}>
-                  {value.toLocaleString()} / {target.toLocaleString()} {unit}
-                </span>
-              )}
-            </li>
-          ))}
-        </ul>
+        <div id="micros-list" className="lg:-mr-2 lg:min-h-0 lg:flex-1 lg:overflow-y-auto lg:pr-2">
+          <ul className="[&>li:first-child]:border-t-0">{micros.slice(0, MOBILE_ROWS).map(row)}</ul>
+          {/* Rows past 4 open with a height animation: grid rows 0fr → 1fr. invisible keeps the
+              collapsed rows away from screen readers once they have slid shut. Desktop always shows them. */}
+          <div
+            className={`grid grid-rows-[1fr] transition-[grid-template-rows,visibility] duration-300 ease-out motion-reduce:transition-none ${collapsed ? 'max-lg:invisible max-lg:grid-rows-[0fr]' : ''}`}
+          >
+            <ul className="min-h-0 overflow-hidden">{micros.slice(MOBILE_ROWS).map(row)}</ul>
+          </div>
+        </div>
       )}
       {canExpand && (
         <button
@@ -53,7 +60,11 @@ export const MicronutrientsCard = ({ micros }: Props) => {
           aria-label={expanded ? 'Show fewer micronutrients' : 'Show all micronutrients'}
           onClick={() => setExpanded(!expanded)}
         >
-          <ChevronDown size={18} aria-hidden className={expanded ? 'rotate-180' : ''} />
+          <ChevronDown
+            size={18}
+            aria-hidden
+            className={`transition-transform duration-300 motion-reduce:transition-none ${expanded ? 'rotate-180' : ''}`}
+          />
         </button>
       )}
     </section>

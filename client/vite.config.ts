@@ -11,6 +11,8 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: 'autoUpdate',
+      // Serve the manifest from `bun dev` too, so an icon added over the ngrok tunnel installs as the app.
+      devOptions: { enabled: true },
       manifest: {
         name: 'Fitra',
         short_name: 'Fitra',
@@ -19,6 +21,8 @@ export default defineConfig({
         background_color: '#f3f4f6',
         display: 'standalone',
         start_url: '/',
+        // Whole site is the app; a link outside the scope makes iOS show the browser bar.
+        scope: '/',
         icons: [
           { src: '/fitra-favicon/favicon-192x192.png', sizes: '192x192', type: 'image/png' },
           { src: '/fitra-favicon/favicon-512x512.png', sizes: '512x512', type: 'image/png' },
