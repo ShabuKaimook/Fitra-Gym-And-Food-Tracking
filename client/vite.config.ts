@@ -33,8 +33,8 @@ export default defineConfig({
   resolve: {
     alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) },
   },
-  // Lets ngrok tunnels reach the dev server (Vite blocks unknown hosts by default).
+  // Lets ngrok and Cloudflare tunnels reach the dev server (Vite blocks unknown hosts by default).
   server: {
-    allowedHosts: ['.ngrok-free.app', '.ngrok-free.dev', '.ngrok.app'],
+    allowedHosts: ['.ngrok-free.app', '.ngrok-free.dev', '.ngrok.app', '.trycloudflare.com'],
   },
 })

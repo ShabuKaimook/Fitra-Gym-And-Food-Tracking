@@ -1,13 +1,16 @@
+import { MealPicker } from '@/components/MealPicker'
 import { TopBarTitle } from '@/components/TopBarTitle'
 import { ROUTE_PATHS } from '@/constants/routePaths'
 import { ChevronLeft } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import { AddFoodLink } from './AddFoodLink'
+import type { Meal } from '@/services/FoodService/types/Food'
+import { mealLabel } from '../food'
 
-type Props = { title: string; newFoodUrl: string }
+type Props = { meal: Meal; onMeal: (meal: Meal) => void }
 
-// Back (mobile only), "Add to Lunch" and Add food. Desktop also gets a breadcrumb in the top bar.
-export const SearchHeader = ({ title, newFoodUrl }: Props) => (
+// Back (mobile only) and the meal as a centred title you can change. Desktop also gets a breadcrumb
+// in the top bar.
+export const SearchHeader = ({ meal, onMeal }: Props) => (
   <header className="flex items-center gap-1">
     <TopBarTitle>
       <span className="text-sm text-ink-2">Food / Food search</span>
@@ -15,11 +18,16 @@ export const SearchHeader = ({ title, newFoodUrl }: Props) => (
     <Link
       to={ROUTE_PATHS.HOME}
       aria-label="Back"
-      className="-ml-2.5 grid size-11 place-items-center rounded-xl text-ink-2 hover:bg-surface-2 lg:hidden"
+      className="-ml-2.5 grid size-11 flex-none place-items-center rounded-xl text-ink-2 hover:bg-surface-2 lg:hidden"
     >
       <ChevronLeft size={22} aria-hidden />
     </Link>
-    <h1 className="m-0 mr-auto text-[21px] leading-tight font-extrabold tracking-[-0.6px] lg:text-[25px]">{title}</h1>
-    <AddFoodLink to={newFoodUrl} />
+    {/* Screen readers get the full heading; on screen the meal picker is the title. */}
+    <h1 className="sr-only">Add to {mealLabel(meal)}</h1>
+    <div className="flex flex-1 justify-center">
+      <MealPicker variant="title" value={meal} onChange={onMeal} />
+    </div>
+    {/* Balances the back button so the picker is truly centred (mobile only, like the back button). */}
+    <span className="-mr-2.5 size-11 flex-none lg:hidden" aria-hidden />
   </header>
 )

@@ -17,7 +17,7 @@ const cols = 'grid-cols-[2.375rem_1fr_auto] lg:grid-cols-[1fr_3.75rem_7rem]'
 
 // Search results (1j). Tapping the row opens the amount; + adds one default serving.
 export const FoodList = ({ foods, emptyText, selectedId, onSelect, onQuickAdd, adding }: Props) => (
-  <div className="rounded-[20px] border border-line/80 bg-surface p-1.5">
+  <div className="flex min-h-0 flex-1 flex-col rounded-[20px] border border-line/80 bg-surface p-1.5">
     <div className={`hidden gap-2.5 py-1 pr-13 pl-2.5 text-[11px] font-bold text-ink-2 lg:grid ${cols}`}>
       <span>Food</span>
       <span>kcal</span>
@@ -33,7 +33,7 @@ export const FoodList = ({ foods, emptyText, selectedId, onSelect, onQuickAdd, a
     ) : foods.length === 0 ? (
       <p className="m-0 px-2.5 py-4 text-center text-[13px] text-ink-2">{emptyText}</p>
     ) : (
-      <ul className="m-0 flex list-none flex-col gap-0.5 p-0">
+      <ul className="m-0 flex min-h-0 list-none flex-col gap-0.5 overflow-y-auto overscroll-contain p-0">
         {foods.map((food) => {
           const selected = food.id === selectedId
           return (

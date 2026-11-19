@@ -1,9 +1,8 @@
 import { ROUTE_PATHS } from '@/constants/routePaths'
 import { useFoodSearch, useRecentFoods } from '@/hooks/queries/useFoods'
 import { useDeferredValue, useState } from 'react'
-import { mealLabel } from './food'
 import { useFoodLog } from './hooks/useFoodLog'
-import { CreateFoodCard } from './partials/CreateFoodCard'
+import { AddFoodLink } from './partials/AddFoodLink'
 import { FilterChips } from './partials/FilterChips'
 import { FoodList } from './partials/FoodList'
 import { SearchBox } from './partials/SearchBox'
@@ -32,10 +31,19 @@ const FoodLogPage = () => {
 
   return (
     <div className="grid items-start gap-4.5 lg:grid-cols-[1fr_20rem]">
-      <section className={`flex min-w-0 flex-col gap-3 ${foodId ? 'max-lg:hidden' : ''}`}>
-        <SearchHeader title={`Add to ${mealLabel(meal)}`} newFoodUrl={newFoodUrl} />
+      {/* Exactly the visible height, so the list scrolls inside it. Subtracts AppLayout's main padding:
+          mobile 20px top + 96px bottom (the bottom nav and a gap); desktop the 56px top bar + 24px + 32px. */}
+      <section
+        className={`flex h-[calc(100dvh-116px-env(safe-area-inset-bottom))] min-w-0 flex-col gap-3 lg:h-[calc(100dvh-112px)] ${foodId ? 'max-lg:hidden' : ''}`}
+      >
+        <SearchHeader meal={meal} onMeal={log.setMeal} />
         <SearchBox value={query} onChange={setQuery} />
-        <FilterChips label="Show" options={TABS} value={tab} onChange={setTab} />
+        <div className="flex items-center gap-2">
+          <FilterChips label="Show" options={TABS} value={tab} onChange={setTab} />
+          <div className="ml-auto">
+            <AddFoodLink to={newFoodUrl} />
+          </div>
+        </div>
 
         <p
           role="status"
@@ -52,8 +60,6 @@ const FoodLogPage = () => {
           onQuickAdd={log.quickAdd}
           adding={log.adding}
         />
-
-        <CreateFoodCard newFoodUrl={newFoodUrl} />
       </section>
 
       <SelectedFood

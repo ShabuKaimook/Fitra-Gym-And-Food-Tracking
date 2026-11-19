@@ -1,10 +1,10 @@
 import { FormPage } from '@/components/Form'
 import { ROUTE_PATHS } from '@/constants/routePaths'
 import { useCreateFood } from '@/hooks/queries/useFoods'
-import { MEALS } from '@/constants/meals'
+import { MealPicker } from '@/components/MealPicker'
 import { parseMeal, unitName } from '@/pages/food-log/food'
-import type { Food, Meal } from '@/services/FoodService/types/Food'
-import { Beef, ChevronDown, Flame, FlaskConical, Leaf, Nut, Plus, RefreshCw, Wheat } from 'lucide-react'
+import type { Food } from '@/services/FoodService/types/Food'
+import { Beef, Flame, FlaskConical, Leaf, Nut, Plus, Wheat } from 'lucide-react'
 import { useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { NutrientCard } from './partials/NutrientCard'
@@ -50,14 +50,6 @@ const FoodNewPage = () => {
   const logUrl = (extra: Record<string, string> = {}) =>
     `${ROUTE_PATHS.FOOD_LOG}?${new URLSearchParams({ meal, ...extra })}`
 
-  // 4 kcal per gram of protein and carbs, 9 per gram of fat.
-  const hasMacros = form.protein !== '' || form.carbs !== '' || form.fat !== ''
-  const syncCalories = () =>
-    setForm((f) => ({
-      ...f,
-      calories: String(Math.round(4 * Number(f.protein) + 4 * Number(f.carbs) + 9 * Number(f.fat))),
-    }))
-
   const save = () =>
     createFood.mutate(
       {
@@ -81,24 +73,6 @@ const FoodNewPage = () => {
       },
     )
 
-  const mealPicker = (
-    <label className="relative">
-      <span className="sr-only">Meal</span>
-      <select
-        value={meal}
-        onChange={(e) => setParams({ ...Object.fromEntries(params), meal: e.target.value as Meal }, { replace: true })}
-        className="h-11 appearance-none rounded-full bg-surface/70 pr-9 pl-4 text-base font-extrabold backdrop-blur-sm"
-      >
-        {MEALS.map((m) => (
-          <option key={m.value} value={m.value}>
-            {m.label}
-          </option>
-        ))}
-      </select>
-      <ChevronDown size={16} className="pointer-events-none absolute top-3.5 right-3.5" aria-hidden />
-    </label>
-  )
-
   return (
     <FormPage
       title="New food"
@@ -107,7 +81,13 @@ const FoodNewPage = () => {
       onSubmit={save}
       pending={createFood.isPending}
       error={createFood.isError ? 'Not saved, try again' : undefined}
-      headerCenter={mealPicker}
+      headerCenter={
+        <MealPicker
+          value={meal}
+          onChange={(m) => setParams({ ...Object.fromEntries(params), meal: m }, { replace: true })}
+          className="bg-surface/70 backdrop-blur-sm"
+        />
+      }
       cover={<img src="/illustrations/new-food.svg" alt="" className="size-full object-cover object-bottom" />}
       side={
         <>

@@ -1,5 +1,5 @@
 import { ROUTE_PATHS } from '@/constants/routePaths'
-import { Bike, ChevronDown, Droplets, Dumbbell, Moon, Plus, Scale, Utensils, type LucideIcon } from 'lucide-react'
+import { Bike, Droplets, Dumbbell, Moon, Plus, Scale, Utensils, type LucideIcon } from 'lucide-react'
 import { useEffect, useRef } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useTodayWater } from './useTodayWater'
