@@ -1,7 +1,7 @@
 import { Skeleton } from '@/components/Skeleton'
 import type { Food } from '@/services/FoodService/types/Food'
 import { MACROS } from '@/constants/nutrients'
-import { CirclePlus, Utensils } from 'lucide-react'
+import { CirclePlus } from 'lucide-react'
 import { basisText, fmt } from '../food'
 
 type Props = {
@@ -42,10 +42,13 @@ export const FoodList = ({ foods, emptyText, selectedId, onSelect, onQuickAdd, a
                 onClick={() => onSelect(food)}
                 className="flex min-w-0 flex-1 items-center gap-3 rounded-2xl py-2 pl-2 text-left"
               >
-                {/* shortcut: placeholder until foods have photos (to-fix.md, food images). */}
-                <span className="grid size-15 flex-none place-items-center rounded-2xl bg-primary-50 text-primary-ink">
-                  <Utensils size={22} aria-hidden />
-                </span>
+                {/* shortcut: one illustration for every food until foods have photos (to-fix.md, food images). */}
+                <img
+                  src="/illustrations/food-placeholder.svg"
+                  alt=""
+                  className="size-15 flex-none rounded-2xl object-cover"
+                />
+
                 <span className="flex min-w-0 flex-col gap-0.5">
                   <span className="truncate text-[15px] font-extrabold">
                     {food.name}

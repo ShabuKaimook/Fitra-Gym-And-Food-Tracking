@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" aria-hidden="true">
+  <!-- Square thumbnail in the style of new-food.svg: a rice bowl with egg, for foods without a photo. -->
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#F8D9C8"/>
+      <stop offset="1" stop-color="#FBE6DA"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Sky, sun blob and dots -->
+  <rect width="120" height="120" fill="url(#sky)"/>
+  <circle cx="98" cy="22" r="16" fill="#F4C7B2" opacity="0.55"/>
+  <circle cx="20" cy="30" r="2.5" fill="#EFB49C"/>
+  <circle cx="84" cy="48" r="2" fill="#EFB49C"/>
+
+  <!-- Hill -->
+  <path d="M0 88 C 30 78 70 84 120 80 V120 H0 Z" fill="#F5D0BE"/>
+
+  <!-- Steam -->
+  <path d="M48 40 c -5 -6 5 -9 0 -16" stroke="#EDB49C" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <path d="M62 38 c -4 -5 4 -8 0 -13" stroke="#EDB49C" stroke-width="3" fill="none" stroke-linecap="round"/>
+
+  <!-- Bowl shadow, rice, egg, greens -->
+  <ellipse cx="60" cy="104" rx="38" ry="5" fill="#EDBBA5"/>
+  <path d="M27 72 C 30 58 44 52 60 52 C 76 52 90 58 93 72 Z" fill="#FDF6F0"/>
+  <ellipse cx="42" cy="64" rx="2.2" ry="1.3" fill="#F1E1D4"/>
+  <ellipse cx="50" cy="58" rx="2.2" ry="1.3" fill="#F1E1D4"/>
+  <ellipse cx="36" cy="69" rx="2.2" ry="1.3" fill="#F1E1D4"/>
+  <path d="M64 64 C 63 57 70 54 77 56 C 85 57 87 63 84 68 C 80 72 71 72 67 70 C 65 69 64 67 64 64 Z" fill="#FFFDF9"/>
+  <circle cx="75" cy="63" r="4" fill="#F4C46C"/>
+  <path d="M50 57 C 46 52 49 47 54 46 C 56 51 55 55 50 57 Z" fill="#E3AE93"/>
+
+  <!-- Chopsticks -->
+  <path d="M54 54 L 104 30" stroke="#C88466" stroke-width="3.5" stroke-linecap="round"/>
+  <path d="M58 58 L 108 38" stroke="#D89A7C" stroke-width="3.5" stroke-linecap="round"/>
+
+  <!-- Bowl body and band -->
+  <path d="M24 72 H96 C 95 92 80 104 60 104 C 40 104 25 92 24 72 Z" fill="#E8A589"/>
+  <path d="M26 79 H94 C 93.5 82 93 84 92 86 H28 C 27 84 26.5 82 26 79 Z" fill="#DC8C6D"/>
+  <circle cx="44" cy="95" r="2" fill="#F2C2AB"/>
+  <circle cx="60" cy="97" r="2" fill="#F2C2AB"/>
+  <circle cx="76" cy="95" r="2" fill="#F2C2AB"/>
+</svg>
