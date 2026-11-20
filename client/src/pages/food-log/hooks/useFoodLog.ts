@@ -1,15 +1,19 @@
 import { useAddFood } from '@/hooks/queries/useAddFood'
 import type { Food, Meal } from '@/services/FoodService/types/Food'
 import { startOfToday, toDateKey } from '@/utils/date'
+import { useMealLabel } from '@/hooks/queries/useMeals'
+import { useUnits } from '@/hooks/queries/useUnits'
 import { useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { defaultAmount, mealLabel, nutrientsFor, parseMeal, toBase, type AmountUnit } from '../food'
+import { defaultAmount, nutrientsFor, parseMeal, toBase, type AmountUnit } from '../food'
 
 // Meal and selected food live in the URL (?meal=lunch&food=id): refresh keeps them, and on mobile
 // the phone's back gesture leaves the amount screen.
 export const useFoodLog = () => {
   const [params, setParams] = useSearchParams()
   const meal = parseMeal(params.get('meal'))
+  const mealLabel = useMealLabel(meal)
+  const units = useUnits().data
   const foodId = params.get('food')
   const addFood = useAddFood()
   const [status, setStatus] = useState('')
@@ -31,7 +35,7 @@ export const useFoodLog = () => {
   const setMeal = (m: Meal) => update({ meal: m }, true)
 
   const add = (food: Food, amount: number, unit: AmountUnit) => {
-    const base = toBase(food, amount, unit)
+    const base = toBase(food, amount, unit, units)
     setStatus('')
     addFood.mutate(
       {
@@ -45,7 +49,7 @@ export const useFoodLog = () => {
       },
       {
         onSuccess: () => {
-          setStatus(`Added ${food.name} to ${mealLabel(meal)}`)
+          setStatus(`Added ${food.name} to ${mealLabel}`)
           unselect()
         },
         onError: () => setStatus('Not saved, try again'),

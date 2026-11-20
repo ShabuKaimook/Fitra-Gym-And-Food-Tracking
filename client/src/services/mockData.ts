@@ -7,7 +7,9 @@ import type {
   DailyWater,
   Food,
   FoodEntry,
+  MealOption,
   Micronutrient,
+  Unit,
 } from './FoodService/types/Food'
 import type { DailyActivity, DailySleep, DailyWeight } from './HealthService/types/Health'
 import type { PlannedWorkout } from './WorkoutService/types/Workout'
@@ -61,6 +63,32 @@ export const MICRONUTRIENTS: DailyMicronutrients[] = ['2026-11-16', '2026-11-17'
   }),
 )
 
+// Meal groups in the order they happen in a day.
+export const MEALS: MealOption[] = [
+  { id: 'breakfast', label: 'Breakfast' },
+  { id: 'lunch', label: 'Lunch' },
+  { id: 'dinner', label: 'Dinner' },
+  { id: 'snacks', label: 'Snacks' },
+]
+
+// size: typical g (ml) in one, for converting a food to a unit it has no size for.
+export const UNITS: Unit[] = [
+  { id: 'g', label: 'Grams (g)', kind: 'base', size: 1 },
+  { id: 'ml', label: 'Millilitres (ml)', kind: 'base', size: 1 },
+  { id: 'serving', label: 'Serving', kind: 'portion', size: 100 },
+  { id: 'bowl', label: 'Bowl', kind: 'portion', size: 250 },
+  { id: 'can', label: 'Can', kind: 'portion', size: 325 },
+  { id: 'piece', label: 'Piece', kind: 'portion', size: 50 },
+  { id: 'plate', label: 'Plate', kind: 'portion', size: 350 },
+  { id: 'slice', label: 'Slice', kind: 'portion', size: 30 },
+  { id: 'teaspoon', label: 'Teaspoon', kind: 'portion', size: 5 },
+  { id: 'tablespoon', label: 'Tablespoon', kind: 'portion', size: 15 },
+  { id: 'pack', label: 'Pack', kind: 'portion', size: 60 },
+  { id: 'box', label: 'Box', kind: 'portion', size: 300 },
+  { id: 'bottle', label: 'Bottle', kind: 'portion', size: 500 },
+  { id: 'cup', label: 'Cup', kind: 'portion', size: 240 },
+]
+
 // Foods logged through the food log; the daily totals above stand in for older entries.
 export const FOOD_ENTRIES: FoodEntry[] = []
 
@@ -71,7 +99,7 @@ export const FOODS: Food[] = [
     brand: null,
     unit: 'g',
     per: 350,
-    serving: { name: 'plate', size: 350 },
+    serving: { unit: 'plate', size: 350 },
     nutrients: { calories: 640, protein: 32, carbs: 70, fat: 24, fiber: 2, sodium: 1200 },
   },
   {
@@ -80,7 +108,7 @@ export const FOODS: Food[] = [
     brand: '7-Eleven',
     unit: 'g',
     per: 300,
-    serving: { name: 'pack', size: 300 },
+    serving: { unit: 'box', size: 300 },
     nutrients: { calories: 480, protein: 28, carbs: 62, fat: 12, fiber: 1.5, sodium: 980 },
   },
   {
@@ -89,7 +117,7 @@ export const FOODS: Food[] = [
     brand: null,
     unit: 'g',
     per: 100,
-    serving: null,
+    serving: { unit: 'bowl', size: 150 },
     nutrients: { calories: 130, protein: 2.7, carbs: 28, fat: 0.3, fiber: 0.4, sodium: null },
   },
   {
@@ -107,7 +135,7 @@ export const FOODS: Food[] = [
     brand: null,
     unit: 'g',
     per: 100,
-    serving: { name: 'egg', size: 50 },
+    serving: { unit: 'piece', size: 50 },
     nutrients: { calories: 155, protein: 13, carbs: 1.1, fat: 11, fiber: 0, sodium: 124 },
   },
   {
@@ -116,7 +144,7 @@ export const FOODS: Food[] = [
     brand: null,
     unit: 'g',
     per: 400,
-    serving: { name: 'plate', size: 400 },
+    serving: { unit: 'plate', size: 400 },
     nutrients: { calories: 620, protein: 30, carbs: 75, fat: 22, fiber: 3, sodium: 1500 },
   },
   {
@@ -125,7 +153,7 @@ export const FOODS: Food[] = [
     brand: null,
     unit: 'ml',
     per: 100,
-    serving: { name: 'glass', size: 350 },
+    serving: { unit: 'cup', size: 350 },
     nutrients: { calories: 75, protein: 1.2, carbs: 13, fat: 2, fiber: 0, sodium: null },
   },
   {
@@ -134,8 +162,71 @@ export const FOODS: Food[] = [
     brand: null,
     unit: 'g',
     per: 100,
-    serving: { name: 'banana', size: 120 },
+    serving: { unit: 'piece', size: 120 },
     nutrients: { calories: 89, protein: 1.1, carbs: 23, fat: 0.3, fiber: 2.6, sodium: 1 },
+  },
+  {
+    id: 'coke-can',
+    name: 'Coca-Cola',
+    brand: 'Coca-Cola',
+    unit: 'ml',
+    per: 100,
+    serving: { unit: 'can', size: 325 },
+    nutrients: { calories: 42, protein: 0, carbs: 10.6, fat: 0, fiber: 0, sodium: 4 },
+  },
+  {
+    id: 'drinking-water-bottle',
+    name: 'Drinking water',
+    brand: null,
+    unit: 'ml',
+    per: 100,
+    serving: { unit: 'bottle', size: 600 },
+    nutrients: { calories: 0, protein: 0, carbs: 0, fat: 0, fiber: 0, sodium: 0 },
+  },
+  {
+    id: 'white-bread',
+    name: 'White bread',
+    brand: null,
+    unit: 'g',
+    per: 100,
+    serving: { unit: 'slice', size: 30 },
+    nutrients: { calories: 265, protein: 9, carbs: 49, fat: 3.2, fiber: 2.7, sodium: 490 },
+  },
+  {
+    id: 'peanut-butter',
+    name: 'Peanut butter',
+    brand: null,
+    unit: 'g',
+    per: 100,
+    serving: { unit: 'tablespoon', size: 16 },
+    nutrients: { calories: 588, protein: 25, carbs: 20, fat: 50, fiber: 6, sodium: 430 },
+  },
+  {
+    id: 'sugar',
+    name: 'Sugar',
+    brand: null,
+    unit: 'g',
+    per: 100,
+    serving: { unit: 'teaspoon', size: 4 },
+    nutrients: { calories: 387, protein: 0, carbs: 100, fat: 0, fiber: 0, sodium: 1 },
+  },
+  {
+    id: 'whey-protein',
+    name: 'Whey protein',
+    brand: null,
+    unit: 'g',
+    per: 30,
+    serving: { unit: 'serving', size: 30 },
+    nutrients: { calories: 120, protein: 24, carbs: 3, fat: 1.5, fiber: null, sodium: 50 },
+  },
+  {
+    id: 'instant-noodles',
+    name: 'Instant noodles',
+    brand: 'Mama',
+    unit: 'g',
+    per: 60,
+    serving: { unit: 'pack', size: 60 },
+    nutrients: { calories: 270, protein: 5, carbs: 38, fat: 11, fiber: null, sodium: 1300 },
   },
 ]
 

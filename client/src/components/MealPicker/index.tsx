@@ -1,6 +1,7 @@
-import { MEALS } from '@/constants/meals'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { useMeals } from '@/hooks/queries/useMeals'
+import { cn } from '@/lib/utils'
 import type { Meal } from '@/services/FoodService/types/Food'
-import { ChevronDown } from 'lucide-react'
 
 type Props = {
   value: Meal
@@ -11,39 +12,33 @@ type Props = {
   className?: string
 }
 
+// Trigger sizes itself to the chosen meal; [&_svg] sizes the chevron the select adds.
 const VARIANTS = {
-  pill: { box: 'rounded-full px-4 text-base', chevron: 16 },
-  title: { box: 'rounded-lg px-1 text-[21px] tracking-[-0.6px] lg:text-[25px]', chevron: 20 },
+  pill: 'w-auto gap-1.5 rounded-full px-4 font-extrabold [&_svg]:size-4 [&_svg]:text-ink',
+  title:
+    'w-auto gap-1.5 rounded-lg border-0 bg-transparent px-1 text-[21px] font-extrabold tracking-[-0.6px] lg:text-[25px] [&_svg]:size-5 [&_svg]:text-ink',
 }
 
-// Dropdown for Breakfast / Lunch / Dinner / Snacks. The visible text and chevron size the control
-// to the chosen meal (a bare <select> is as wide as its longest option); an invisible native
-// <select> covers them, so tapping still opens the platform's own list.
+// Dropdown for Breakfast / Lunch / Dinner / Snacks, shared by the food log title and the new food cover.
 export const MealPicker = ({
   value,
   onChange,
   variant = 'pill',
   className = 'border border-line bg-surface',
 }: Props) => {
-  const v = VARIANTS[variant]
+  const meals = useMeals().data ?? []
   return (
-    <label
-      className={`relative inline-flex h-11 items-center gap-1.5 font-extrabold has-focus-visible:outline-3 has-focus-visible:outline-offset-2 has-focus-visible:outline-primary ${v.box} ${variant === 'pill' ? className : ''}`}
-    >
-      <span aria-hidden>{MEALS.find((m) => m.value === value)?.label}</span>
-      <ChevronDown size={v.chevron} className="flex-none" aria-hidden />
-      <select
-        aria-label="Meal"
-        value={value}
-        onChange={(e) => onChange(e.target.value as Meal)}
-        className="absolute inset-0 cursor-pointer appearance-none opacity-0"
-      >
-        {MEALS.map((m) => (
-          <option key={m.value} value={m.value}>
+    <Select value={value} onValueChange={(v) => onChange(v as Meal)}>
+      <SelectTrigger aria-label="Meal" className={cn(VARIANTS[variant], variant === 'pill' && className)}>
+        <SelectValue />
+      </SelectTrigger>
+      <SelectContent position="popper" align="center" sideOffset={6}>
+        {meals.map((m) => (
+          <SelectItem key={m.id} value={m.id}>
             {m.label}
-          </option>
+          </SelectItem>
         ))}
-      </select>
-    </label>
+      </SelectContent>
+    </Select>
   )
 }

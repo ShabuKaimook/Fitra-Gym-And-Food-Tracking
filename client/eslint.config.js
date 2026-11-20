@@ -31,4 +31,9 @@ export default defineConfig([
       ],
     },
   },
+  {
+    // shadcn-generated (`bunx shadcn add`): kept as generated so later updates diff cleanly.
+    files: ['src/components/ui/**'],
+    rules: { 'func-style': 'off', 'react-refresh/only-export-components': 'off' },
+  },
 ])

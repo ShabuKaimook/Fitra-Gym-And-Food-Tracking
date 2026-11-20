@@ -1,12 +1,15 @@
-import { input, inputBase } from '@/components/Form'
+import { inputBase } from '@/components/Form'
 import { numbersOnly } from '@/utils/numbersOnly'
 import { MACROS, MICROS } from '@/constants/nutrients'
-import { MEALS } from '@/constants/meals'
+import { useMealLabel } from '@/hooks/queries/useMeals'
+import { useUnits } from '@/hooks/queries/useUnits'
 import { useInlineValidation } from '@/hooks/useInlineValidation'
 import type { Food, Meal } from '@/services/FoodService/types/Food'
 import { ChevronLeft } from 'lucide-react'
 import { useState, type FormEvent } from 'react'
-import { amountUnits, defaultAmount, fmt, mealLabel, nutrientsFor, toBase, type AmountUnit } from '../food'
+import { defaultAmount, fmt, nutrientsFor, toBase, type AmountUnit } from '../food'
+import { MealSelect } from './MealSelect'
+import { UnitSelect } from './UnitSelect'
 
 type Props = {
   food: Food
@@ -23,8 +26,10 @@ export const AmountPanel = ({ food, meal, onMeal, onBack, onAdd, adding }: Props
   const initial = defaultAmount(food)
   const [amount, setAmount] = useState(String(initial.amount))
   const [unit, setUnit] = useState<AmountUnit>(initial.unit)
-  const base = toBase(food, Number(amount) || 0, unit)
+  const units = useUnits().data
+  const base = toBase(food, Number(amount) || 0, unit, units)
   const n = nutrientsFor(food, base)
+  const mealLabel = useMealLabel(meal)
 
   const rows: [string, number | null, string, string?][] = [
     ...MACROS.map(({ key, label, bg }): [string, number | null, string, string] => [label, n[key], 'g', bg]),
@@ -76,18 +81,9 @@ export const AmountPanel = ({ food, meal, onMeal, onBack, onAdd, adding }: Props
               onChange={(e) => setAmount(e.target.value)}
             />
           </span>
-          <select
-            className={input}
-            aria-label="Unit"
-            value={unit}
-            onChange={(e) => setUnit(e.target.value as AmountUnit)}
-          >
-            {amountUnits(food).map((u) => (
-              <option key={u.value} value={u.value}>
-                {u.label}
-              </option>
-            ))}
-          </select>
+          <span className="min-w-0 flex-1">
+            <UnitSelect food={food} value={unit} onChange={setUnit} />
+          </span>
         </div>
       </div>
 
@@ -108,16 +104,7 @@ export const AmountPanel = ({ food, meal, onMeal, onBack, onAdd, adding }: Props
         ))}
       </div>
 
-      <label className="flex flex-col gap-1.5">
-        <span className="text-[13px] font-bold text-ink-2">Meal</span>
-        <select className={input} value={meal} onChange={(e) => onMeal(e.target.value as Meal)}>
-          {MEALS.map((m) => (
-            <option key={m.value} value={m.value}>
-              {m.label}
-            </option>
-          ))}
-        </select>
-      </label>
+      <MealSelect value={meal} onChange={onMeal} />
 
       {invalidMessage && (
         <p role="alert" className="m-0 text-[13px] font-bold text-danger">
@@ -129,7 +116,7 @@ export const AmountPanel = ({ food, meal, onMeal, onBack, onAdd, adding }: Props
         disabled={adding}
         className="h-13 rounded-2xl bg-primary text-[15px] font-extrabold text-on-primary disabled:opacity-60 lg:h-11"
       >
-        {adding ? 'Saving…' : `Add to ${mealLabel(meal)}`}
+        {adding ? 'Saving…' : `Add to ${mealLabel}`}
       </button>
     </form>
   )

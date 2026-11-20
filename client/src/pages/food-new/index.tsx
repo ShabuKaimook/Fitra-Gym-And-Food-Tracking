@@ -3,14 +3,15 @@ import { MACROS, MICROS } from '@/constants/nutrients'
 import { ROUTE_PATHS } from '@/constants/routePaths'
 import { useCreateFood } from '@/hooks/queries/useFoods'
 import { MealPicker } from '@/components/MealPicker'
-import { parseMeal, unitName } from '@/pages/food-log/food'
+import { parseMeal } from '@/pages/food-log/food'
 import type { Food } from '@/services/FoodService/types/Food'
 import { Flame, Plus } from 'lucide-react'
 import { useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { NutrientCard } from './partials/NutrientCard'
-import { PillInput, PillSelect } from './partials/PillField'
+import { PillInput } from './partials/PillField'
 import { TitleField } from './partials/TitleField'
+import { UnitSelect } from './partials/UnitSelect'
 
 // Blank stays null (no data), never 0.
 const optionalNumber = (v: string) => (v === '' ? null : Number(v))
@@ -99,10 +100,7 @@ const FoodNewPage = () => {
             value={form.per}
             onChange={set('per')}
           />
-          <PillSelect label="Unit" value={form.unit} onChange={set('unit')}>
-            <option value="g">{unitName('g')}</option>
-            <option value="ml">{unitName('ml')}</option>
-          </PillSelect>
+          <UnitSelect value={form.unit} onChange={(unit) => setForm((f) => ({ ...f, unit }))} />
         </>
       }
     >

@@ -1,11 +1,26 @@
 import type { RequestOptions } from '@/types/api/RequestOptions'
 import type { DateKey } from '@/utils/date'
 import { inRange, mockRequest, onDate } from '@/utils/mockRequest'
-import { CALORIES, FOOD_ENTRIES, FOODS, MACROS, MICRONUTRIENTS, WATER } from '../mockData'
-import type { DailyCalories, DailyMacros, DailyMicronutrients, DailyWater, Food, FoodEntry } from './types/Food'
+import { CALORIES, FOOD_ENTRIES, FOODS, MACROS, MEALS, MICRONUTRIENTS, UNITS, WATER } from '../mockData'
+import type {
+  DailyCalories,
+  DailyMacros,
+  DailyMicronutrients,
+  DailyWater,
+  Food,
+  FoodEntry,
+  MealOption,
+  Unit,
+} from './types/Food'
 
 // Range calls return one record per day that has data (from and to inclusive).
 export const FoodService = {
+  /** Meal groups in day order. */
+  getMeals: async (options?: RequestOptions): Promise<MealOption[]> => mockRequest(MEALS, options),
+
+  /** Base units (g, ml) first, then portions. */
+  getUnits: async (options?: RequestOptions): Promise<Unit[]> => mockRequest(UNITS, options),
+
   getCalories: async (from: DateKey, to: DateKey, options?: RequestOptions): Promise<DailyCalories[]> =>
     mockRequest(inRange(CALORIES, from, to), options),
 
