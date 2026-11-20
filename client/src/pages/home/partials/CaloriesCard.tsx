@@ -1,4 +1,5 @@
 import type { Macros } from '@/hooks/queries/useMacros'
+import { MACROS } from '@/constants/nutrients'
 import { Flame } from 'lucide-react'
 import { ProgressBar } from '@/components/ProgressBar'
 import { ProgressRing } from '@/components/ProgressRing'
@@ -6,12 +7,6 @@ import { card, cardLabel, cardSurface, muted } from './ui'
 
 /** null = nothing logged that day. */
 type Props = { calories: { eaten: number; target: number } | null; macros: Macros | null }
-
-const MACROS = [
-  { key: 'protein', label: 'Protein', color: 'var(--color-protein)' },
-  { key: 'carbs', label: 'Carbs', color: 'var(--color-carbs)' },
-  { key: 'fat', label: 'Fat', color: 'var(--color-fat)' },
-] as const
 
 export const CaloriesCard = ({ calories, macros }: Props) => {
   return (

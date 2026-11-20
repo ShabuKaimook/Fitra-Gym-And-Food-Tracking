@@ -37,5 +37,12 @@ export type Food = {
   nutrients: Nutrients
 }
 
-/** One logged food, with nutrients already worked out for the amount eaten. */
-export type FoodEntry = Nutrients & { date: DateKey; meal: Meal; foodId: string; name: string; amount: string }
+/** One logged food, with nutrients already worked out for the amount eaten. `amount` is in `unit`. */
+export type FoodEntry = Nutrients & {
+  date: DateKey
+  meal: Meal
+  foodId: string
+  name: string
+  amount: number
+  unit: Food['unit']
+}

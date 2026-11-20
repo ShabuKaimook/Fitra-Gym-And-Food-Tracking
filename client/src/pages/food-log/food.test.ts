@@ -1,6 +1,6 @@
 import type { Food } from '@/services/FoodService/types/Food'
 import { expect, test } from 'bun:test'
-import { amountText, describeFood, nutrientsFor, parseMeal, toBase } from './food'
+import { basisText, nutrientsFor, parseMeal, toBase } from './food'
 
 const rice: Food = {
   id: 'rice',
@@ -24,12 +24,10 @@ test('nutrientsFor scales from the basis, rounds, and keeps missing as null', ()
 test('servings convert to the base unit', () => {
   expect(toBase(rice, 2, 'serving')).toBe(300)
   expect(toBase(rice, 170, 'base')).toBe(170)
-  expect(amountText(rice, 2, 'serving')).toBe('2 bowls')
-  expect(amountText(rice, 170, 'base')).toBe('170 g')
 })
 
-test('describeFood flags missing data', () => {
-  expect(describeFood(rice)).toBe('Generic, per bowl (150 g), some data missing')
+test('basisText is the amount the nutrients are for, not the serving', () => {
+  expect(basisText(rice)).toBe('100 g')
 })
 
 test('parseMeal falls back to the time of day', () => {

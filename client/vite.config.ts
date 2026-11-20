@@ -11,6 +11,8 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: 'autoUpdate',
+      // Send the Cloudflare Access cookie with the manifest request, or Access blocks it and install fails.
+      useCredentials: true,
       // Serve the manifest from `bun dev` too, so an icon added over the ngrok tunnel installs as the app.
       devOptions: { enabled: true },
       manifest: {
@@ -35,6 +37,6 @@ export default defineConfig({
   },
   // Lets ngrok and Cloudflare tunnels reach the dev server (Vite blocks unknown hosts by default).
   server: {
-    allowedHosts: ['.ngrok-free.app', '.ngrok-free.dev', '.ngrok.app', '.trycloudflare.com'],
+    allowedHosts: ['.ngrok-free.app', '.ngrok-free.dev', '.ngrok.app', '.trycloudflare.com', '.shabukaimook.com'],
   },
 })

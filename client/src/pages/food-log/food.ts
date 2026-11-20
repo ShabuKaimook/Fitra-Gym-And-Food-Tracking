@@ -28,12 +28,6 @@ export const defaultAmount = (food: Food): { amount: number; unit: AmountUnit } 
 export const toBase = (food: Food, amount: number, unit: AmountUnit) =>
   unit === 'serving' && food.serving ? amount * food.serving.size : amount
 
-// "1 plate", "2 plates" (shortcut: English plural by adding s), "170 g".
-export const amountText = (food: Food, amount: number, unit: AmountUnit) =>
-  unit === 'serving' && food.serving
-    ? `${amount} ${food.serving.name}${amount === 1 ? '' : 's'}`
-    : `${amount} ${food.unit}`
-
 const round = (n: number, step: number) => Math.round(n / step) * step
 const scale = (v: number | null, f: number, step: number) => (v === null ? null : round(v * f, step))
 
@@ -51,21 +45,8 @@ export const nutrientsFor = (food: Food, base: number): Nutrients => {
   }
 }
 
-export const hasMissingData = (food: Food) => Object.values(food.nutrients).some((v) => v === null)
-
-// "Generic, per plate (350 g)", "7-Eleven, per 100 g, some data missing".
-export const describeFood = (food: Food) =>
-  [
-    food.brand ?? 'Generic',
-    food.serving ? `per ${food.serving.name} (${food.serving.size} ${food.unit})` : `per ${food.per} ${food.unit}`,
-    hasMissingData(food) && 'some data missing',
-  ]
-    .filter(Boolean)
-    .join(', ')
-
-// "32 / 70 / 24" for the food's basis; "no data" if any of the three is missing.
-export const macroLine = ({ nutrients: { protein, carbs, fat } }: Food) =>
-  protein === null || carbs === null || fat === null ? 'no data' : `${protein} / ${carbs} / ${fat}`
+// The amount the food's nutrients are for ("350 g", "100 g"), not the serving: an egg is 50 g but listed per 100 g.
+export const basisText = (food: Food) => `${food.per} ${food.unit}`
 
 // Trims float noise (0.30000000000000004 → 0.3) for display.
 export const fmt = (n: number) => String(Number(n.toFixed(1)))

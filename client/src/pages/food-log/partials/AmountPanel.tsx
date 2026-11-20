@@ -1,20 +1,12 @@
 import { input, inputBase } from '@/components/Form'
 import { numbersOnly } from '@/utils/numbersOnly'
+import { MACROS, MICROS } from '@/constants/nutrients'
 import { MEALS } from '@/constants/meals'
 import { useInlineValidation } from '@/hooks/useInlineValidation'
 import type { Food, Meal } from '@/services/FoodService/types/Food'
 import { ChevronLeft } from 'lucide-react'
 import { useState, type FormEvent } from 'react'
-import {
-  amountUnits,
-  defaultAmount,
-  fmt,
-  hasMissingData,
-  mealLabel,
-  nutrientsFor,
-  toBase,
-  type AmountUnit,
-} from '../food'
+import { amountUnits, defaultAmount, fmt, mealLabel, nutrientsFor, toBase, type AmountUnit } from '../food'
 
 type Props = {
   food: Food
@@ -24,9 +16,6 @@ type Props = {
   onAdd: (amount: number, unit: AmountUnit) => void
   adding: boolean
 }
-
-const tag = 'rounded-[7px] px-1.75 py-0.75 text-[11px] font-bold'
-const tagGrey = `${tag} bg-surface-2 text-ink-2`
 
 // Amount screen (1j): mobile shows it in place of the list, desktop beside it. Mount with key={food.id}
 // so the amount resets when another food is picked.
@@ -38,11 +27,8 @@ export const AmountPanel = ({ food, meal, onMeal, onBack, onAdd, adding }: Props
   const n = nutrientsFor(food, base)
 
   const rows: [string, number | null, string, string?][] = [
-    ['Protein', n.protein, 'g', 'bg-protein'],
-    ['Carbs', n.carbs, 'g', 'bg-carbs'],
-    ['Fat', n.fat, 'g', 'bg-fat'],
-    ['Fiber', n.fiber, 'g'],
-    ['Sodium', n.sodium, 'mg'],
+    ...MACROS.map(({ key, label, bg }): [string, number | null, string, string] => [label, n[key], 'g', bg]),
+    ...MICROS.map(({ key, label, unit }): [string, number | null, string] => [label, n[key], unit]),
   ]
 
   const { attach, message: invalidMessage, clear: clearInvalid } = useInlineValidation()
@@ -70,13 +56,6 @@ export const AmountPanel = ({ food, meal, onMeal, onBack, onAdd, adding }: Props
           <ChevronLeft size={22} aria-hidden />
         </button>
         <h2 className="m-0 truncate text-[21px] leading-tight font-extrabold tracking-[-0.6px]">{food.name}</h2>
-      </div>
-      <div className="flex flex-wrap gap-1.5">
-        <span className={tagGrey}>{food.brand ?? 'Generic'}</span>
-        <span className={tagGrey}>
-          per {food.per} {food.unit}
-        </span>
-        {hasMissingData(food) && <span className={`${tag} bg-primary-50 text-primary-ink`}>some data missing</span>}
       </div>
 
       <div className="flex flex-col gap-1.5">

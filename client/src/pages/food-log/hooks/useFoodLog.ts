@@ -3,7 +3,7 @@ import type { Food, Meal } from '@/services/FoodService/types/Food'
 import { startOfToday, toDateKey } from '@/utils/date'
 import { useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { amountText, defaultAmount, mealLabel, nutrientsFor, parseMeal, toBase, type AmountUnit } from '../food'
+import { defaultAmount, mealLabel, nutrientsFor, parseMeal, toBase, type AmountUnit } from '../food'
 
 // Meal and selected food live in the URL (?meal=lunch&food=id): refresh keeps them, and on mobile
 // the phone's back gesture leaves the amount screen.
@@ -31,7 +31,7 @@ export const useFoodLog = () => {
   const setMeal = (m: Meal) => update({ meal: m }, true)
 
   const add = (food: Food, amount: number, unit: AmountUnit) => {
-    const text = amountText(food, amount, unit)
+    const base = toBase(food, amount, unit)
     setStatus('')
     addFood.mutate(
       {
@@ -39,12 +39,13 @@ export const useFoodLog = () => {
         meal,
         foodId: food.id,
         name: food.name,
-        amount: text,
-        ...nutrientsFor(food, toBase(food, amount, unit)),
+        amount: base,
+        unit: food.unit,
+        ...nutrientsFor(food, base),
       },
       {
         onSuccess: () => {
-          setStatus(`Added ${text} ${food.name} to ${mealLabel(meal)}`)
+          setStatus(`Added ${food.name} to ${mealLabel(meal)}`)
           unselect()
         },
         onError: () => setStatus('Not saved, try again'),

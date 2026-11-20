@@ -1,26 +1,16 @@
 import { FormPage } from '@/components/Form'
+import { MACROS, MICROS } from '@/constants/nutrients'
 import { ROUTE_PATHS } from '@/constants/routePaths'
 import { useCreateFood } from '@/hooks/queries/useFoods'
 import { MealPicker } from '@/components/MealPicker'
 import { parseMeal, unitName } from '@/pages/food-log/food'
 import type { Food } from '@/services/FoodService/types/Food'
-import { Beef, Flame, FlaskConical, Leaf, Nut, Plus, Wheat } from 'lucide-react'
+import { Flame, Plus } from 'lucide-react'
 import { useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { NutrientCard } from './partials/NutrientCard'
 import { PillInput, PillSelect } from './partials/PillField'
 import { TitleField } from './partials/TitleField'
-
-const MACROS = [
-  { key: 'protein', label: 'Protein', icon: Beef, color: 'text-protein' },
-  { key: 'carbs', label: 'Carbs', icon: Wheat, color: 'text-carbs' },
-  { key: 'fat', label: 'Fat', icon: Nut, color: 'text-fat' },
-] as const
-
-const MORE = [
-  { key: 'fiber', label: 'Fiber', unit: 'g', max: 1000, icon: Leaf },
-  { key: 'sodium', label: 'Sodium', unit: 'mg', max: 100000, icon: FlaskConical },
-] as const
 
 // Blank stays null (no data), never 0.
 const optionalNumber = (v: string) => (v === '' ? null : Number(v))
@@ -142,10 +132,10 @@ const FoodNewPage = () => {
       />
 
       <div className="grid grid-cols-3 gap-2.5">
-        {MACROS.map(({ key, label, icon: Icon, color }) => (
+        {MACROS.map(({ key, label, icon: Icon, text }) => (
           <NutrientCard
             key={key}
-            icon={<Icon size={16} className={color} aria-hidden />}
+            icon={<Icon size={16} className={text} aria-hidden />}
             label={label}
             unit="g"
             inputMode="decimal"
@@ -158,7 +148,7 @@ const FoodNewPage = () => {
 
       {more && (
         <div className="grid grid-cols-2 gap-2.5">
-          {MORE.map(({ key, label, unit, max, icon: Icon }) => (
+          {MICROS.map(({ key, label, unit, max, icon: Icon }) => (
             <NutrientCard
               key={key}
               icon={<Icon size={16} className="text-ink-3" aria-hidden />}
