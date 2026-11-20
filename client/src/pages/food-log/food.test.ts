@@ -19,6 +19,8 @@ test('nutrientsFor scales from the basis, rounds, and keeps missing as null', ()
   expect(n.carbs).toBeCloseTo(47.6)
   expect(n.fat).toBeCloseTo(0.5)
   expect(n.sodium).toBeNull()
+  // Micros the food doesn't list stay absent, not null.
+  expect('zinc' in n).toBe(false)
 })
 
 test('servings convert to the base unit', () => {

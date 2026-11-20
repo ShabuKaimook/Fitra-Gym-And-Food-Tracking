@@ -1,4 +1,4 @@
-import { numbersOnly } from '@/utils/numbersOnly'
+import { capAtMax, numbersOnly } from '@/utils/numbersOnly'
 import type { InputHTMLAttributes, ReactNode } from 'react'
 
 type Props = {
@@ -26,6 +26,7 @@ export const NutrientCard = ({ icon, label, unit, action, ...inputProps }: Props
           placeholder="–"
           onBeforeInput={numbersOnly}
           {...inputProps}
+          onChange={capAtMax(inputProps.onChange)}
           className="field-sizing-content max-w-full min-w-[2ch] bg-transparent text-lg font-bold tabular-nums placeholder:text-ink-3 focus-visible:outline-none"
         />
         <span className="text-sm font-semibold text-ink-2">{unit}</span>

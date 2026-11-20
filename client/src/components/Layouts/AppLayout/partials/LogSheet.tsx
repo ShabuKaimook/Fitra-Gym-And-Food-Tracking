@@ -1,4 +1,4 @@
-import { numbersOnly } from '@/utils/numbersOnly'
+import { capAtMax, numbersOnly } from '@/utils/numbersOnly'
 import { ROUTE_PATHS } from '@/constants/routePaths'
 import { Bike, Droplets, Dumbbell, Footprints, Moon, Scale, Utensils, type LucideIcon } from 'lucide-react'
 import { useState, type Ref } from 'react'
@@ -113,7 +113,7 @@ export const LogSheet = ({ ref }: { ref: Ref<HTMLDialogElement> }) => {
                 autoFocus
                 placeholder="ml"
                 value={ml}
-                onChange={(e) => setMl(e.target.value)}
+                onChange={capAtMax((e) => setMl(e.target.value))}
                 className="min-h-11 min-w-0 rounded-[14px] border border-line bg-surface-2 px-3 tabular-nums focus-visible:outline-2"
               />
               <button type="submit" className={`${waterQuick} px-4`} disabled={adding}>

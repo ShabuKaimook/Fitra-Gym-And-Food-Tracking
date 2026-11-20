@@ -1,4 +1,4 @@
-import { numbersOnly } from '@/utils/numbersOnly'
+import { capAtMax, numbersOnly } from '@/utils/numbersOnly'
 import type { InputHTMLAttributes } from 'react'
 
 // Label on the left, a rounded pill control on the right.
@@ -18,6 +18,7 @@ export const PillInput = ({ label, ...inputProps }: InputProps) => (
       step="any"
       onBeforeInput={numbersOnly}
       {...inputProps}
+      onChange={capAtMax(inputProps.onChange)}
       className={`${pill} w-28 px-4 text-center`}
     />
   </label>

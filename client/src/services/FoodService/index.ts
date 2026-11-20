@@ -1,5 +1,6 @@
 import type { RequestOptions } from '@/types/api/RequestOptions'
 import type { DateKey } from '@/utils/date'
+import { MICROS } from '@/constants/nutrients'
 import { inRange, mockRequest, onDate } from '@/utils/mockRequest'
 import { CALORIES, FOOD_ENTRIES, FOODS, MACROS, MEALS, MICRONUTRIENTS, UNITS, WATER } from '../mockData'
 import type {
@@ -68,12 +69,10 @@ export const FoodService = {
       micro = { date: entry.date, items: (MICRONUTRIENTS.at(-1)?.items ?? []).map((m) => ({ ...m, value: null })) }
       MICRONUTRIENTS.push(micro)
     }
-    for (const [name, value] of [
-      ['Fiber', entry.fiber],
-      ['Sodium', entry.sodium],
-    ] as const) {
-      const item = micro.items.find((m) => m.name === name)
-      if (item && value !== null) item.value = (item.value ?? 0) + value
+    for (const { key, label } of MICROS) {
+      const value = entry[key]
+      const item = micro.items.find((m) => m.name === label)
+      if (item && value != null) item.value = (item.value ?? 0) + value
     }
     return mockRequest(entry)
   },

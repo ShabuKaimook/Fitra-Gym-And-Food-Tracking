@@ -35,15 +35,27 @@ export type UnitId = BaseUnit | PortionUnit
 /** `size`: typical g (or ml) in one, used when a food has no size of its own for this unit. */
 export type Unit = { id: UnitId; label: string; kind: 'base' | 'portion'; size: number }
 
-/** Grams for protein, carbs, fat and fiber; mg for sodium. null = no data, never counted as 0. */
+export type MicroKey =
+  | 'fiber'
+  | 'sugar'
+  | 'sodium'
+  | 'potassium'
+  | 'saturatedFat'
+  | 'cholesterol'
+  | 'calcium'
+  | 'iron'
+  | 'vitaminC'
+  | 'vitaminD'
+  | 'magnesium'
+  | 'zinc'
+
+/** Macros in grams; micros in the unit MICROS gives them. null or missing = no data, never counted as 0. */
 export type Nutrients = {
   calories: number
   protein: number | null
   carbs: number | null
   fat: number | null
-  fiber: number | null
-  sodium: number | null
-}
+} & Partial<Record<MicroKey, number | null>>
 
 /** A food in the database. `nutrients` are for `per` of `unit` (e.g. per 100 g, per 1 plate). */
 export type Food = {

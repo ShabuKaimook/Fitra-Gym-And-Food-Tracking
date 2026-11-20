@@ -63,7 +63,8 @@ function SelectContent({
         align={align}
         {...props}
       >
-        <SelectScrollUpButton />
+        {/* No scroll buttons: when one mounts, Radix scrolls the focused item back into view, so on touch
+            the list snaps to the top and can't be scrolled (radix-ui/react-select 2.4.1). Native scrolling instead. */}
         <SelectPrimitive.Viewport
           data-position={position}
           className={cn(
@@ -73,7 +74,6 @@ function SelectContent({
         >
           {children}
         </SelectPrimitive.Viewport>
-        <SelectScrollDownButton />
       </SelectPrimitive.Content>
     </SelectPrimitive.Portal>
   )

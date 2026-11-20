@@ -1,5 +1,5 @@
 import { inputBase } from '@/components/Form'
-import { numbersOnly } from '@/utils/numbersOnly'
+import { capAtMax, numbersOnly } from '@/utils/numbersOnly'
 import { MACROS, MICROS } from '@/constants/nutrients'
 import { useMealLabel } from '@/hooks/queries/useMeals'
 import { useUnits } from '@/hooks/queries/useUnits'
@@ -33,7 +33,12 @@ export const AmountPanel = ({ food, meal, onMeal, onBack, onAdd, adding }: Props
 
   const rows: [string, number | null, string, string?][] = [
     ...MACROS.map(({ key, label, bg }): [string, number | null, string, string] => [label, n[key], 'g', bg]),
-    ...MICROS.map(({ key, label, unit }): [string, number | null, string] => [label, n[key], unit]),
+    // Only micros this food lists; the rest weren't entered, so a row of "No data" × 12 would be noise.
+    ...MICROS.filter(({ key }) => n[key] !== undefined).map(({ key, label, unit }): [string, number | null, string] => [
+      label,
+      n[key] ?? null,
+      unit,
+    ]),
   ]
 
   const { attach, message: invalidMessage, clear: clearInvalid } = useInlineValidation()
@@ -78,7 +83,7 @@ export const AmountPanel = ({ food, meal, onMeal, onBack, onAdd, adding }: Props
               max={100000}
               step="any"
               value={amount}
-              onChange={(e) => setAmount(e.target.value)}
+              onChange={capAtMax((e) => setAmount(e.target.value))}
             />
           </span>
           <span className="min-w-0 flex-1">

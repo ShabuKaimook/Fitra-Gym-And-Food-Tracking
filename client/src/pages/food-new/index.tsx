@@ -1,13 +1,14 @@
 import { FormPage } from '@/components/Form'
-import { MACROS, MICROS } from '@/constants/nutrients'
+import { MACROS } from '@/constants/nutrients'
 import { ROUTE_PATHS } from '@/constants/routePaths'
 import { useCreateFood } from '@/hooks/queries/useFoods'
 import { MealPicker } from '@/components/MealPicker'
 import { parseMeal } from '@/pages/food-log/food'
 import type { Food } from '@/services/FoodService/types/Food'
-import { Flame, Plus } from 'lucide-react'
+import { Flame } from 'lucide-react'
 import { useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
+import { MicronutrientsBox, type MicroValues } from './partials/MicronutrientsBox'
 import { NutrientCard } from './partials/NutrientCard'
 import { PillInput } from './partials/PillField'
 import { TitleField } from './partials/TitleField'
@@ -23,7 +24,7 @@ const FoodNewPage = () => {
   const [params, setParams] = useSearchParams()
   const meal = parseMeal(params.get('meal'))
   const createFood = useCreateFood()
-  const [more, setMore] = useState(false)
+  const [micros, setMicros] = useState<MicroValues>({})
   const [form, setForm] = useState({
     name: params.get('name') ?? '',
     per: '100',
@@ -32,8 +33,6 @@ const FoodNewPage = () => {
     protein: '',
     carbs: '',
     fat: '',
-    fiber: '',
-    sodium: '',
   })
   const set = (key: keyof typeof form) => (e: { target: { value: string } }) =>
     setForm((f) => ({ ...f, [key]: e.target.value }))
@@ -54,8 +53,7 @@ const FoodNewPage = () => {
           protein: optionalNumber(form.protein),
           carbs: optionalNumber(form.carbs),
           fat: optionalNumber(form.fat),
-          fiber: optionalNumber(form.fiber),
-          sodium: optionalNumber(form.sodium),
+          ...Object.fromEntries(Object.entries(micros).map(([key, v]) => [key, optionalNumber(v)])),
         },
       },
       {
@@ -104,18 +102,7 @@ const FoodNewPage = () => {
         </>
       }
     >
-      <div className="flex items-center justify-between gap-3 pt-1">
-        <h2 className="m-0 text-sm font-bold">Nutrition</h2>
-        <button
-          type="button"
-          aria-expanded={more}
-          onClick={() => setMore((m) => !m)}
-          className="inline-flex min-h-11 items-center gap-1 text-[13px] font-bold text-ink-2"
-        >
-          {more ? 'Fewer nutrients' : 'Add more nutrients'}
-          <Plus size={16} className={more ? 'rotate-45' : ''} aria-hidden />
-        </button>
-      </div>
+      <h2 className="m-0 pt-1 text-sm font-bold">Nutrition</h2>
 
       <NutrientCard
         icon={<Flame size={16} className="text-primary" aria-hidden />}
@@ -144,22 +131,7 @@ const FoodNewPage = () => {
         ))}
       </div>
 
-      {more && (
-        <div className="grid grid-cols-2 gap-2.5">
-          {MICROS.map(({ key, label, unit, max, icon: Icon }) => (
-            <NutrientCard
-              key={key}
-              icon={<Icon size={16} className="text-ink-3" aria-hidden />}
-              label={label}
-              unit={unit}
-              inputMode="decimal"
-              max={max}
-              value={form[key]}
-              onChange={set(key)}
-            />
-          ))}
-        </div>
-      )}
+      <MicronutrientsBox values={micros} onChange={setMicros} />
       <p className="m-0 text-xs text-ink-2">Left blank = no data, never counted as 0</p>
     </FormPage>
   )

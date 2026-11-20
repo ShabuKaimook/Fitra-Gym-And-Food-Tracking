@@ -1,3 +1,4 @@
+import { MICROS } from '@/constants/nutrients'
 import type { Food, Meal, Nutrients, Unit, UnitId } from '@/services/FoodService/types/Food'
 
 // Record<Meal, …> so a new meal in the type fails to compile here until it's added.
@@ -67,8 +68,10 @@ export const nutrientsFor = (food: Food, base: number): Nutrients => {
     protein: scale(n.protein, f, 0.1),
     carbs: scale(n.carbs, f, 0.1),
     fat: scale(n.fat, f, 0.1),
-    fiber: scale(n.fiber, f, 0.1),
-    sodium: scale(n.sodium, f, 1),
+    // Only the micros the food lists, so "not entered" stays distinguishable from "entered as unknown".
+    ...Object.fromEntries(
+      MICROS.filter(({ key }) => n[key] !== undefined).map(({ key }) => [key, scale(n[key] ?? null, f, 0.1)]),
+    ),
   }
 }
 
