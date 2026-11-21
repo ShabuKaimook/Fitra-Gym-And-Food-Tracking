@@ -1,7 +1,8 @@
 import { Skeleton } from '@/components/Skeleton'
 import type { Food } from '@/services/FoodService/types/Food'
 import { MACROS } from '@/constants/nutrients'
-import { CirclePlus } from 'lucide-react'
+import { Check, Plus } from 'lucide-react'
+import { useEffect, useState } from 'react'
 import { basisText, fmt } from '../food'
 
 type Props = {
@@ -79,15 +80,7 @@ export const FoodList = ({ foods, emptyText, selectedId, onSelect, onQuickAdd, a
                   </span>
                 </span>
               </button>
-              <button
-                type="button"
-                aria-label={`Quick add ${food.name}`}
-                disabled={adding}
-                onClick={() => onQuickAdd(food)}
-                className="grid size-18 flex-none place-items-center text-primary"
-              >
-                <CirclePlus size={24} aria-hidden />
-              </button>
+              <QuickAddButton name={food.name} disabled={adding} onClick={() => onQuickAdd(food)} />
             </li>
           )
         })}
@@ -95,3 +88,59 @@ export const FoodList = ({ foods, emptyText, selectedId, onSelect, onQuickAdd, a
     )}
   </div>
 )
+
+// Phase lengths match spin-45, bump and unspin-45 in index.css. Timers, not animationend, so reduced motion
+// (no animation) still steps through and resets.
+const NEXT = {
+  spin: { to: 'bump', ms: 200 },
+  bump: { to: 'unspin', ms: 400 },
+  unspin: { to: 'idle', ms: 200 },
+} as const
+type Phase = 'idle' | keyof typeof NEXT
+
+// + that spins 45°, then turns into an orange check that bumps 1 → 1.3 → 1, then spins back from 45° to the outline +.
+const QuickAddButton = ({ name, disabled, onClick }: { name: string; disabled: boolean; onClick: () => void }) => {
+  const [phase, setPhase] = useState<Phase>('idle')
+
+  useEffect(() => {
+    if (phase === 'idle') return
+    const timer = setTimeout(() => setPhase(NEXT[phase].to), NEXT[phase].ms)
+    return () => clearTimeout(timer)
+  }, [phase])
+
+  return (
+    <button
+      type="button"
+      aria-label={`Quick add ${name}`}
+      disabled={disabled}
+      onClick={() => {
+        setPhase('spin')
+        onClick()
+      }}
+      className="grid size-18 flex-none place-items-center"
+    >
+      <span
+        className={`grid size-6 place-items-center rounded-full border-2 border-primary motion-reduce:animate-none ${
+          phase === 'bump' ? 'animate-bump bg-primary text-on-primary' : 'text-primary'
+        }`}
+      >
+        {phase === 'bump' ? (
+          <Check size={14} strokeWidth={3} aria-hidden />
+        ) : (
+          <Plus
+            size={14}
+            strokeWidth={3}
+            aria-hidden
+            className={
+              phase === 'spin'
+                ? 'animate-spin-45 motion-reduce:animate-none'
+                : phase === 'unspin'
+                  ? 'animate-unspin-45 motion-reduce:animate-none'
+                  : ''
+            }
+          />
+        )}
+      </span>
+    </button>
+  )
+}
