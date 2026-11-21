@@ -14,4 +14,16 @@ export const HealthService = {
 
   getActivity: async (date: DateKey, options?: RequestOptions): Promise<DailyActivity | null> =>
     mockRequest(onDate(ACTIVITY, date), options),
+
+  /** Replaces the day's step count. */
+  setSteps: async ({ date, steps }: { date: DateKey; steps: number }): Promise<DailyActivity> => {
+    // shortcut: edits the in-memory mock (lost on reload); the API will own this.
+    let day = onDate(ACTIVITY, date)
+    if (!day) {
+      day = { date, steps: 0, stepsTarget: ACTIVITY.at(-1)?.stepsTarget ?? 10000, cardioMinutes: null }
+      ACTIVITY.push(day)
+    }
+    day.steps = steps
+    return mockRequest(day)
+  },
 }

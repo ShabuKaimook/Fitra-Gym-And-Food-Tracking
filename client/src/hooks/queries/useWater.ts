@@ -12,6 +12,16 @@ export const useWater = (date: Date) => {
   })
 }
 
+// Replaces the day's water total with `liters`.
+export const useSetWater = (date: Date) => {
+  const key = toDateKey(date)
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (liters: number) => FoodService.setWater({ date: key, liters }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: QUERY_KEYS.water(key) }),
+  })
+}
+
 // Adds `ml` to the day's water total.
 export const useAddWater = (date: Date) => {
   const key = toDateKey(date)

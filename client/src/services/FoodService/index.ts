@@ -45,6 +45,18 @@ export const FoodService = {
     return mockRequest(day)
   },
 
+  /** Replaces the day's water total. */
+  setWater: async ({ date, liters }: { date: DateKey; liters: number }): Promise<DailyWater> => {
+    // shortcut: edits the in-memory mock (lost on reload); the API will own this.
+    let day = onDate(WATER, date)
+    if (!day) {
+      day = { date, liters: 0, target: WATER.at(-1)?.target ?? 2.5 }
+      WATER.push(day)
+    }
+    day.liters = liters
+    return mockRequest(day)
+  },
+
   addFood: async (entry: FoodEntry): Promise<FoodEntry> => {
     // shortcut: edits the in-memory mock (lost on reload) and its daily totals; the API will own this.
     FOOD_ENTRIES.push(entry)

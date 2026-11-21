@@ -3,10 +3,16 @@ import type { DailyActivity, DailySleep, DailyWeight } from '@/services/HealthSe
 import type { Loadable } from '@/types/Loadable'
 import { Droplets, Footprints, Moon, Scale } from 'lucide-react'
 import { Skeleton } from '@/components/Skeleton'
+import { useSetSteps } from '@/hooks/queries/useActivity'
+import { useSetWater } from '@/hooks/queries/useWater'
+import { useState } from 'react'
+import { toast } from 'react-toastify'
+import { FormDialog } from '@/components/FormDialog'
 import { StatTile } from './StatTile'
 import { cardSkeleton, row } from './ui'
 
 type Props = {
+  date: Date
   activity: Loadable<DailyActivity | null>
   water: Loadable<DailyWater | null>
   sleep: Loadable<DailySleep | null>
@@ -16,10 +22,21 @@ type Props = {
 const formatSleep = (min: number) => `${Math.floor(min / 60)}h${min % 60 ? ` ${min % 60}m` : ''}`
 
 // Steps, water, sleep and weight tiles. null data → the tile's "Not recorded" state.
-export const StatsRow = ({ activity, water, sleep, weight }: Props) => {
+export const StatsRow = ({ date, activity, water, sleep, weight }: Props) => {
   const act = activity.data
   const wat = water.data
   const slp = sleep.data
+  const [editing, setEditing] = useState<'steps' | 'water' | null>(null)
+  const setSteps = useSetSteps(date)
+  const setWater = useSetWater(date)
+
+  const toasts = (what: string) => ({
+    onSuccess: () => {
+      toast.success(`${what} updated`)
+      setEditing(null)
+    },
+    onError: () => toast.error(`${what} not saved, try again`),
+  })
 
   return (
     <div className={`${row} lg:grid-cols-4 lg:gap-3`}>
@@ -35,6 +52,7 @@ export const StatsRow = ({ activity, water, sleep, weight }: Props) => {
           target={act?.stepsTarget.toLocaleString()}
           progress={act ? { value: act.steps, max: act.stepsTarget } : undefined}
           addLabel="Add steps"
+          onEdit={() => setEditing('steps')}
         />
       )}
       {water.isPending ? (
@@ -49,6 +67,7 @@ export const StatsRow = ({ activity, water, sleep, weight }: Props) => {
           target={wat ? `${wat.target} L` : undefined}
           progress={wat ? { value: wat.liters, max: wat.target } : undefined}
           addLabel="Add water"
+          onEdit={() => setEditing('water')}
         />
       )}
       {sleep.isPending ? (
@@ -74,6 +93,26 @@ export const StatsRow = ({ activity, water, sleep, weight }: Props) => {
           icon={Scale}
           value={weight.data ? `${weight.data.kg} kg` : null}
           addLabel="Add"
+        />
+      )}
+      {editing === 'steps' && (
+        <FormDialog
+          title="Edit steps"
+          rows={[[{ name: 'steps', label: 'Steps', max: 100000 }]]}
+          initial={act ? { steps: String(act.steps) } : undefined}
+          saving={setSteps.isPending}
+          onSave={(v) => setSteps.mutate(v.steps, toasts('Steps'))}
+          onClose={() => setEditing(null)}
+        />
+      )}
+      {editing === 'water' && (
+        <FormDialog
+          title="Edit water"
+          rows={[[{ name: 'liters', label: 'Water', unit: 'L', max: 10, step: 0.01 }]]}
+          initial={wat ? { liters: String(wat.liters) } : undefined}
+          saving={setWater.isPending}
+          onSave={(v) => setWater.mutate(v.liters, toasts('Water'))}
+          onClose={() => setEditing(null)}
         />
       )}
     </div>

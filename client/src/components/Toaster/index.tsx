@@ -18,9 +18,10 @@ export const Toaster = () => {
   return (
     <ToastContainer
       position={desktop ? 'top-right' : 'bottom-center'}
-      autoClose={5000}
+      autoClose={700}
+      limit={3}
       transition={Bounce}
-      hideProgressBar={false}
+      hideProgressBar
       closeOnClick={false}
       pauseOnFocusLoss
       pauseOnHover

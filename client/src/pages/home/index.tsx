@@ -36,7 +36,7 @@ const HomePage = () => {
       {/* Mobile: one 2-column grid, the row wrappers dissolve and areas set the order. Desktop: rows. */}
       <div className="grid grid-cols-2 gap-3 [grid-template-areas:'cal_cal'_'steps_water'_'micro_micro'_'sleep_weight'_'workout_workout'] lg:flex lg:flex-col lg:gap-3.5">
         <NutritionRow calories={calories} macros={macros} micros={micros} />
-        <StatsRow activity={activity} water={water} sleep={sleep} weight={weight} />
+        <StatsRow date={date} activity={activity} water={water} sleep={sleep} weight={weight} />
         <TrainingRow workout={workout} activity={activity} isToday={isToday} />
       </div>
     </div>
