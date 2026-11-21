@@ -18,7 +18,7 @@ const TABS = [
 // screen; desktop shows both side by side.
 const FoodLogPage = () => {
   const log = useFoodLog()
-  const { meal, foodId, status } = log
+  const { meal, foodId } = log
   const [query, setQuery] = useState('')
   const [tab, setTab] = useState<'all' | 'recent'>('all')
   const search = useFoodSearch(useDeferredValue(query))
@@ -44,13 +44,6 @@ const FoodLogPage = () => {
             <AddFoodLink to={newFoodUrl} />
           </div>
         </div>
-
-        <p
-          role="status"
-          className={`m-0 text-[13px] font-bold empty:hidden ${status.startsWith('Not') ? 'text-danger' : 'text-success'}`}
-        >
-          {status}
-        </p>
 
         <FoodList
           foods={foods}

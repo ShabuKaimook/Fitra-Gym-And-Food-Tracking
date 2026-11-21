@@ -3,8 +3,8 @@ import type { Food, Meal } from '@/services/FoodService/types/Food'
 import { startOfToday, toDateKey } from '@/utils/date'
 import { useMealLabel } from '@/hooks/queries/useMeals'
 import { useUnits } from '@/hooks/queries/useUnits'
-import { useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
+import { toast } from 'react-toastify'
 import { defaultAmount, nutrientsFor, parseMeal, toBase, type AmountUnit } from '../food'
 
 // Meal and selected food live in the URL (?meal=lunch&food=id): refresh keeps them, and on mobile
@@ -16,7 +16,6 @@ export const useFoodLog = () => {
   const units = useUnits().data
   const foodId = params.get('food')
   const addFood = useAddFood()
-  const [status, setStatus] = useState('')
 
   const update = (changes: Record<string, string | null>, replace: boolean) =>
     setParams(
@@ -36,7 +35,6 @@ export const useFoodLog = () => {
 
   const add = (food: Food, amount: number, unit: AmountUnit) => {
     const base = toBase(food, amount, unit, units)
-    setStatus('')
     addFood.mutate(
       {
         date: toDateKey(startOfToday()),
@@ -49,10 +47,10 @@ export const useFoodLog = () => {
       },
       {
         onSuccess: () => {
-          setStatus(`Added ${food.name} to ${mealLabel}`)
+          toast.success(`Added ${food.name} to ${mealLabel}`)
           unselect()
         },
-        onError: () => setStatus('Not saved, try again'),
+        onError: () => toast.error(`${food.name} not saved, try again`),
       },
     )
   }
@@ -63,5 +61,5 @@ export const useFoodLog = () => {
     add(food, amount, unit)
   }
 
-  return { meal, setMeal, foodId, select, unselect, add, quickAdd, adding: addFood.isPending, status }
+  return { meal, setMeal, foodId, select, unselect, add, quickAdd, adding: addFood.isPending }
 }

@@ -8,6 +8,7 @@ import type { Food } from '@/services/FoodService/types/Food'
 import { Flame } from 'lucide-react'
 import { useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
+import { toast } from 'react-toastify'
 import { MicronutrientsBox, type MicroValues } from './partials/MicronutrientsBox'
 import { NutrientCard } from './partials/NutrientCard'
 import { PillInput } from './partials/PillField'
@@ -58,7 +59,11 @@ const FoodNewPage = () => {
       },
       {
         // Straight to its amount screen; replace so Back doesn't return to this filled-in form.
-        onSuccess: (food) => navigate(logUrl({ food: food.id }), { replace: true }),
+        onSuccess: (food) => {
+          toast.success(`Saved ${food.name}`)
+          navigate(logUrl({ food: food.id }), { replace: true })
+        },
+        onError: () => toast.error('Food not saved, try again'),
       },
     )
 
@@ -69,7 +74,6 @@ const FoodNewPage = () => {
       submitLabel="Save"
       onSubmit={save}
       pending={createFood.isPending}
-      error={createFood.isError ? 'Not saved, try again' : undefined}
       headerCenter={
         <MealPicker
           value={meal}

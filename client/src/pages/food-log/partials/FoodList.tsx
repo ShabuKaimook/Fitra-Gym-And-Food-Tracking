@@ -65,7 +65,14 @@ export const FoodList = ({ foods, emptyText, selectedId, onSelect, onQuickAdd, a
                           <Icon size={14} className={text} aria-hidden />
                           <span className="sr-only">{label}</span>
                           {/* Missing stays visibly missing, never 0. */}
-                          {grams === null ? <span className="italic">no data</span> : `${fmt(grams)} g`}
+                          {grams === null ? (
+                            <>
+                              <span aria-hidden>–</span>
+                              <span className="sr-only">no data</span>
+                            </>
+                          ) : (
+                            `${fmt(grams)} g`
+                          )}
                         </span>
                       )
                     })}
