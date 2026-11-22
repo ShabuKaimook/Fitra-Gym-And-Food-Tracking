@@ -7,33 +7,24 @@ import { useSearchParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { defaultAmount, nutrientsFor, parseMeal, toBase, type AmountUnit } from '../food'
 
-// Meal and selected food live in the URL (?meal=lunch&food=id): refresh keeps them, and on mobile
-// the phone's back gesture leaves the amount screen.
+// Meal lives in the URL (?meal=lunch) so refresh keeps it. Used by the food log and the food form.
 export const useFoodLog = () => {
   const [params, setParams] = useSearchParams()
   const meal = parseMeal(params.get('meal'))
   const mealLabel = useMealLabel(meal)
   const units = useUnits().data
-  const foodId = params.get('food')
   const addFood = useAddFood()
 
-  const update = (changes: Record<string, string | null>, replace: boolean) =>
+  const setMeal = (m: Meal) =>
     setParams(
       (p) => {
-        for (const [k, v] of Object.entries(changes)) {
-          if (v === null) p.delete(k)
-          else p.set(k, v)
-        }
+        p.set('meal', m)
         return p
       },
-      { replace },
+      { replace: true },
     )
 
-  const select = (id: string) => update({ food: id }, foodId !== null)
-  const unselect = () => update({ food: null }, true)
-  const setMeal = (m: Meal) => update({ meal: m }, true)
-
-  const add = (food: Food, amount: number, unit: AmountUnit) => {
+  const add = (food: Food, amount: number, unit: AmountUnit, onDone?: () => void) => {
     const base = toBase(food, amount, unit, units)
     addFood.mutate(
       {
@@ -48,7 +39,7 @@ export const useFoodLog = () => {
       {
         onSuccess: () => {
           toast.success(`Added ${food.name} to ${mealLabel}`)
-          unselect()
+          onDone?.()
         },
         onError: () => toast.error(`${food.name} not saved, try again`),
       },
@@ -61,5 +52,5 @@ export const useFoodLog = () => {
     add(food, amount, unit)
   }
 
-  return { meal, setMeal, foodId, select, unselect, add, quickAdd, adding: addFood.isPending }
+  return { meal, setMeal, mealLabel, add, quickAdd, adding: addFood.isPending }
 }

@@ -116,4 +116,13 @@ export const FoodService = {
     FOODS.push(created)
     return mockRequest(created)
   },
+
+  /** Replaces the whole food; logged entries keep the nutrients they were logged with. */
+  updateFood: async (food: Food): Promise<Food> => {
+    // shortcut: in-memory mock (lost on reload); the API will own this.
+    const i = FOODS.findIndex((f) => f.id === food.id)
+    if (i === -1) throw new Error(`Food ${food.id} not found`)
+    FOODS[i] = food
+    return mockRequest(food)
+  },
 }

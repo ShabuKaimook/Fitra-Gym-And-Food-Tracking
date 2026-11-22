@@ -33,7 +33,6 @@ export const toBase = (food: Food, amount: number, unit: AmountUnit, units?: Uni
   return (amount * (unitOf(units, unit)?.size ?? 1)) / (unitOf(units, food.unit)?.size ?? 1)
 }
 
-
 // The food's own units first (exact sizes), then every other unit with its estimated size as the hint.
 // Labels fall back to ids ("plate") until useUnits() loads.
 export const amountUnits = (food: Food, units: Unit[] | undefined): { own: UnitOption[]; other: UnitOption[] } => {

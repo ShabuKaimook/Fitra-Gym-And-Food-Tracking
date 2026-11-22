@@ -2,7 +2,7 @@ import { Field, input } from '@/components/Form'
 import { useInlineValidation } from '@/hooks/useInlineValidation'
 import { capAtMax, numbersOnly } from '@/utils/numbersOnly'
 import { X } from 'lucide-react'
-import { useEffect, useId, useRef, useState } from 'react'
+import { useEffect, useId, useLayoutEffect, useRef, useState } from 'react'
 
 export type DialogField = {
   name: string
@@ -30,22 +30,45 @@ type Props = {
 
 const btn = 'inline-flex min-h-11 items-center justify-center rounded-xl text-[14px] font-extrabold'
 
-// Centred modal with number fields laid out in rows. Native <dialog> gives focus trapping, Esc and
-// an inert page. Mount it only while open: it opens on mount, and onClose is the parent's cue to unmount.
+// Modal with number fields laid out in rows: centred, or on phones a sheet resting on the keyboard.
+// Native <dialog> gives focus trapping, Esc and an inert page. Mount it only while open: it opens on
+// mount, and onClose is the parent's cue to unmount.
 export const FormDialog = ({ title, rows, initial = {}, submitLabel = 'Save', saving, onSave, onClose }: Props) => {
   const ref = useRef<HTMLDialogElement>(null)
   const titleId = useId()
   const [values, setValues] = useState(initial)
   const { attach, message, clear } = useInlineValidation()
 
-  useEffect(() => ref.current?.showModal(), [])
+  // Layout effect: still inside the tap that opened it, which iOS needs before focus() may raise the keyboard.
+  useLayoutEffect(() => {
+    ref.current?.showModal()
+    ref.current?.querySelector('input')?.focus()
+  }, [])
+
+  // --kb = how much of the page the keyboard covers, so the phone sheet's bottom sits on top of it.
+  useEffect(() => {
+    const vv = window.visualViewport
+    if (!vv) return
+    const update = () =>
+      ref.current?.style.setProperty(
+        '--kb',
+        `${Math.max(0, document.documentElement.clientHeight - vv.offsetTop - vv.height)}px`,
+      )
+    update()
+    vv.addEventListener('resize', update)
+    vv.addEventListener('scroll', update)
+    return () => {
+      vv.removeEventListener('resize', update)
+      vv.removeEventListener('scroll', update)
+    }
+  }, [])
   const close = () => ref.current?.close()
 
   return (
     <dialog
       ref={ref}
       aria-labelledby={titleId}
-      className="m-auto w-[calc(100%-2rem)] max-w-sm rounded-[26px] bg-surface p-5 text-ink shadow-[0_10px_40px_rgba(0,0,0,0.12)] backdrop:bg-ink/40 backdrop:animate-fade-in motion-reduce:backdrop:animate-none"
+      className="m-auto w-[calc(100%-2rem)] max-w-sm rounded-[26px] bg-surface p-5 text-ink shadow-[0_10px_40px_rgba(0,0,0,0.12)] backdrop:animate-fade-in backdrop:bg-ink/40 motion-reduce:backdrop:animate-none max-sm:mt-auto max-sm:mb-[calc(var(--kb,0px)+8px)] max-sm:w-[calc(100%-1rem)] max-sm:max-w-none"
       // A click on the dialog itself (not its content) is a click on the backdrop.
       onClick={(e) => e.target === e.currentTarget && close()}
       onClose={onClose}
@@ -75,7 +98,7 @@ export const FormDialog = ({ title, rows, initial = {}, submitLabel = 'Save', sa
 
         {rows.map((row, i) => (
           <div key={i} className="grid gap-3" style={{ gridTemplateColumns: `repeat(${row.length}, minmax(0, 1fr))` }}>
-            {row.map(({ name, label, unit, max, min = 0, step = 1 }, j) => (
+            {row.map(({ name, label, unit, max, min = 0, step = 1 }) => (
               <Field key={name} label={label} unit={unit}>
                 <input
                   type="number"
@@ -85,7 +108,6 @@ export const FormDialog = ({ title, rows, initial = {}, submitLabel = 'Save', sa
                   max={max}
                   step={step}
                   required
-                  autoFocus={i === 0 && j === 0}
                   value={values[name] ?? ''}
                   onChange={capAtMax((e) => setValues((v) => ({ ...v, [name]: e.target.value })))}
                   className={input}

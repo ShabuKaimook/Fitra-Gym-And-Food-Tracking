@@ -31,3 +31,11 @@ export const useCreateFood = () => {
     onSuccess: () => queryClient.invalidateQueries({ queryKey: QUERY_KEYS.foods }),
   })
 }
+
+export const useUpdateFood = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: FoodService.updateFood,
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: QUERY_KEYS.foods }),
+  })
+}

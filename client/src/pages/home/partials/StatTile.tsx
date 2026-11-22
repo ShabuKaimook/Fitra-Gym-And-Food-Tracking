@@ -10,6 +10,8 @@ type Props = {
   /** null → "Not recorded" with an add button (never a 0 bar) */
   value: string | null
   target?: string
+  /** Small line under the value, e.g. "Quality 7/10" */
+  detail?: string
   progress?: { value: number; max: number }
   /** Data colour family: --color-{tone}, -tint, -ink */
   tone?: Tone
@@ -26,7 +28,18 @@ const ICON_TONE: Record<Tone, string> = {
   sleep: 'bg-sleep-tint text-sleep-ink',
 }
 
-export const StatTile = ({ label, icon: Icon, value, target, progress, tone, addLabel, onEdit, className = '' }: Props) => {
+export const StatTile = ({
+  label,
+  icon: Icon,
+  value,
+  target,
+  detail,
+  progress,
+  tone,
+  addLabel,
+  onEdit,
+  className = '',
+}: Props) => {
   const empty = value === null
   const iconClass = tone && !empty ? ICON_TONE[tone] : 'bg-surface text-ink-2'
 
@@ -66,6 +79,7 @@ export const StatTile = ({ label, icon: Icon, value, target, progress, tone, add
             <span className="text-lg leading-6 font-extrabold tracking-[-0.4px] tabular-nums">{value}</span>
             {target && <span className={muted}> / {target}</span>}
           </div>
+          {detail && <div className={muted}>{detail}</div>}
           {progress && <ProgressBar {...progress} color={`var(--color-${tone ?? 'primary'})`} />}
         </>
       )}

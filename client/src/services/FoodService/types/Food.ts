@@ -68,6 +68,8 @@ export type Food = {
   /** A named portion in `unit`, e.g. one plate = 350 g. */
   serving: { unit: PortionUnit; size: number } | null
   nutrients: Nutrients
+  /** Photo URL; missing = the placeholder illustration. */
+  image?: string
 }
 
 /** One logged food, with nutrients already worked out for the amount eaten. `amount` is in `unit`. */

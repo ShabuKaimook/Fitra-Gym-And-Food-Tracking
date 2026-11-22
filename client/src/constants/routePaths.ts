@@ -5,6 +5,7 @@ export const ROUTE_PATHS = {
   FOOD: '/food',
   FOOD_LOG: '/food/log',
   FOOD_NEW: '/food/new',
+  FOOD_EDIT: '/food/edit',
   ACTIVITY: '/activity',
   RECOVERY: '/recovery',
   BODY: '/body',

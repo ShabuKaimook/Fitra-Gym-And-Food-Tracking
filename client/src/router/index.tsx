@@ -32,6 +32,7 @@ export const router = createBrowserRouter([
       page(ROUTE_PATHS.HOME, () => import('@/pages/home')),
       page(ROUTE_PATHS.FOOD_LOG, () => import('@/pages/food-log')),
       page(ROUTE_PATHS.FOOD_NEW, () => import('@/pages/food-new'), { fullScreen: true }),
+      page(ROUTE_PATHS.FOOD_EDIT, () => import('@/pages/food-edit'), { fullScreen: true }),
       page(ROUTE_PATHS.NOT_FOUND, () => import('@/pages/not-found')),
     ],
   },

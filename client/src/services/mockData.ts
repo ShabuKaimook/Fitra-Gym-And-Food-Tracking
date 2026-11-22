@@ -11,7 +11,14 @@ import type {
   Micronutrient,
   Unit,
 } from './FoodService/types/Food'
-import type { DailyActivity, DailySleep, DailyWeight } from './HealthService/types/Health'
+import type {
+  DailyActivity,
+  DailyNote,
+  DailyScore,
+  DailySleep,
+  DailyWaist,
+  DailyWeight,
+} from './HealthService/types/Health'
 import type { PlannedWorkout } from './WorkoutService/types/Workout'
 
 export const CALORIES: DailyCalories[] = [
@@ -238,16 +245,38 @@ export const WATER: DailyWater[] = [
 ]
 
 export const SLEEP: DailySleep[] = [
-  { date: '2026-11-16', minutes: 450, target: 480 },
-  { date: '2026-11-17', minutes: 395, target: 480 },
-  { date: '2026-11-18', minutes: 485, target: 480 },
-  { date: '2026-11-19', minutes: 430, target: 480 },
+  { date: '2026-11-16', minutes: 450, target: 480, quality: 7 },
+  { date: '2026-11-17', minutes: 395, target: 480, quality: 5 },
+  { date: '2026-11-18', minutes: 485, target: 480, quality: 8 },
+  { date: '2026-11-19', minutes: 430, target: 480, quality: null },
 ]
 
 // Weighed on two of the four days.
 export const WEIGHT: DailyWeight[] = [
   { date: '2026-11-16', kg: 72.4 },
   { date: '2026-11-18', kg: 72.1 },
+]
+
+export const WAIST: DailyWaist[] = [
+  { date: '2026-11-16', cm: 81.5 },
+  { date: '2026-11-18', cm: 81 },
+]
+
+export const ENERGY: DailyScore[] = [
+  { date: '2026-11-16', score: 7 },
+  { date: '2026-11-17', score: 5 },
+  { date: '2026-11-18', score: 8 },
+]
+
+export const RECOVERY: DailyScore[] = [
+  { date: '2026-11-16', score: 6 },
+  { date: '2026-11-17', score: 4 },
+  { date: '2026-11-18', score: 8 },
+]
+
+export const NOTES: DailyNote[] = [
+  { date: '2026-11-16', text: 'Good legs session, slept a bit late.' },
+  { date: '2026-11-18', text: 'Felt strong all day.' },
 ]
 
 export const ACTIVITY: DailyActivity[] = [

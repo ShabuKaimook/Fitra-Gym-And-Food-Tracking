@@ -1,4 +1,5 @@
 import { useFullScreen } from '@/hooks/useFullScreen'
+import { useModalScrollLock } from '@/hooks/useModalScrollLock'
 import { useRef, useState } from 'react'
 import { Outlet } from 'react-router-dom'
 import { BottomNav } from './partials/BottomNav'
@@ -16,6 +17,7 @@ export const AppLayout = () => {
   const logSheetRef = useRef<HTMLDialogElement>(null)
   // Full-screen pages (e.g. New food) hide the mobile bottom nav, so main needs no room for it.
   const fullScreen = useFullScreen()
+  useModalScrollLock()
 
   return (
     <div className="min-h-dvh lg:grid lg:grid-cols-[220px_1fr]">
