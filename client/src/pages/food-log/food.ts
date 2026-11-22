@@ -1,4 +1,5 @@
 import { MICROS } from '@/constants/nutrients'
+import type { UnitOption } from '@/components/UnitSelect'
 import type { Food, Meal, Nutrients, Unit, UnitId } from '@/services/FoodService/types/Food'
 
 // Record<Meal, …> so a new meal in the type fails to compile here until it's added.
@@ -32,7 +33,6 @@ export const toBase = (food: Food, amount: number, unit: AmountUnit, units?: Uni
   return (amount * (unitOf(units, unit)?.size ?? 1)) / (unitOf(units, food.unit)?.size ?? 1)
 }
 
-type UnitOption = { value: UnitId; label: string; hint?: string }
 
 // The food's own units first (exact sizes), then every other unit with its estimated size as the hint.
 // Labels fall back to ids ("plate") until useUnits() loads.

@@ -7,9 +7,9 @@ import { useInlineValidation } from '@/hooks/useInlineValidation'
 import type { Food, Meal } from '@/services/FoodService/types/Food'
 import { ChevronLeft } from 'lucide-react'
 import { useState, type FormEvent } from 'react'
-import { defaultAmount, fmt, nutrientsFor, toBase, type AmountUnit } from '../food'
+import { amountUnits, defaultAmount, fmt, nutrientsFor, toBase, type AmountUnit } from '../food'
 import { MealSelect } from './MealSelect'
-import { UnitSelect } from './UnitSelect'
+import { UnitSelect } from '@/components/UnitSelect'
 
 type Props = {
   food: Food
@@ -27,6 +27,7 @@ export const AmountPanel = ({ food, meal, onMeal, onBack, onAdd, adding }: Props
   const [amount, setAmount] = useState(String(initial.amount))
   const [unit, setUnit] = useState<AmountUnit>(initial.unit)
   const units = useUnits().data
+  const { own, other } = amountUnits(food, units)
   const base = toBase(food, Number(amount) || 0, unit, units)
   const n = nutrientsFor(food, base)
   const mealLabel = useMealLabel(meal)
@@ -87,7 +88,15 @@ export const AmountPanel = ({ food, meal, onMeal, onBack, onAdd, adding }: Props
             />
           </span>
           <span className="min-w-0 flex-1">
-            <UnitSelect food={food} value={unit} onChange={setUnit} />
+            <UnitSelect
+              aria-label="Unit"
+              value={unit}
+              onChange={setUnit}
+              groups={[
+                { options: own },
+                { label: 'Other units (estimate)', options: other },
+              ]}
+            />
           </span>
         </div>
       </div>

@@ -13,7 +13,7 @@ import { MicronutrientsBox, type MicroValues } from './partials/MicronutrientsBo
 import { NutrientCard } from './partials/NutrientCard'
 import { PillInput } from './partials/PillField'
 import { TitleField } from './partials/TitleField'
-import { UnitSelect } from './partials/UnitSelect'
+import { UnitRow } from './partials/UnitRow'
 
 // Blank stays null (no data), never 0.
 const optionalNumber = (v: string) => (v === '' ? null : Number(v))
@@ -102,7 +102,7 @@ const FoodNewPage = () => {
             value={form.per}
             onChange={set('per')}
           />
-          <UnitSelect value={form.unit} onChange={(unit) => setForm((f) => ({ ...f, unit }))} />
+          <UnitRow value={form.unit} onChange={(unit) => setForm((f) => ({ ...f, unit }))} />
         </>
       }
     >

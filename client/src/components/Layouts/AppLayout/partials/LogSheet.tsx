@@ -1,4 +1,4 @@
-import { capAtMax, numbersOnly } from '@/utils/numbersOnly'
+import { FormDialog } from '@/components/FormDialog'
 import { ROUTE_PATHS } from '@/constants/routePaths'
 import { Bike, Droplets, Dumbbell, Footprints, Moon, Scale, Utensils, type LucideIcon } from 'lucide-react'
 import { useState, type Ref } from 'react'
@@ -39,13 +39,6 @@ const waterPlain = `${waterBtn} border border-line bg-surface-2 text-ink`
 export const LogSheet = ({ ref }: { ref: Ref<HTMLDialogElement> }) => {
   const { status, add, adding } = useTodayWater()
   const [custom, setCustom] = useState(false)
-  const [ml, setMl] = useState('')
-
-  const addCustom = () => {
-    add(Number(ml))
-    setMl('')
-    setCustom(false)
-  }
 
   return (
     <dialog
@@ -91,50 +84,29 @@ export const LogSheet = ({ ref }: { ref: Ref<HTMLDialogElement> }) => {
               {status}
             </span>
           </div>
-          {custom ? (
-            <form
-              className="grid grid-cols-[1fr_auto_auto] gap-2"
-              onSubmit={(e) => {
-                e.preventDefault()
-                addCustom()
+          <div className="grid grid-cols-3 gap-2">
+            <button type="button" className={waterQuick} disabled={adding} onClick={() => add(250)}>
+              +250 ml
+            </button>
+            <button type="button" className={waterQuick} disabled={adding} onClick={() => add(500)}>
+              +500 ml
+            </button>
+            <button type="button" className={waterPlain} onClick={() => setCustom(true)}>
+              Custom
+            </button>
+          </div>
+          {custom && (
+            <FormDialog
+              title="Add water"
+              rows={[[{ name: 'ml', label: 'Water', unit: 'ml', min: 1, max: 5000 }]]}
+              submitLabel="Add"
+              saving={adding}
+              onSave={(v) => {
+                add(v.ml)
+                setCustom(false)
               }}
-            >
-              <label htmlFor="water-ml" className="sr-only">
-                Water in millilitres
-              </label>
-              <input
-                id="water-ml"
-                type="number"
-                onBeforeInput={numbersOnly}
-                inputMode="numeric"
-                min={1}
-                max={5000}
-                required
-                autoFocus
-                placeholder="ml"
-                value={ml}
-                onChange={capAtMax((e) => setMl(e.target.value))}
-                className="min-h-11 min-w-0 rounded-[14px] border border-line bg-surface-2 px-3 tabular-nums focus-visible:outline-2"
-              />
-              <button type="submit" className={`${waterQuick} px-4`} disabled={adding}>
-                Add
-              </button>
-              <button type="button" className={`${waterPlain} px-3`} onClick={() => setCustom(false)}>
-                Cancel
-              </button>
-            </form>
-          ) : (
-            <div className="grid grid-cols-3 gap-2">
-              <button type="button" className={waterQuick} disabled={adding} onClick={() => add(250)}>
-                +250 ml
-              </button>
-              <button type="button" className={waterQuick} disabled={adding} onClick={() => add(500)}>
-                +500 ml
-              </button>
-              <button type="button" className={waterPlain} onClick={() => setCustom(true)}>
-                Custom
-              </button>
-            </div>
+              onClose={() => setCustom(false)}
+            />
           )}
         </section>
       </div>
