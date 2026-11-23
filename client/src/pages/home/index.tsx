@@ -16,7 +16,7 @@ import { CheckInRow } from './partials/CheckInRow'
 import { DayHeader } from './partials/DayHeader'
 import { NutritionRow } from './partials/NutritionRow'
 import { StatsRow } from './partials/StatsRow'
-import { TrainingRow } from './partials/TrainingRow'
+import { WorkoutNotesRow } from './partials/WorkoutNotesRow'
 
 // Home (wireframe 1a): the page fetches, each row renders its cards or their skeletons.
 const HomePage = () => {
@@ -42,12 +42,13 @@ const HomePage = () => {
 
       <WeekStrip date={date} today={today} onSelect={select} />
 
-      {/* Mobile: one 2-column grid, the row wrappers dissolve and areas set the order. Desktop: rows. */}
+      {/* Mobile: one 2-column grid, the row wrappers dissolve and areas set the order. Desktop: rows of
+          calories | micros, steps water sleep cardio, weight waist energy recovery, workout | notes. */}
       <div className="grid grid-cols-2 gap-3 [grid-template-areas:'cal_cal'_'steps_water'_'micro_micro'_'sleep_sleep'_'weight_waist'_'energy_recovery'_'note_note'_'workout_workout'] lg:flex lg:flex-col lg:gap-3.5">
         <NutritionRow calories={calories} macros={macros} micros={micros} />
-        <StatsRow date={date} activity={activity} water={water} sleep={sleep} weight={weight} />
-        <CheckInRow date={date} waist={waist} energy={energy} recovery={recovery} note={note} />
-        <TrainingRow workout={workout} activity={activity} isToday={isToday} />
+        <StatsRow date={date} activity={activity} water={water} sleep={sleep} />
+        <CheckInRow date={date} weight={weight} waist={waist} energy={energy} recovery={recovery} />
+        <WorkoutNotesRow date={date} isToday={isToday} workout={workout} note={note} />
       </div>
     </div>
   )

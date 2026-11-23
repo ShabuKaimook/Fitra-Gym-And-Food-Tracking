@@ -16,7 +16,8 @@ type Edit = {
 
 type Props = Omit<ComponentProps<typeof StatTile>, 'onEdit' | 'className'> & {
   loading: boolean
-  /** Full class, e.g. '[grid-area:steps]', so Tailwind can find it. Mobile only; desktop rows use auto. */
+  /** Mobile placement as a full class Tailwind can find: '[grid-area:steps]', or 'max-lg:hidden' for a
+   *  desktop-only tile. Desktop rows place tiles in order. */
   area: string
   /** Leave out for a tile that can't be edited yet. */
   edit?: Edit

@@ -1,7 +1,7 @@
 import type { DailyWater } from '@/services/FoodService/types/Food'
-import type { DailyActivity, DailySleep, DailyWeight } from '@/services/HealthService/types/Health'
+import type { DailyActivity, DailySleep } from '@/services/HealthService/types/Health'
 import type { Loadable } from '@/types/Loadable'
-import { Droplets, Footprints, Moon, Scale } from 'lucide-react'
+import { Bike, Droplets, Footprints, Moon } from 'lucide-react'
 import { useSetSteps } from '@/hooks/queries/useActivity'
 import { useSetSleep } from '@/hooks/queries/useSleep'
 import { useSetWater } from '@/hooks/queries/useWater'
@@ -13,13 +13,12 @@ type Props = {
   activity: Loadable<DailyActivity | null>
   water: Loadable<DailyWater | null>
   sleep: Loadable<DailySleep | null>
-  weight: Loadable<DailyWeight | null>
 }
 
 const formatSleep = (min: number) => `${Math.floor(min / 60)}h${min % 60 ? ` ${min % 60}m` : ''}`
 
-// Steps, water, sleep (hours and quality) and weight tiles. null data → the tile's "Not recorded" state.
-export const StatsRow = ({ date, activity, water, sleep, weight }: Props) => {
+// Steps, water, sleep (hours and quality) and cardio tiles. null data → the tile's "Not recorded" state.
+export const StatsRow = ({ date, activity, water, sleep }: Props) => {
   const act = activity.data
   const wat = water.data
   const slp = sleep.data
@@ -96,13 +95,15 @@ export const StatsRow = ({ date, activity, water, sleep, weight }: Props) => {
           save: (v) => setSleep.mutateAsync({ minutes: v.hours * 60 + v.minutes, quality: v.quality }),
         }}
       />
+      {/* Desktop only: wireframe 1a leaves cardio out on mobile. */}
       <MetricTile
-        loading={weight.isPending}
-        area="[grid-area:weight]"
-        label="Weight"
-        icon={Scale}
-        value={weight.data ? `${weight.data.kg} kg` : null}
-        addLabel="Add"
+        loading={activity.isPending}
+        area="max-lg:hidden"
+        label="Cardio"
+        icon={Bike}
+        tone="activity"
+        value={act?.cardioMinutes ? `${act.cardioMinutes} min` : null}
+        addLabel="Add cardio"
       />
     </div>
   )

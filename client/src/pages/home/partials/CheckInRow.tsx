@@ -1,34 +1,36 @@
-import { Skeleton } from '@/components/Skeleton'
 import { useSetEnergy } from '@/hooks/queries/useEnergy'
-import { useSetNote } from '@/hooks/queries/useNote'
 import { useSetRecovery } from '@/hooks/queries/useRecovery'
 import { useSetWaist } from '@/hooks/queries/useWaist'
-import type { DailyNote, DailyScore, DailyWaist } from '@/services/HealthService/types/Health'
+import type { DailyScore, DailyWaist, DailyWeight } from '@/services/HealthService/types/Health'
 import type { Loadable } from '@/types/Loadable'
-import { toDateKey } from '@/utils/date'
-import { BatteryCharging, HeartPulse, Ruler, type LucideIcon } from 'lucide-react'
-import { toast } from 'react-toastify'
+import { BatteryCharging, HeartPulse, Ruler, Scale, type LucideIcon } from 'lucide-react'
 import { MetricTile } from './MetricTile'
-import { NoteCard } from './NoteCard'
-import { cardSkeleton, row } from './ui'
+import { row } from './ui'
 
 type Props = {
   date: Date
+  weight: Loadable<DailyWeight | null>
   waist: Loadable<DailyWaist | null>
   energy: Loadable<DailyScore | null>
   recovery: Loadable<DailyScore | null>
-  note: Loadable<DailyNote | null>
 }
 
-// Waist, energy and recovery tiles, then the day's note. null data → the tile's "Not recorded" state.
-export const CheckInRow = ({ date, waist, energy, recovery, note }: Props) => {
+// Body (weight, waist) and how the day felt (energy, recovery). null data → the tile's "Not recorded" state.
+export const CheckInRow = ({ date, weight, waist, energy, recovery }: Props) => {
   const setWaist = useSetWaist(date)
   const setEnergy = useSetEnergy(date)
   const setRecovery = useSetRecovery(date)
-  const setNote = useSetNote(date)
 
   return (
-    <div className={`${row} lg:grid-cols-3`}>
+    <div className={`${row} lg:grid-cols-4 lg:gap-3`}>
+      <MetricTile
+        loading={weight.isPending}
+        area="[grid-area:weight]"
+        label="Weight"
+        icon={Scale}
+        value={weight.data ? `${weight.data.kg} kg` : null}
+        addLabel="Add"
+      />
       <MetricTile
         loading={waist.isPending}
         area="[grid-area:waist]"
@@ -62,23 +64,6 @@ export const CheckInRow = ({ date, waist, energy, recovery, note }: Props) => {
         saving={setRecovery.isPending}
         save={setRecovery.mutateAsync}
       />
-
-      {note.isPending ? (
-        <Skeleton className={`${cardSkeleton} min-h-32 [grid-area:note] lg:col-span-3`} />
-      ) : (
-        // key: the card copies the note into its text box once, so a new day needs a fresh card.
-        <NoteCard
-          key={toDateKey(date)}
-          note={note.data?.text ?? ''}
-          saving={setNote.isPending}
-          onSave={(text) =>
-            setNote.mutate(text, {
-              onSuccess: () => toast.success('Note saved'),
-              onError: () => toast.error('Note not saved, try again'),
-            })
-          }
-        />
-      )}
     </div>
   )
 }

@@ -1,43 +1,44 @@
 import { useEffect } from 'react'
 
-// iOS Safari keeps scrolling the page behind a modal <dialog>, even with overflow: hidden. While any
-// dialog is open the body is pinned (position: fixed) at the current scroll, then put back on close.
-// With the keyboard up iOS also lets a drag pan the visible area, which only blocking touchmove stops.
+const SCROLL_KEYS = new Set([' ', 'ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End'])
+
+// Stops the page behind an open <dialog> from scrolling by cancelling the inputs that scroll it:
+// wheel/trackpad, finger drags (iOS, including panning while the keyboard is up) and scroll keys.
+// No styles change, so the layout never moves. Don't use overflow: hidden (Firefox drops the sticky
+// sidebar and top bar) or position: fixed on the body (breaks sticky everywhere).
 // Watches the DOM, so every dialog is covered without each one opting in.
 export const useModalScrollLock = () => {
   useEffect(() => {
-    const body = document.body
-    let lockedAt: number | null = null
-
+    let locked = false
     const sync = () => {
-      const open = document.querySelector('dialog[open]') !== null
-      if (open && lockedAt === null) {
-        lockedAt = window.scrollY
-        Object.assign(body.style, { position: 'fixed', top: `-${lockedAt}px`, left: '0', right: '0' })
-      } else if (!open && lockedAt !== null) {
-        Object.assign(body.style, { position: '', top: '', left: '', right: '' })
-        window.scrollTo(0, lockedAt)
-        lockedAt = null
-      }
+      locked = document.querySelector('dialog[open]') !== null
     }
 
-    // shortcut: blocks every drag while a dialog is open, fine while no dialog scrolls inside; allow
-    // drags within a scrollable dialog area once one exists.
-    const blockDrag = (e: TouchEvent) => {
-      if (lockedAt !== null) e.preventDefault()
+    // shortcut: also blocks scrolling inside a dialog, fine while no dialog scrolls; allow it for a
+    // scrollable dialog area once one exists.
+    const block = (e: Event) => {
+      if (locked) e.preventDefault()
+    }
+    const blockKeys = (e: KeyboardEvent) => {
+      const el = e.target instanceof HTMLElement ? e.target : null
+      // Fields use these keys themselves, and Space presses a focused button.
+      const ownsKey =
+        el?.matches('input, textarea, select, [contenteditable]') || (e.key === ' ' && el?.matches('button'))
+      if (locked && !ownsKey && SCROLL_KEYS.has(e.key)) e.preventDefault()
     }
 
     // childList too: a dialog can be unmounted while still open.
     const observer = new MutationObserver(sync)
-    observer.observe(body, { subtree: true, childList: true, attributes: true, attributeFilter: ['open'] })
-    document.addEventListener('touchmove', blockDrag, { passive: false })
+    observer.observe(document.body, { subtree: true, childList: true, attributes: true, attributeFilter: ['open'] })
+    // passive: false, or the browser ignores preventDefault on these.
+    document.addEventListener('wheel', block, { passive: false })
+    document.addEventListener('touchmove', block, { passive: false })
+    document.addEventListener('keydown', blockKeys)
     return () => {
       observer.disconnect()
-      document.removeEventListener('touchmove', blockDrag)
-      if (lockedAt !== null) {
-        Object.assign(body.style, { position: '', top: '', left: '', right: '' })
-        window.scrollTo(0, lockedAt)
-      }
+      document.removeEventListener('wheel', block)
+      document.removeEventListener('touchmove', block)
+      document.removeEventListener('keydown', blockKeys)
     }
   }, [])
 }

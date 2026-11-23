@@ -5,7 +5,8 @@ import { btnBase, card, cardLabel, cardSurface } from './ui'
 type Props = { note: string; saving: boolean; onSave: (note: string) => void }
 
 // The day's note: typed straight into the card; Save shows once the text differs from what's saved.
-// Mount with key={date} so a draft doesn't follow you to another day.
+// Mount with key={date} so a draft doesn't follow you to another day. Desktop: full width when it's
+// alone in its row (no workout that day); :first-child also outranks the grid-area reset.
 export const NoteCard = ({ note, saving, onSave }: Props) => {
   const id = useId()
   const [text, setText] = useState(note)
@@ -13,7 +14,7 @@ export const NoteCard = ({ note, saving, onSave }: Props) => {
 
   return (
     <form
-      className={`${card} ${cardSurface} [grid-area:note] lg:col-span-3 lg:[grid-area:auto]`}
+      className={`${card} ${cardSurface} [grid-area:note] lg:[grid-area:auto] lg:first:[grid-column:1/-1]`}
       onSubmit={(e) => {
         e.preventDefault()
         onSave(text.trim())
