@@ -21,3 +21,13 @@ export const useSetSteps = (date: Date) => {
     onSuccess: () => queryClient.invalidateQueries({ queryKey: QUERY_KEYS.activity(key) }),
   })
 }
+
+// Replaces the day's cardio minutes.
+export const useSetCardio = (date: Date) => {
+  const key = toDateKey(date)
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (minutes: number) => HealthService.setCardio({ date: key, minutes }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: QUERY_KEYS.activity(key) }),
+  })
+}

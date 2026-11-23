@@ -1,6 +1,6 @@
 import type { RequestOptions } from '@/types/api/RequestOptions'
 import type { DateKey } from '@/utils/date'
-import { mockRequest, onDate } from '@/utils/mockRequest'
+import { lastBefore, mockRequest, onDate } from '@/utils/mockRequest'
 import { ACTIVITY, ENERGY, NOTES, RECOVERY, SLEEP, WAIST, WEIGHT } from '../mockData'
 import type { DailyActivity, DailyNote, DailyScore, DailySleep, DailyWaist, DailyWeight } from './types/Health'
 
@@ -12,6 +12,17 @@ const upsert = <T extends { date: DateKey }>(rows: T[], row: T) => {
   return mockRequest(row)
 }
 
+// The day's activity record, created empty (0 steps, no cardio) if missing.
+// shortcut: edits the in-memory mock (lost on reload); the API will own this.
+const activityDay = (date: DateKey) => {
+  let day = onDate(ACTIVITY, date)
+  if (!day) {
+    day = { date, steps: 0, stepsTarget: ACTIVITY.at(-1)?.stepsTarget ?? 10000, cardioMinutes: null }
+    ACTIVITY.push(day)
+  }
+  return day
+}
+
 // null = nothing recorded that day.
 export const HealthService = {
   getSleep: async (date: DateKey, options?: RequestOptions): Promise<DailySleep | null> =>
@@ -20,8 +31,16 @@ export const HealthService = {
   getWeight: async (date: DateKey, options?: RequestOptions): Promise<DailyWeight | null> =>
     mockRequest(onDate(WEIGHT, date), options),
 
+  /** The last weigh-in before `date`; null = none earlier. */
+  getWeightBefore: async (date: DateKey, options?: RequestOptions): Promise<DailyWeight | null> =>
+    mockRequest(lastBefore(WEIGHT, date), options),
+
   getWaist: async (date: DateKey, options?: RequestOptions): Promise<DailyWaist | null> =>
     mockRequest(onDate(WAIST, date), options),
+
+  /** The last waist measurement before `date`; null = none earlier. */
+  getWaistBefore: async (date: DateKey, options?: RequestOptions): Promise<DailyWaist | null> =>
+    mockRequest(lastBefore(WAIST, date), options),
 
   getEnergy: async (date: DateKey, options?: RequestOptions): Promise<DailyScore | null> =>
     mockRequest(onDate(ENERGY, date), options),
@@ -37,15 +56,20 @@ export const HealthService = {
 
   /** Replaces the day's step count. */
   setSteps: async ({ date, steps }: { date: DateKey; steps: number }): Promise<DailyActivity> => {
-    // shortcut: edits the in-memory mock (lost on reload); the API will own this.
-    let day = onDate(ACTIVITY, date)
-    if (!day) {
-      day = { date, steps: 0, stepsTarget: ACTIVITY.at(-1)?.stepsTarget ?? 10000, cardioMinutes: null }
-      ACTIVITY.push(day)
-    }
+    const day = activityDay(date)
     day.steps = steps
     return mockRequest(day)
   },
+
+  /** Replaces the day's cardio minutes. */
+  setCardio: async ({ date, minutes }: { date: DateKey; minutes: number }): Promise<DailyActivity> => {
+    const day = activityDay(date)
+    day.cardioMinutes = minutes
+    return mockRequest(day)
+  },
+
+  /** Replaces the day's body weight. */
+  setWeight: async (weight: DailyWeight): Promise<DailyWeight> => upsert(WEIGHT, weight),
 
   /** Replaces the night's sleep and its quality. */
   setSleep: async ({

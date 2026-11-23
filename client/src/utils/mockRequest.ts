@@ -9,6 +9,10 @@ export const inRange = <T extends Dated>(rows: T[], from: DateKey, to: DateKey) 
 
 export const onDate = <T extends Dated>(rows: T[], date: DateKey) => rows.find((r) => r.date === date) ?? null
 
+// The latest row dated before `date`, e.g. the last weigh-in before today.
+export const lastBefore = <T extends Dated>(rows: T[], date: DateKey) =>
+  rows.filter((r) => r.date < date).reduce<T | null>((last, r) => (!last || r.date > last.date ? r : last), null)
+
 // shortcut: stands in for AxiosUtil.createRequest until the API exists; services swap this one call.
 // Resolves after a short delay (so loading states show) and honours the abort signal like Axios.
 export const mockRequest = <T>(data: T, options?: RequestOptions) =>

@@ -10,7 +10,7 @@ type Props = {
   /** null → "Not recorded" with an add button (never a 0 bar) */
   value: string | null
   target?: string
-  /** Small line under the value, e.g. "Quality 7/10" */
+  /** Small muted line under the value (or under "Not recorded"), e.g. "Quality 7/10" */
   detail?: string
   progress?: { value: number; max: number }
   /** Data colour family: --color-{tone}, -tint, -ink */
@@ -64,6 +64,7 @@ export const StatTile = ({
       {empty ? (
         <>
           <div className="text-[15px] leading-6 font-extrabold tracking-[-0.4px] text-ink-2">Not recorded</div>
+          {detail && <div className={muted}>{detail}</div>}
           <button
             type="button"
             onClick={onEdit}

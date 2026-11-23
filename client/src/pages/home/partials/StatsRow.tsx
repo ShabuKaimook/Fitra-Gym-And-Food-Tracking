@@ -2,7 +2,7 @@ import type { DailyWater } from '@/services/FoodService/types/Food'
 import type { DailyActivity, DailySleep } from '@/services/HealthService/types/Health'
 import type { Loadable } from '@/types/Loadable'
 import { Bike, Droplets, Footprints, Moon } from 'lucide-react'
-import { useSetSteps } from '@/hooks/queries/useActivity'
+import { useSetCardio, useSetSteps } from '@/hooks/queries/useActivity'
 import { useSetSleep } from '@/hooks/queries/useSleep'
 import { useSetWater } from '@/hooks/queries/useWater'
 import { MetricTile } from './MetricTile'
@@ -25,6 +25,7 @@ export const StatsRow = ({ date, activity, water, sleep }: Props) => {
   const setSteps = useSetSteps(date)
   const setWater = useSetWater(date)
   const setSleep = useSetSleep(date)
+  const setCardio = useSetCardio(date)
 
   return (
     <div className={`${row} lg:grid-cols-4 lg:gap-3`}>
@@ -102,8 +103,15 @@ export const StatsRow = ({ date, activity, water, sleep }: Props) => {
         label="Cardio"
         icon={Bike}
         tone="activity"
-        value={act?.cardioMinutes ? `${act.cardioMinutes} min` : null}
+        value={act?.cardioMinutes != null ? `${act.cardioMinutes} min` : null}
         addLabel="Add cardio"
+        edit={{
+          title: 'Edit cardio',
+          rows: [[{ name: 'minutes', label: 'Cardio', unit: 'min', max: 1440 }]],
+          initial: act?.cardioMinutes != null ? { minutes: String(act.cardioMinutes) } : undefined,
+          saving: setCardio.isPending,
+          save: (v) => setCardio.mutateAsync(v.minutes),
+        }}
       />
     </div>
   )
