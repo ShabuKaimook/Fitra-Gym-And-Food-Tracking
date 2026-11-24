@@ -14,10 +14,11 @@ export const useModalScrollLock = () => {
       locked = document.querySelector('dialog[open]') !== null
     }
 
-    // shortcut: also blocks scrolling inside a dialog, fine while no dialog scrolls; allow it for a
-    // scrollable dialog area once one exists.
+    // A list that scrolls inside an open dialog marks itself data-scroll-area (e.g. the exercise picker);
+    // drags and wheel there still scroll it. Give it overscroll-contain so its end doesn't pull the page.
     const block = (e: Event) => {
-      if (locked) e.preventDefault()
+      const inScrollArea = e.target instanceof Element && e.target.closest('dialog[open] [data-scroll-area]')
+      if (locked && !inScrollArea) e.preventDefault()
     }
     const blockKeys = (e: KeyboardEvent) => {
       const el = e.target instanceof HTMLElement ? e.target : null

@@ -12,11 +12,33 @@ export type PlannedWorkout = {
   planDay: { week: number; day: number } | null
 }
 
-/** A training plan: a split run for a number of weeks. */
-export type TrainingPlan = { id: string; name: string; split: string; weeks: number; currentWeek: number }
+/** One training day of a split: its name ("Upper") and exercises, in order. */
+export type SplitDay = { name: string; exerciseIds: string[] }
 
-/** A weekly split. days: Mon … Sun, true = a training day. */
-export type Split = { id: string; name: string; kind: 'custom' | 'builtin'; days: boolean[] }
+/** A weekly split. days: Mon … Sun, null = a rest day. */
+export type Split = { id: string; name: string; kind: 'custom' | 'builtin'; days: (SplitDay | null)[] }
+
+/** The plan's own copy of its split's days, used from `fromWeek` on (until a later entry). */
+export type PlanScheduleEntry = { fromWeek: number; days: (SplitDay | null)[] }
+
+/** A training plan: a split run for a number of weeks. `split` is the split's name as shown;
+ * `schedule` is the plan's own copy of the split, so editing the split changes a plan only when asked. */
+export type TrainingPlan = {
+  id: string
+  name: string
+  splitId: string
+  split: string
+  status: 'active' | 'upcoming' | 'finished'
+  weeks: number
+  currentWeek: number
+  schedule: PlanScheduleEntry[]
+}
+
+export type Muscle = 'Chest' | 'Back' | 'Shoulders' | 'Legs' | 'Arms' | 'Core'
+export type Equipment = 'Machine' | 'Dumbbell' | 'Barbell' | 'Cable' | 'Bodyweight'
+
+/** An exercise in the library. */
+export type Exercise = { id: string; name: string; muscle: Muscle; equipment: Equipment; favourite: boolean }
 
 export type WorkoutTemplate = { id: string; name: string }
 

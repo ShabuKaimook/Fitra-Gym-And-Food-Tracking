@@ -20,6 +20,9 @@ import type {
   DailyWeight,
 } from './HealthService/types/Health'
 import type {
+  Equipment,
+  Exercise,
+  Muscle,
   PlannedExercise,
   PlannedWorkout,
   Split,
@@ -345,22 +348,102 @@ export const WORKOUTS: PlannedWorkout[] = [
   workout('2026-11-28', 'Leg day', 60, LEGS, 3, 6),
 ]
 
-export const ACTIVE_PLAN: TrainingPlan | null = {
-  id: 'hypertrophy',
-  name: 'Hypertrophy block',
-  split: 'Push / Pull / Legs',
-  weeks: 12,
-  currentWeek: 3,
-}
-
-const days = (pattern: string) => [...pattern].map((c) => c === 'x')
+// One letter per weekday, Mon first: '-' = rest, any other letter = that day of `names` ('a' = names[0]).
+const days = (pattern: string, names: string[], exercises: Record<string, string[]> = {}) =>
+  [...pattern].map((c) => {
+    if (c === '-') return null
+    const name = names[c.charCodeAt(0) - 97]
+    return { name, exerciseIds: exercises[name] ?? [] }
+  })
 
 export const SPLITS: Split[] = [
-  { id: 'my-4-day', name: 'My 4-day', kind: 'custom', days: days('xx-xx--') },
-  { id: 'ppl', name: 'PPL', kind: 'builtin', days: days('xxxxxx-') },
-  { id: 'upper-lower', name: 'Upper / Lower', kind: 'builtin', days: days('xx-xx--') },
-  { id: 'full-body', name: 'Full Body', kind: 'builtin', days: days('x-x-x--') },
-  { id: 'bro', name: 'Body part', kind: 'builtin', days: days('xxxxx--') },
+  {
+    id: 'my-4-day',
+    name: 'My 4-day',
+    kind: 'custom',
+    days: days('ab-ab--', ['Upper', 'Lower'], {
+      Upper: ['bench-press', 'seated-cable-row', 'lateral-raise'],
+      Lower: ['back-squat', 'romanian-deadlift', 'leg-curl'],
+    }),
+  },
+  { id: 'ppl', name: 'PPL', kind: 'builtin', days: days('abcabc-', ['Push', 'Pull', 'Legs']) },
+  { id: 'upper-lower', name: 'Upper / Lower', kind: 'builtin', days: days('ab-ab--', ['Upper', 'Lower']) },
+  {
+    id: 'full-body',
+    name: 'Full Body',
+    kind: 'builtin',
+    days: days('a-b-c--', ['Full body A', 'Full body B', 'Full body C']),
+  },
+  {
+    id: 'bro',
+    name: 'Body part',
+    kind: 'builtin',
+    days: days('abcde--', ['Chest', 'Back', 'Shoulders', 'Legs', 'Arms']),
+  },
+]
+
+const splitDays = (id: string) => SPLITS.find((s) => s.id === id)!.days
+const plan = (
+  id: string,
+  name: string,
+  splitId: string,
+  status: TrainingPlan['status'],
+  weeks: number,
+  currentWeek: number,
+): TrainingPlan => ({
+  id,
+  name,
+  splitId,
+  split: SPLITS.find((s) => s.id === splitId)!.name,
+  status,
+  weeks,
+  currentWeek,
+  schedule: [{ fromWeek: 1, days: structuredClone(splitDays(splitId)) }],
+})
+
+// One active plan; the other two use "My 4-day" so editing that split has plans to ask about.
+export const PLANS: TrainingPlan[] = [
+  { ...plan('hypertrophy', 'Hypertrophy block', 'ppl', 'active', 12, 3), split: 'Push / Pull / Legs' },
+  plan('winter-cut', 'Winter cut', 'my-4-day', 'upcoming', 8, 0),
+  plan('spring-strength', 'Spring strength', 'my-4-day', 'finished', 6, 6),
+]
+
+const ex = (name: string, muscle: Muscle, equipment: Equipment, favourite = false): Exercise => ({
+  id: name.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+  name,
+  muscle,
+  equipment,
+  favourite,
+})
+
+export const EXERCISES: Exercise[] = [
+  ex('Bench press', 'Chest', 'Barbell', true),
+  ex('Incline DB press', 'Chest', 'Dumbbell', true),
+  ex('DB bench press', 'Chest', 'Dumbbell', true),
+  ex('DB fly', 'Chest', 'Dumbbell'),
+  ex('Pullover', 'Chest', 'Dumbbell'),
+  ex('Squeeze press', 'Chest', 'Dumbbell'),
+  ex('Chest press machine', 'Chest', 'Machine'),
+  ex('Cable crossover', 'Chest', 'Cable'),
+  ex('Push-up', 'Chest', 'Bodyweight'),
+  ex('Pull-up', 'Back', 'Bodyweight', true),
+  ex('Barbell row', 'Back', 'Barbell', true),
+  ex('Lat pulldown', 'Back', 'Cable'),
+  ex('Seated cable row', 'Back', 'Cable', true),
+  ex('One-arm DB row', 'Back', 'Dumbbell'),
+  ex('Overhead press', 'Shoulders', 'Barbell', true),
+  ex('Lateral raise', 'Shoulders', 'Dumbbell', true),
+  ex('Face pull', 'Shoulders', 'Cable'),
+  ex('Back squat', 'Legs', 'Barbell', true),
+  ex('Romanian deadlift', 'Legs', 'Barbell', true),
+  ex('Leg press', 'Legs', 'Machine'),
+  ex('Leg curl', 'Legs', 'Machine'),
+  ex('Walking lunge', 'Legs', 'Dumbbell'),
+  ex('Calf raise', 'Legs', 'Machine'),
+  ex('Biceps curl', 'Arms', 'Dumbbell'),
+  ex('Triceps pushdown', 'Arms', 'Cable'),
+  ex('Plank', 'Core', 'Bodyweight'),
+  ex('Cable crunch', 'Core', 'Cable'),
 ]
 
 export const TEMPLATES: WorkoutTemplate[] = [

@@ -4,6 +4,8 @@ import { useActivePlan, useLastSession, useSplits, useTemplates } from '@/hooks/
 import { usePlannedWorkout } from '@/hooks/queries/usePlannedWorkout'
 import { muted } from '@/pages/home/partials/ui'
 import { startOfToday } from '@/utils/date'
+import { ROUTE_PATHS } from '@/constants/routePaths'
+import { Link } from 'react-router-dom'
 import { History, Plus } from 'lucide-react'
 import { GymLinks } from './partials/GymLinks'
 import { PlanCard } from './partials/PlanCard'
@@ -12,7 +14,7 @@ import { TodayPlanCard } from './partials/TodayPlanCard'
 import { outlineBtn, primaryBtn, whiteBtn } from './partials/ui'
 
 // Gym overview (wireframe 1e): today's workout, the active plan, splits, then templates and the library.
-// shortcut: the buttons here (start workout, edit plan, create split…) do nothing yet; wire each to its
+// shortcut: the buttons here (start workout, edit plan, templates…) do nothing yet; wire each to its
 // screen (1f, 1m, 1g) as those are built.
 const GymPage = () => {
   const today = startOfToday()
@@ -35,10 +37,10 @@ const GymPage = () => {
           History
         </button>
         <div className="ml-auto flex gap-2 max-lg:hidden">
-          <button type="button" className={whiteBtn}>
+          <Link to={ROUTE_PATHS.SPLIT_NEW} className={whiteBtn}>
             <Plus size={15} aria-hidden />
             Create split
-          </button>
+          </Link>
           <button type="button" className={primaryBtn}>
             <Plus size={15} aria-hidden />
             Create plan
@@ -64,9 +66,12 @@ const GymPage = () => {
               <span className="max-lg:hidden"> saved</span>
             </span>
           )}
-          <button type="button" className="ml-auto min-h-9 text-[13px] font-bold text-primary-ink lg:hidden">
+          <Link
+            to={ROUTE_PATHS.SPLIT_NEW}
+            className="ml-auto inline-flex min-h-9 items-center text-[13px] font-bold text-primary-ink lg:hidden"
+          >
             + New split
-          </button>
+          </Link>
         </div>
         {splits.isPending ? (
           <Skeleton className="h-24 rounded-[18px] lg:h-26" />

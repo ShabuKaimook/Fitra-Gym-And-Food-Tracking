@@ -31,6 +31,8 @@ export const router = createBrowserRouter([
       redirect(ROUTE_PATHS.ROOT, ROUTE_PATHS.HOME),
       page(ROUTE_PATHS.HOME, () => import('@/pages/home')),
       page(ROUTE_PATHS.GYM, () => import('@/pages/gym')),
+      page(ROUTE_PATHS.SPLIT_NEW, () => import('@/pages/split/new'), { fullScreen: true }),
+      page(ROUTE_PATHS.SPLIT_EDIT, () => import('@/pages/split/edit'), { fullScreen: true }),
       page(ROUTE_PATHS.FOOD_LOG, () => import('@/pages/food-log')),
       page(ROUTE_PATHS.FOOD_NEW, () => import('@/pages/food-new'), { fullScreen: true }),
       page(ROUTE_PATHS.FOOD_EDIT, () => import('@/pages/food-edit'), { fullScreen: true }),
