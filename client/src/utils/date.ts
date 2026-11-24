@@ -18,4 +18,7 @@ export const addDays = (d: Date, n: number) => {
 }
 
 // Monday of d's week. getDay() is Sun=0…Sat=6; (+6)%7 turns it into days since Monday (Sun → 6).
+/** Short day names, Monday first like mondayOf: index 0 = Mon … 6 = Sun. For days with no date, e.g. a split. */
+export const WEEKDAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] as const
+
 export const mondayOf = (d: Date) => addDays(d, -((d.getDay() + 6) % 7))

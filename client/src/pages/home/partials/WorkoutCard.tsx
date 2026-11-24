@@ -15,7 +15,7 @@ export const WorkoutCard = ({ workout, isToday }: Props) => (
         {workout.name}
       </h2>
       <div className={muted}>
-        {workout.exercises} exercises, about {workout.minutes} min
+        {workout.exercises.length} exercises, about {workout.minutes} min
       </div>
     </div>
     <button

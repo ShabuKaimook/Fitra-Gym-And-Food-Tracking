@@ -1,4 +1,4 @@
-// shortcut: sample records for Mon 16 – Thu 19 Nov 2026; delete this file once the services call the API.
+// shortcut: sample records for Mon 16 – Thu 19 Nov 2026 (planned workouts run to Sat 28 Nov); delete this file once the services call the API.
 // Days outside this range have no records, so the UI shows its empty states.
 import type {
   DailyCalories,
@@ -19,7 +19,14 @@ import type {
   DailyWaist,
   DailyWeight,
 } from './HealthService/types/Health'
-import type { PlannedWorkout } from './WorkoutService/types/Workout'
+import type {
+  PlannedExercise,
+  PlannedWorkout,
+  Split,
+  TrainingPlan,
+  WorkoutSession,
+  WorkoutTemplate,
+} from './WorkoutService/types/Workout'
 
 export const CALORIES: DailyCalories[] = [
   { date: '2026-11-16', eaten: 2050, target: 2200 },
@@ -287,8 +294,84 @@ export const ACTIVITY: DailyActivity[] = [
 ]
 
 // Wednesday is a rest day: no workout planned.
+const PUSH: PlannedExercise[] = [
+  { name: 'Bench press', sets: 3, reps: '8–12', restSeconds: 120 },
+  { name: 'Overhead press', sets: 3, reps: '6–10', restSeconds: 120 },
+  { name: 'Incline DB press', sets: 3, reps: '8–12', restSeconds: 90 },
+  { name: 'Lateral raise', sets: 3, reps: '12–15', restSeconds: 60 },
+  { name: 'Triceps pushdown', sets: 3, reps: '10–12', restSeconds: 60 },
+  { name: 'Chest fly', sets: 3, reps: '12–15', restSeconds: 60 },
+]
+const PULL: PlannedExercise[] = [
+  { name: 'Pull-up', sets: 3, reps: '6–10', restSeconds: 120 },
+  { name: 'Barbell row', sets: 3, reps: '6–10', restSeconds: 120 },
+  { name: 'Lat pulldown', sets: 3, reps: '8–12', restSeconds: 90 },
+  { name: 'Seated cable row', sets: 3, reps: '10–12', restSeconds: 90 },
+  { name: 'Face pull', sets: 3, reps: '12–15', restSeconds: 60 },
+  { name: 'Biceps curl', sets: 3, reps: '10–12', restSeconds: 60 },
+]
+const LEGS: PlannedExercise[] = [
+  { name: 'Back squat', sets: 3, reps: '5–8', restSeconds: 180 },
+  { name: 'Romanian deadlift', sets: 3, reps: '8–10', restSeconds: 120 },
+  { name: 'Leg press', sets: 3, reps: '10–12', restSeconds: 90 },
+  { name: 'Leg curl', sets: 3, reps: '10–12', restSeconds: 60 },
+  { name: 'Calf raise', sets: 4, reps: '12–15', restSeconds: 60 },
+]
+const workout = (
+  date: string,
+  name: string,
+  minutes: number,
+  exercises: PlannedExercise[],
+  week: number,
+  day: number,
+) => ({
+  date,
+  name,
+  minutes,
+  exercises,
+  planDay: { week, day },
+})
+
+// Push / Pull / Legs twice a week: week 2 of the plan, then week 3 (23 – 28 Nov).
 export const WORKOUTS: PlannedWorkout[] = [
-  { date: '2026-11-16', name: 'Pull day', exercises: 6, minutes: 50 },
-  { date: '2026-11-17', name: 'Leg day', exercises: 5, minutes: 60 },
-  { date: '2026-11-19', name: 'Push day', exercises: 6, minutes: 55 },
+  workout('2026-11-16', 'Pull day', 50, PULL, 2, 2),
+  workout('2026-11-17', 'Leg day', 60, LEGS, 2, 3),
+  workout('2026-11-19', 'Push day', 55, PUSH, 2, 4),
+  workout('2026-11-23', 'Push day', 55, PUSH, 3, 1),
+  workout('2026-11-24', 'Pull day', 50, PULL, 3, 2),
+  workout('2026-11-25', 'Leg day', 60, LEGS, 3, 3),
+  workout('2026-11-26', 'Push day', 55, PUSH, 3, 4),
+  workout('2026-11-27', 'Pull day', 50, PULL, 3, 5),
+  workout('2026-11-28', 'Leg day', 60, LEGS, 3, 6),
+]
+
+export const ACTIVE_PLAN: TrainingPlan | null = {
+  id: 'hypertrophy',
+  name: 'Hypertrophy block',
+  split: 'Push / Pull / Legs',
+  weeks: 12,
+  currentWeek: 3,
+}
+
+const days = (pattern: string) => [...pattern].map((c) => c === 'x')
+
+export const SPLITS: Split[] = [
+  { id: 'my-4-day', name: 'My 4-day', kind: 'custom', days: days('xx-xx--') },
+  { id: 'ppl', name: 'PPL', kind: 'builtin', days: days('xxxxxx-') },
+  { id: 'upper-lower', name: 'Upper / Lower', kind: 'builtin', days: days('xx-xx--') },
+  { id: 'full-body', name: 'Full Body', kind: 'builtin', days: days('x-x-x--') },
+  { id: 'bro', name: 'Body part', kind: 'builtin', days: days('xxxxx--') },
+]
+
+export const TEMPLATES: WorkoutTemplate[] = [
+  { id: 'quick-upper', name: 'Quick upper' },
+  { id: 'arms', name: 'Arms finisher' },
+  { id: 'hotel', name: 'Hotel gym' },
+]
+
+export const SESSIONS: WorkoutSession[] = [
+  { date: '2026-11-16', name: 'Pull day' },
+  { date: '2026-11-17', name: 'Leg day' },
+  { date: '2026-11-19', name: 'Push day' },
+  { date: '2026-11-23', name: 'Push day' },
 ]
