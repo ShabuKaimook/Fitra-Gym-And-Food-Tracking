@@ -1,3 +1,4 @@
+import { Button } from '@/components/Button'
 import { TopBarTitle } from '@/components/TopBarTitle'
 import { useFullScreen } from '@/hooks/useFullScreen'
 import { useInlineValidation } from '@/hooks/useInlineValidation'
@@ -129,13 +130,9 @@ export const FormPage = ({
           {message}
         </p>
       )}
-      <button
-        type="submit"
-        disabled={pending}
-        className="h-13 rounded-2xl bg-primary text-base font-extrabold text-on-primary shadow-[0_8px_24px_-6px_rgba(255,122,26,0.45)] disabled:opacity-60 lg:h-11"
-      >
+      <Button type="submit" size="lg" disabled={pending} className="shadow-[0_8px_24px_-6px_rgba(255,122,26,0.45)]">
         {pending ? 'Saving…' : submitLabel}
-      </button>
+      </Button>
     </div>
   )
 

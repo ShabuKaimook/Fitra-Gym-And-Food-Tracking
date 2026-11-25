@@ -8,4 +8,3 @@ export const muted = 'text-[13px] leading-4.5 text-ink-2 tabular-nums'
 export const row = 'contents lg:grid lg:gap-3.5'
 // Skeleton standing in for a card: same corners; desktop rows have no named grid areas, so reset it.
 export const cardSkeleton = 'rounded-[20px] lg:[grid-area:auto]'
-export const btnBase = 'inline-flex flex-none items-center justify-center gap-1.5 whitespace-nowrap font-extrabold'

@@ -1,6 +1,7 @@
+import { Button } from '@/components/Button'
 import { Play } from 'lucide-react'
 import type { PlannedWorkout } from '@/services/WorkoutService/types/Workout'
-import { btnBase, muted } from './ui'
+import { muted } from './ui'
 
 type Props = { workout: PlannedWorkout; isToday: boolean }
 
@@ -18,12 +19,9 @@ export const WorkoutCard = ({ workout, isToday }: Props) => (
         {workout.exercises.length} exercises, about {workout.minutes} min
       </div>
     </div>
-    <button
-      type="button"
-      className={`${btnBase} min-h-11 rounded-2xl bg-primary px-4 text-sm text-on-primary hover:bg-primary-hover`}
-    >
+    <Button>
       <Play size={14} aria-hidden />
       Start workout
-    </button>
+    </Button>
   </section>
 )

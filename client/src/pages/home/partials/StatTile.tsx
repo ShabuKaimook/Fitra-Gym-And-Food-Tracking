@@ -1,6 +1,7 @@
+import { Button } from '@/components/Button'
 import { SquarePen, Plus, type LucideIcon } from 'lucide-react'
 import { ProgressBar } from '@/components/ProgressBar'
-import { btnBase, card, cardSurface, muted } from './ui'
+import { card, cardSurface, muted } from './ui'
 
 type Tone = 'activity' | 'water' | 'sleep'
 
@@ -65,14 +66,10 @@ export const StatTile = ({
         <>
           <div className="text-[15px] leading-6 font-extrabold tracking-[-0.4px] text-ink-2">Not recorded</div>
           {detail && <div className={muted}>{detail}</div>}
-          <button
-            type="button"
-            onClick={onEdit}
-            className={`${btnBase} min-h-9 self-start rounded-xl bg-primary-50 px-3 text-[13px] text-primary-ink hover:bg-primary-100`}
-          >
+          <Button variant="soft" size="sm" onClick={onEdit} className="self-start">
             <Plus size={13} aria-hidden />
             {addLabel}
-          </button>
+          </Button>
         </>
       ) : (
         <>

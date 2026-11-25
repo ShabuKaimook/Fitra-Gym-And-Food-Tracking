@@ -1,6 +1,7 @@
+import { Button } from '@/components/Button'
 import { NotebookPen } from 'lucide-react'
 import { useId, useState } from 'react'
-import { btnBase, card, cardLabel, cardSurface } from './ui'
+import { card, cardLabel, cardSurface } from './ui'
 
 type Props = { note: string; saving: boolean; onSave: (note: string) => void }
 
@@ -35,20 +36,12 @@ export const NoteCard = ({ note, saving, onSave }: Props) => {
       />
       {changed && (
         <div className="flex justify-end gap-2">
-          <button
-            type="button"
-            onClick={() => setText(note)}
-            className={`${btnBase} min-h-9 rounded-xl border border-line bg-surface-2 px-3 text-[13px]`}
-          >
+          <Button variant="outline" size="sm" onClick={() => setText(note)}>
             Discard
-          </button>
-          <button
-            type="submit"
-            disabled={saving}
-            className={`${btnBase} min-h-9 rounded-xl bg-primary px-4 text-[13px] text-on-primary hover:bg-primary-hover disabled:opacity-60`}
-          >
+          </Button>
+          <Button type="submit" size="sm" disabled={saving}>
             {saving ? 'Saving…' : 'Save note'}
-          </button>
+          </Button>
         </div>
       )}
     </form>

@@ -1,3 +1,4 @@
+import { Button } from '@/components/Button'
 import { Skeleton } from '@/components/Skeleton'
 import { TopBarTitle } from '@/components/TopBarTitle'
 import { useActivePlan, useLastSession, useSplits, useTemplates } from '@/hooks/queries/useGym'
@@ -11,7 +12,6 @@ import { GymLinks } from './partials/GymLinks'
 import { PlanCard } from './partials/PlanCard'
 import { SplitsRail } from './partials/SplitsRail'
 import { TodayPlanCard } from './partials/TodayPlanCard'
-import { outlineBtn, primaryBtn, whiteBtn } from './partials/ui'
 
 // Gym overview (wireframe 1e): today's workout, the active plan, splits, then templates and the library.
 // shortcut: the buttons here (start workout, edit plan, templates…) do nothing yet; wire each to its
@@ -32,19 +32,19 @@ const GymPage = () => {
 
       <header className="flex items-center gap-2">
         <h1 className="m-0 text-2xl leading-7.5 font-extrabold tracking-[-0.4px] lg:hidden">Gym</h1>
-        <button type="button" className={`${outlineBtn} ml-auto lg:hidden`}>
+        <Button variant="outline" size="sm" className="ml-auto lg:hidden">
           <History size={14} aria-hidden />
           History
-        </button>
+        </Button>
         <div className="ml-auto flex gap-2 max-lg:hidden">
-          <Link to={ROUTE_PATHS.SPLIT_NEW} className={whiteBtn}>
+          <Button variant="outline" to={ROUTE_PATHS.SPLIT_NEW} className="text-primary hover:bg-primary-50">
             <Plus size={15} aria-hidden />
             Create split
-          </Link>
-          <button type="button" className={primaryBtn}>
+          </Button>
+          <Button>
             <Plus size={15} aria-hidden />
             Create plan
-          </button>
+          </Button>
         </div>
       </header>
 

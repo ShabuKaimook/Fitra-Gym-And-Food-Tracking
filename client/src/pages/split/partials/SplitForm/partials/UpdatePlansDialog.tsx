@@ -1,3 +1,4 @@
+import { Button } from '@/components/Button'
 import type { TrainingPlan } from '@/services/WorkoutService/types/Workout'
 import { X } from 'lucide-react'
 import { useEffect, useId, useRef, useState } from 'react'
@@ -10,8 +11,6 @@ type Props = {
   onSave: (planIds: string[]) => void
   onClose: () => void
 }
-
-const btn = 'inline-flex min-h-11 items-center justify-center rounded-xl px-3 text-[14px] font-extrabold'
 
 // What saving would do to each plan: weeks already played never change.
 const effect = (p: TrainingPlan) =>
@@ -98,22 +97,12 @@ export const UpdatePlansDialog = ({ splitName, plans, saving, onSave, onClose }:
         </fieldset>
 
         <div className="grid grid-cols-2 gap-2">
-          <button
-            type="button"
-            disabled={saving}
-            className={`${btn} border border-line bg-surface-2 disabled:opacity-60`}
-            onClick={() => onSave([])}
-          >
+          <Button variant="outline" disabled={saving} onClick={() => onSave([])} className="whitespace-normal">
             Save split only
-          </button>
-          <button
-            type="button"
-            disabled={saving || picked.length === 0}
-            className={`${btn} bg-primary text-on-primary hover:bg-primary-hover disabled:opacity-50`}
-            onClick={() => onSave(picked)}
-          >
+          </Button>
+          <Button disabled={saving || picked.length === 0} onClick={() => onSave(picked)} className="whitespace-normal">
             {saving ? 'Saving…' : `Save and update ${picked.length || ''} plan${picked.length === 1 ? '' : 's'}`}
-          </button>
+          </Button>
         </div>
       </div>
     </dialog>

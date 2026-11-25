@@ -1,3 +1,4 @@
+import { Button } from '@/components/Button'
 import { Field, input } from '@/components/Form'
 import { useInlineValidation } from '@/hooks/useInlineValidation'
 import { capAtMax, numbersOnly } from '@/utils/numbersOnly'
@@ -27,8 +28,6 @@ type Props = {
   onSave: (values: Record<string, number>) => void
   onClose: () => void
 }
-
-const btn = 'inline-flex min-h-11 items-center justify-center rounded-xl text-[14px] font-extrabold'
 
 // Modal with number fields laid out in rows: centred, or on phones a sheet resting on the keyboard.
 // Native <dialog> gives focus trapping, Esc and an inert page. Mount it only while open: it opens on
@@ -124,16 +123,12 @@ export const FormDialog = ({ title, rows, initial = {}, submitLabel = 'Save', sa
         )}
 
         <div className="grid grid-cols-2 gap-2">
-          <button type="button" className={`${btn} border border-line bg-surface-2`} onClick={close}>
+          <Button variant="outline" onClick={close}>
             Cancel
-          </button>
-          <button
-            type="submit"
-            disabled={saving}
-            className={`${btn} bg-primary text-on-primary hover:bg-primary-hover disabled:opacity-60`}
-          >
+          </Button>
+          <Button type="submit" disabled={saving}>
             {submitLabel}
-          </button>
+          </Button>
         </div>
       </form>
     </dialog>

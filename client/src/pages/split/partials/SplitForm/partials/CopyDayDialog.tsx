@@ -1,3 +1,4 @@
+import { Button } from '@/components/Button'
 import type { SplitDay } from '@/services/WorkoutService/types/Workout'
 import { WEEKDAYS } from '@/utils/date'
 import { X } from 'lucide-react'
@@ -11,8 +12,6 @@ type Props = {
   onCopy: (to: number[]) => void
   onClose: () => void
 }
-
-const btn = 'inline-flex min-h-11 items-center justify-center rounded-xl text-[14px] font-extrabold'
 
 // Pick the other weekdays to copy a day's name and exercises to. A rest day becomes a training day; a
 // day that already has exercises says what it loses. Mount it only while open: it opens on mount.
@@ -87,20 +86,18 @@ export const CopyDayDialog = ({ days, from, onCopy, onClose }: Props) => {
         </fieldset>
 
         <div className="grid grid-cols-2 gap-2">
-          <button type="button" className={`${btn} border border-line bg-surface-2`} onClick={close}>
+          <Button variant="outline" onClick={close}>
             Cancel
-          </button>
-          <button
-            type="button"
+          </Button>
+          <Button
             disabled={to.length === 0}
             onClick={() => {
               onCopy(to)
               close()
             }}
-            className={`${btn} bg-primary text-on-primary hover:bg-primary-hover disabled:opacity-50`}
           >
             {to.length > 1 ? `Copy to ${to.length} days` : to.length === 1 ? `Copy to ${WEEKDAYS[to[0]]}` : 'Copy'}
-          </button>
+          </Button>
         </div>
       </div>
     </dialog>

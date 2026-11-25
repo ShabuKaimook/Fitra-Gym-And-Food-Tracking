@@ -1,3 +1,4 @@
+import { Button } from '@/components/Button'
 import { inputBase } from '@/components/Form'
 import { useExerciseOptions } from '@/hooks/queries/useGym'
 import type { Equipment, Exercise, Muscle } from '@/services/WorkoutService/types/Workout'
@@ -49,14 +50,10 @@ export const ExercisePicker = ({ target, exercises = [], inDay, onAdd, onCustom,
         <div className="min-w-0 flex-1">
           <h2 className="m-0 truncate text-[15px] font-extrabold">Add to {target}</h2>
         </div>
-        <button
-          type="button"
-          onClick={onCustom}
-          className="inline-flex min-h-9 flex-none items-center gap-1 rounded-xl bg-primary-50 px-3 text-[13px] font-extrabold text-primary-ink"
-        >
+        <Button variant="soft" size="sm" onClick={onCustom}>
           <Plus size={14} aria-hidden />
           Custom
-        </button>
+        </Button>
       </div>
 
       <label className="relative">
@@ -132,14 +129,9 @@ export const ExercisePicker = ({ target, exercises = [], inDay, onAdd, onCustom,
         <span className="text-[13px] text-ink-2 tabular-nums" aria-live="polite">
           {picked.length} selected
         </span>
-        <button
-          type="button"
-          disabled={picked.length === 0}
-          onClick={add}
-          className="ml-auto min-h-11 rounded-2xl bg-primary px-4 text-sm font-extrabold text-on-primary hover:bg-primary-hover disabled:opacity-50"
-        >
+        <Button disabled={picked.length === 0} onClick={add} className="ml-auto">
           Add {picked.length || ''} to {target.split(',')[0]}
-        </button>
+        </Button>
       </div>
     </div>
   )

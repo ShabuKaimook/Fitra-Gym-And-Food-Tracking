@@ -1,7 +1,7 @@
+import { Button } from '@/components/Button'
 import type { PlannedWorkout } from '@/services/WorkoutService/types/Workout'
 import { muted } from '@/pages/home/partials/ui'
 import { Play, Timer } from 'lucide-react'
-import { primaryBtn } from './ui'
 
 // How many exercises the card lists before "+3 more".
 const SHOWN = 3
@@ -78,10 +78,10 @@ export const TodayPlanCard = ({ workout }: { workout: PlannedWorkout | null }) =
         </tbody>
       </table>
 
-      <button type="button" className={`${primaryBtn} mt-1 self-start`}>
+      <Button className="mt-1 self-start">
         <Play size={14} aria-hidden />
         Start workout
-      </button>
+      </Button>
     </section>
   )
 }

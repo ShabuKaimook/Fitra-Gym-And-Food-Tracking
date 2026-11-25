@@ -1,3 +1,4 @@
+import { Button } from '@/components/Button'
 import { ExerciseForm } from '@/components/ExerciseForm'
 import type { Exercise } from '@/services/WorkoutService/types/Workout'
 import { X } from 'lucide-react'
@@ -52,14 +53,9 @@ export const NewExerciseSheet = ({ target, onCreated, onClose }: Props) => {
                 <h2 className="m-0 truncate text-xl font-extrabold tracking-[-0.4px]">New exercise</h2>
                 <p className="m-0 truncate text-xs text-ink-2">Saved to your library and added to {target}</p>
               </div>
-              <button
-                type="submit"
-                form={FORM_ID}
-                disabled={saving}
-                className="min-h-10 flex-none rounded-2xl bg-primary px-4 text-sm font-extrabold text-on-primary hover:bg-primary-hover disabled:opacity-60"
-              >
+              <Button type="submit" form={FORM_ID} disabled={saving} className="min-h-10">
                 {saving ? 'Saving…' : 'Save'}
-              </button>
+              </Button>
             </header>
           )}
         />
