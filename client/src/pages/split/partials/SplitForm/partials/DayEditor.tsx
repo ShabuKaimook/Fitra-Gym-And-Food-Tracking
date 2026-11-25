@@ -6,7 +6,7 @@ import { Copy, Plus, X } from 'lucide-react'
 import { useId, useState } from 'react'
 import { dayLabel } from '@/pages/split/split'
 import { CopyDayDialog } from './CopyDayDialog'
-import { ExerciseThumb } from './ExerciseThumb'
+import { ExerciseThumb } from '@/components/ExerciseThumb'
 
 type Props = {
   days: (SplitDay | null)[]
@@ -93,7 +93,7 @@ export const DayEditor = ({
               const ex = exercises.get(id)
               return (
                 <li key={id} className="flex items-center gap-3 border-b border-line-soft py-2.5 last:border-b-0">
-                  <ExerciseThumb />
+                  <ExerciseThumb src={ex?.photo} />
                   <span className="flex min-w-0 flex-1 flex-col">
                     <span className="truncate text-[13px] font-extrabold">{ex?.name ?? id}</span>
                     {ex && (

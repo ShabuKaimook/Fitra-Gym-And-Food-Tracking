@@ -22,6 +22,7 @@ import type {
 import type {
   Equipment,
   Exercise,
+  ExerciseOptions,
   Muscle,
   PlannedExercise,
   PlannedWorkout,
@@ -408,12 +409,46 @@ export const PLANS: TrainingPlan[] = [
   plan('spring-strength', 'Spring strength', 'my-4-day', 'finished', 6, 6),
 ]
 
+export const EXERCISE_OPTIONS: ExerciseOptions = {
+  muscles: ['Chest', 'Back', 'Shoulders', 'Legs', 'Arms', 'Core'],
+  equipment: ['Machine', 'Dumbbell', 'Barbell', 'Cable', 'Bodyweight'],
+  secondaryMuscles: [
+    'Biceps',
+    'Rear delts',
+    'Traps',
+    'Forearms',
+    'Lats',
+    'Triceps',
+    'Front delts',
+    'Abs',
+    'Glutes',
+    'Quads',
+    'Hamstrings',
+    'Calves',
+  ],
+  recordTypes: [
+    { value: 'weight-reps', label: 'Weight and reps' },
+    { value: 'reps', label: 'Reps only' },
+    { value: 'time', label: 'Time' },
+  ],
+  weightUnits: [
+    { value: 'kg', label: 'Kilograms (kg)' },
+    { value: 'lb', label: 'Pounds (lb)' },
+    { value: 'level', label: 'Pin level (machine stack)' },
+  ],
+}
+
 const ex = (name: string, muscle: Muscle, equipment: Equipment, favourite = false): Exercise => ({
   id: name.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
   name,
   muscle,
+  secondary: [],
   equipment,
+  record: equipment === 'Bodyweight' ? 'reps' : 'weight-reps',
+  weightUnit: equipment === 'Bodyweight' ? null : 'kg',
+  howTo: '',
   favourite,
+  custom: false,
 })
 
 export const EXERCISES: Exercise[] = [

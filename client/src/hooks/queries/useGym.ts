@@ -47,9 +47,25 @@ export const useCreateSplit = () => {
   })
 }
 
+export const useCreateExercise = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: WorkoutService.createExercise,
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: QUERY_KEYS.exercises }),
+  })
+}
+
 // The exercise library, by name.
 export const useExercises = () =>
   useQuery({ queryKey: QUERY_KEYS.exercises, queryFn: ({ signal }) => WorkoutService.getExercises({ signal }) })
+
+// Muscles, equipment, record types and weight units to choose from. Fetched once per session.
+export const useExerciseOptions = () =>
+  useQuery({
+    queryKey: QUERY_KEYS.exerciseOptions,
+    queryFn: ({ signal }) => WorkoutService.getExerciseOptions({ signal }),
+    staleTime: Infinity,
+  })
 
 export const useTemplates = () =>
   useQuery({ queryKey: QUERY_KEYS.templates, queryFn: ({ signal }) => WorkoutService.getTemplates({ signal }) })

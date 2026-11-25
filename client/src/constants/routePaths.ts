@@ -4,6 +4,7 @@ export const ROUTE_PATHS = {
   GYM: '/gym',
   SPLIT_NEW: '/gym/splits/new',
   SPLIT_EDIT: '/gym/splits/:id/edit',
+  EXERCISE_NEW: '/gym/exercises/new',
   FOOD: '/food',
   FOOD_LOG: '/food/log',
   FOOD_NEW: '/food/new',

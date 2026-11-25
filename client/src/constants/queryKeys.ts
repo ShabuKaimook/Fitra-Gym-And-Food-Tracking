@@ -22,6 +22,7 @@ export const QUERY_KEYS = {
   splits: ['splits'] as const,
   split: (id: string) => ['splits', id] as const,
   exercises: ['exercises'] as const,
+  exerciseOptions: ['exercise-options'] as const,
   templates: ['templates'] as const,
   lastSession: (date: DateKey) => ['sessions', 'last-before', date] as const,
   meals: ['meals'] as const,

@@ -1,9 +1,9 @@
 import type { RequestOptions } from '@/types/api/RequestOptions'
 import type { DateKey } from '@/utils/date'
 import { lastBefore, mockRequest, onDate } from '@/utils/mockRequest'
-import { EXERCISES, PLANS, SESSIONS, SPLITS, TEMPLATES, WORKOUTS } from '../mockData'
+import { EXERCISE_OPTIONS, EXERCISES, PLANS, SESSIONS, SPLITS, TEMPLATES, WORKOUTS } from '../mockData'
 import { planScheduleAfter } from './plans'
-import type { Exercise, PlannedWorkout, Split, TrainingPlan, WorkoutSession, WorkoutTemplate } from './types/Workout'
+import type { Exercise, ExerciseOptions, PlannedWorkout, Split, TrainingPlan, WorkoutSession, WorkoutTemplate } from './types/Workout'
 
 export const WorkoutService = {
   /** null = rest day, nothing planned. */
@@ -65,12 +65,24 @@ export const WorkoutService = {
     return mockRequest(created)
   },
 
+  /** Saves an exercise of the user's own (1n). */
+  createExercise: async (exercise: Omit<Exercise, 'id' | 'custom' | 'favourite'>): Promise<Exercise> => {
+    // shortcut: in-memory mock (lost on reload); the API will own this.
+    const created: Exercise = { ...exercise, id: crypto.randomUUID(), custom: true, favourite: false }
+    EXERCISES.push(created)
+    return mockRequest(created)
+  },
+
   /** The exercise library, by name. */
   getExercises: async (options?: RequestOptions): Promise<Exercise[]> =>
     mockRequest(
       [...EXERCISES].sort((a, b) => a.name.localeCompare(b.name)),
       options,
     ),
+
+  /** Muscles, equipment, record types and weight units to choose from, in display order. */
+  getExerciseOptions: async (options?: RequestOptions): Promise<ExerciseOptions> =>
+    mockRequest(EXERCISE_OPTIONS, options),
 
   getTemplates: async (options?: RequestOptions): Promise<WorkoutTemplate[]> => mockRequest(TEMPLATES, options),
 

@@ -1,3 +1,5 @@
+import { EditorHeader } from '@/components/EditorHeader'
+import { ROUTE_PATHS } from '@/constants/routePaths'
 import { useExercises } from '@/hooks/queries/useGym'
 import { dayLabel } from '@/pages/split/split'
 import type { Split } from '@/services/WorkoutService/types/Workout'
@@ -6,8 +8,8 @@ import { useMemo, useState } from 'react'
 import { useSplitForm } from './hooks/useSplitForm'
 import { DayEditor } from './partials/DayEditor'
 import { ExercisePicker } from './partials/ExercisePicker'
+import { NewExerciseSheet } from './partials/NewExerciseSheet'
 import { PickerSheet } from './partials/PickerSheet'
-import { SplitHeader } from './partials/SplitHeader'
 import { SplitNameField } from './partials/SplitNameField'
 import { UpdatePlansDialog } from './partials/UpdatePlansDialog'
 import { WeekRow } from './partials/WeekRow'
@@ -23,6 +25,7 @@ export const SplitForm = ({ split }: { split?: Split }) => {
   const exercises = useExercises()
   const byId = useMemo(() => new Map(exercises.data?.map((e) => [e.id, e])), [exercises.data])
   const [picking, setPicking] = useState(false)
+  const [creating, setCreating] = useState(false)
 
   const title = f.mode === 'new' ? 'New split' : f.mode === 'copy' ? `Copy of ${split!.name}` : 'Edit split'
   const label = dayLabel(f.days, f.selected)
@@ -31,11 +34,19 @@ export const SplitForm = ({ split }: { split?: Split }) => {
     exercises: exercises.data,
     inDay: f.day.exerciseIds,
     onAdd: f.addExercises,
+    onCustom: () => setCreating(true),
   }
 
   return (
     <div className="mx-auto flex w-full max-w-5xl flex-col gap-4">
-      <SplitHeader title={title} formId={FORM_ID} saving={f.saving} />
+      <EditorHeader
+        title={title}
+        crumb="Gym /"
+        backTo={ROUTE_PATHS.GYM}
+        formId={FORM_ID}
+        saving={f.saving}
+        saveLabel="Save split"
+      />
 
       <div className="grid items-start gap-5 lg:grid-cols-[1fr_24rem]">
         {/* The picker sits outside the form, so Enter in its search box can't save the split. */}
@@ -69,6 +80,14 @@ export const SplitForm = ({ split }: { split?: Split }) => {
       </div>
 
       {picking && <PickerSheet {...picker} onClose={() => setPicking(false)} />}
+      {creating && (
+        <NewExerciseSheet
+          target={picker.target}
+          // A new exercise goes straight into the day it was made for.
+          onCreated={(exercise) => f.addExercises([exercise.id])}
+          onClose={() => setCreating(false)}
+        />
+      )}
       {f.askingPlans && (
         <UpdatePlansDialog
           splitName={f.name.trim()}

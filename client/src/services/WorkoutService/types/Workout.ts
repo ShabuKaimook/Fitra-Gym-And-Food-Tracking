@@ -34,11 +34,42 @@ export type TrainingPlan = {
   schedule: PlanScheduleEntry[]
 }
 
-export type Muscle = 'Chest' | 'Back' | 'Shoulders' | 'Legs' | 'Arms' | 'Core'
-export type Equipment = 'Machine' | 'Dumbbell' | 'Barbell' | 'Cable' | 'Bodyweight'
+// Muscles and equipment are lists the backend owns (getExerciseOptions), so any string it sends.
+export type Muscle = string
+export type Equipment = string
+/** Smaller muscle groups an exercise also works, e.g. a row's biceps and rear delts. */
+export type SecondaryMuscle = string
 
-/** An exercise in the library. */
-export type Exercise = { id: string; name: string; muscle: Muscle; equipment: Equipment; favourite: boolean }
+/** What a set of it records. */
+export type RecordType = 'weight-reps' | 'reps' | 'time'
+/** level = a machine's pin number, for stacks without kg or lb. */
+export type WeightUnit = 'kg' | 'lb' | 'level'
+
+/** The choices for an exercise, in display order: the picker's filters (1f) and the new exercise form (1n).
+ * Record types and weight units keep fixed values because the app treats each one differently. */
+export type ExerciseOptions = {
+  muscles: Muscle[]
+  equipment: Equipment[]
+  secondaryMuscles: SecondaryMuscle[]
+  recordTypes: { value: RecordType; label: string }[]
+  weightUnits: { value: WeightUnit; label: string }[]
+}
+
+/** An exercise in the library. weightUnit is set only when it records weight; photo is a URL. */
+export type Exercise = {
+  id: string
+  name: string
+  muscle: Muscle
+  secondary: SecondaryMuscle[]
+  equipment: Equipment
+  record: RecordType
+  weightUnit: WeightUnit | null
+  howTo: string
+  photo?: string
+  favourite: boolean
+  /** Made by the user (1n), not part of the built-in library. */
+  custom: boolean
+}
 
 export type WorkoutTemplate = { id: string; name: string }
 

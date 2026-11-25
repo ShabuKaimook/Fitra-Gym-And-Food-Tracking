@@ -1,11 +1,9 @@
 import { inputBase } from '@/components/Form'
+import { useExerciseOptions } from '@/hooks/queries/useGym'
 import type { Equipment, Exercise, Muscle } from '@/services/WorkoutService/types/Workout'
 import { Plus, Search, Star } from 'lucide-react'
 import { useState, type ReactNode } from 'react'
-import { ExerciseThumb } from './ExerciseThumb'
-
-const MUSCLES: Muscle[] = ['Chest', 'Back', 'Shoulders', 'Legs', 'Arms', 'Core']
-const EQUIPMENT: Equipment[] = ['Machine', 'Dumbbell', 'Barbell', 'Cable', 'Bodyweight']
+import { ExerciseThumb } from '@/components/ExerciseThumb'
 
 type Props = {
   /** "Mon, Upper" */
@@ -14,13 +12,16 @@ type Props = {
   /** Already in the day: tagged "In day" and can't be picked again. */
   inDay: string[]
   onAdd: (ids: string[]) => void
+  /** Opens the new exercise form (1n). */
+  onCustom: () => void
   /** Mobile sheet: the close button. */
   header?: ReactNode
 }
 
 // Search and filter the library, tick exercises, add them to one day (1f). Muscles or equipment:
 // any ticked chip in a row matches; the rows and Favourites narrow each other.
-export const ExercisePicker = ({ target, exercises = [], inDay, onAdd, header }: Props) => {
+export const ExercisePicker = ({ target, exercises = [], inDay, onAdd, onCustom, header }: Props) => {
+  const { data: options } = useExerciseOptions()
   const [query, setQuery] = useState('')
   const [favourites, setFavourites] = useState(false)
   const [muscles, setMuscles] = useState<Muscle[]>([])
@@ -48,9 +49,9 @@ export const ExercisePicker = ({ target, exercises = [], inDay, onAdd, header }:
         <div className="min-w-0 flex-1">
           <h2 className="m-0 truncate text-[15px] font-extrabold">Add to {target}</h2>
         </div>
-        {/* shortcut: Custom exercise opens 1n once it's built. */}
         <button
           type="button"
+          onClick={onCustom}
           className="inline-flex min-h-9 flex-none items-center gap-1 rounded-xl bg-primary-50 px-3 text-[13px] font-extrabold text-primary-ink"
         >
           <Plus size={14} aria-hidden />
@@ -75,14 +76,14 @@ export const ExercisePicker = ({ target, exercises = [], inDay, onAdd, header }:
           <Star size={13} aria-hidden />
           Favourites
         </Chip>
-        {MUSCLES.map((m) => (
+        {options?.muscles.map((m) => (
           <Chip key={m} on={muscles.includes(m)} onClick={() => setMuscles((ms) => toggle(ms, m))}>
             {m}
           </Chip>
         ))}
       </div>
       <div role="group" aria-label="Equipment" className="flex [scrollbar-width:none] gap-1.5 overflow-x-auto">
-        {EQUIPMENT.map((e) => (
+        {options?.equipment.map((e) => (
           <Chip key={e} on={equipment.includes(e)} onClick={() => setEquipment((es) => toggle(es, e))}>
             {e}
           </Chip>
@@ -100,7 +101,7 @@ export const ExercisePicker = ({ target, exercises = [], inDay, onAdd, header }:
           return (
             <li key={e.id} className="border-b border-line-soft last:border-b-0">
               <label className={`flex items-center gap-3 py-2.5 ${already ? 'opacity-60' : 'cursor-pointer'}`}>
-                <ExerciseThumb />
+                <ExerciseThumb src={e.photo} />
                 <span className="flex min-w-0 flex-1 flex-col">
                   <span className="flex items-center gap-1.5 text-[13px] font-extrabold">
                     <span className="truncate">{e.name}</span>
