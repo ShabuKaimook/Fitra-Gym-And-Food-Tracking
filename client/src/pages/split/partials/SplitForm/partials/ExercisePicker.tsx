@@ -1,3 +1,4 @@
+import { ToggleChip } from '@/components/ToggleChip'
 import { Button } from '@/components/Button'
 import { inputBase } from '@/components/Form'
 import { useExerciseOptions } from '@/hooks/queries/useGym'
@@ -69,21 +70,21 @@ export const ExercisePicker = ({ target, exercises = [], inDay, onAdd, onCustom,
       </label>
 
       <div role="group" aria-label="Muscle" className="flex [scrollbar-width:none] gap-1.5 overflow-x-auto">
-        <Chip on={favourites} onClick={() => setFavourites((f) => !f)}>
+        <ToggleChip on={favourites} onClick={() => setFavourites((f) => !f)}>
           <Star size={13} aria-hidden />
           Favourites
-        </Chip>
+        </ToggleChip>
         {options?.muscles.map((m) => (
-          <Chip key={m} on={muscles.includes(m)} onClick={() => setMuscles((ms) => toggle(ms, m))}>
+          <ToggleChip key={m} on={muscles.includes(m)} onClick={() => setMuscles((ms) => toggle(ms, m))}>
             {m}
-          </Chip>
+          </ToggleChip>
         ))}
       </div>
       <div role="group" aria-label="Equipment" className="flex [scrollbar-width:none] gap-1.5 overflow-x-auto">
         {options?.equipment.map((e) => (
-          <Chip key={e} on={equipment.includes(e)} onClick={() => setEquipment((es) => toggle(es, e))}>
+          <ToggleChip key={e} on={equipment.includes(e)} onClick={() => setEquipment((es) => toggle(es, e))}>
             {e}
-          </Chip>
+          </ToggleChip>
         ))}
       </div>
 
@@ -136,16 +137,3 @@ export const ExercisePicker = ({ target, exercises = [], inDay, onAdd, onCustom,
     </div>
   )
 }
-
-const Chip = ({ on, onClick, children }: { on: boolean; onClick: () => void; children: ReactNode }) => (
-  <button
-    type="button"
-    aria-pressed={on}
-    onClick={onClick}
-    className={`inline-flex min-h-9 flex-none items-center gap-1 rounded-full border px-3 text-[13px] font-bold ${
-      on ? 'border-primary bg-primary-50 text-primary-ink' : 'border-line bg-surface text-ink-2'
-    }`}
-  >
-    {children}
-  </button>
-)

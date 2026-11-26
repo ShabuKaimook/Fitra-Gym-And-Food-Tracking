@@ -1,3 +1,4 @@
+import { ToggleChip } from '@/components/ToggleChip'
 import type { SecondaryMuscle } from '@/services/WorkoutService/types/Workout'
 import { useState } from 'react'
 
@@ -15,17 +16,9 @@ export const SecondaryMuscles = ({ options, value, onToggle }: Props) => {
       <legend className="mb-1.5 p-0 text-[13px] font-bold text-ink-2">Secondary muscles, optional</legend>
       <div className="flex flex-wrap gap-1.5">
         {shown.map((m) => (
-          <button
-            key={m}
-            type="button"
-            aria-pressed={value.includes(m)}
-            onClick={() => onToggle(m)}
-            className={`min-h-9 rounded-full border px-3 text-[13px] font-bold ${
-              value.includes(m) ? 'border-primary bg-primary-50 text-primary-ink' : 'border-line bg-surface text-ink-2'
-            }`}
-          >
+          <ToggleChip key={m} on={value.includes(m)} onClick={() => onToggle(m)}>
             {m}
-          </button>
+          </ToggleChip>
         ))}
         <button
           type="button"
