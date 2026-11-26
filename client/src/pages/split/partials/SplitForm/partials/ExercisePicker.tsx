@@ -1,10 +1,10 @@
 import { Card } from '@/components/Card'
 import { ToggleChip } from '@/components/ToggleChip'
 import { Button } from '@/components/Button'
-import { inputBase } from '@/components/Form'
+import { SearchInput } from '@/components/SearchInput'
 import { useExerciseOptions } from '@/hooks/queries/useGym'
 import type { Equipment, Exercise, Muscle } from '@/services/WorkoutService/types/Workout'
-import { Plus, Search, Star } from 'lucide-react'
+import { Plus, Star } from 'lucide-react'
 import { useState, type ReactNode } from 'react'
 import { ExerciseThumb } from '@/components/ExerciseThumb'
 
@@ -58,17 +58,7 @@ export const ExercisePicker = ({ target, exercises = [], inDay, onAdd, onCustom,
         </Button>
       </div>
 
-      <label className="relative">
-        <span className="sr-only">Search exercises</span>
-        <Search size={16} className="absolute top-1/2 left-3 -translate-y-1/2 text-ink-3" aria-hidden />
-        <input
-          type="search"
-          className={`${inputBase} min-h-10 pl-9 text-sm`}
-          placeholder="Search exercises"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-        />
-      </label>
+      <SearchInput label="Search exercises" value={query} onChange={setQuery} />
 
       <div role="group" aria-label="Muscle" className="flex [scrollbar-width:none] gap-1.5 overflow-x-auto">
         <ToggleChip on={favourites} onClick={() => setFavourites((f) => !f)}>

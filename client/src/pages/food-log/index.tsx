@@ -1,3 +1,4 @@
+import { SearchInput } from '@/components/SearchInput'
 import { ROUTE_PATHS } from '@/constants/routePaths'
 import { useFoodSearch, useRecentFoods } from '@/hooks/queries/useFoods'
 import { useDeferredValue, useState } from 'react'
@@ -5,7 +6,6 @@ import { useFoodLog } from './hooks/useFoodLog'
 import { AddFoodLink } from './partials/AddFoodLink'
 import { FilterChips } from './partials/FilterChips'
 import { FoodList } from './partials/FoodList'
-import { SearchBox } from './partials/SearchBox'
 import { SearchHeader } from './partials/SearchHeader'
 
 const TABS = [
@@ -35,7 +35,7 @@ const FoodLogPage = () => {
         className={`flex h-[calc(100dvh-116px-env(safe-area-inset-bottom))] min-w-0 flex-col gap-3 lg:h-[calc(100dvh-112px)]`}
       >
         <SearchHeader meal={meal} onMeal={log.setMeal} />
-        <SearchBox value={query} onChange={setQuery} />
+        <SearchInput label="Search foods" value={query} onChange={setQuery} />
         <div className="flex items-center gap-2">
           <FilterChips label="Show" options={TABS} value={tab} onChange={setTab} />
           <div className="ml-auto">
