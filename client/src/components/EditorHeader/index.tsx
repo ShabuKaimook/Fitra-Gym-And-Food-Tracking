@@ -1,7 +1,7 @@
+import { IconButton } from '@/components/IconButton'
 import { Button } from '@/components/Button'
 import { TopBarTitle } from '@/components/TopBarTitle'
 import { ChevronLeft } from 'lucide-react'
-import { Link } from 'react-router-dom'
 
 type Props = {
   title: string
@@ -26,13 +26,9 @@ export const EditorHeader = ({ title, crumb, backTo, formId, saving, saveLabel }
     </TopBarTitle>
 
     <header className="flex items-center gap-2">
-      <Link
-        to={backTo}
-        aria-label="Back"
-        className="-ml-2.5 grid size-11 place-items-center rounded-full text-ink-2 hover:bg-surface-2 lg:hidden"
-      >
+      <IconButton label="Back" size="xl" to={backTo} className="-ml-2.5 lg:hidden">
         <ChevronLeft size={22} aria-hidden />
-      </Link>
+      </IconButton>
       <h1 className="m-0 min-w-0 flex-1 truncate text-xl font-extrabold tracking-[-0.4px] lg:hidden">{title}</h1>
       <Button variant="outline" to={backTo} className="ml-auto max-lg:hidden">
         Cancel

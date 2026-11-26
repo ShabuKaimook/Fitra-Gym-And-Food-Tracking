@@ -1,3 +1,4 @@
+import { IconButton } from '@/components/IconButton'
 import { X } from 'lucide-react'
 import { useEffect, useRef, type ComponentProps } from 'react'
 import { ExercisePicker } from './ExercisePicker'
@@ -26,14 +27,9 @@ export const PickerSheet = ({ onClose, onAdd, ...picker }: Props) => {
             ref.current?.close()
           }}
           header={
-            <button
-              type="button"
-              aria-label="Close"
-              onClick={() => ref.current?.close()}
-              className="-ml-2 grid size-10 flex-none place-items-center rounded-full text-ink-2 hover:bg-surface-2"
-            >
+            <IconButton label="Close" size="lg" onClick={() => ref.current?.close()} className="-ml-2">
               <X size={20} aria-hidden />
-            </button>
+            </IconButton>
           }
         />
       </div>

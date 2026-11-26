@@ -1,3 +1,4 @@
+import { IconButton } from '@/components/IconButton'
 import { Button } from '@/components/Button'
 import { SquarePen, Plus, type LucideIcon } from 'lucide-react'
 import { ProgressBar } from '@/components/ProgressBar'
@@ -52,14 +53,15 @@ export const StatTile = ({
         </span>
         {label}
         {onEdit && !empty && (
-          <button
-            type="button"
-            aria-label={`Edit ${label.toLowerCase()}`}
+          <IconButton
+            label={`Edit ${label.toLowerCase()}`}
+            size="sm"
+            tone="muted"
             onClick={onEdit}
-            className="-my-1 -mr-1.5 ml-auto grid size-8 place-items-center rounded-full text-ink-3 hover:bg-surface-2 hover:text-ink"
+            className="-my-1 -mr-1.5 ml-auto"
           >
             <SquarePen size={15} aria-hidden />
-          </button>
+          </IconButton>
         )}
       </h2>
       {empty ? (

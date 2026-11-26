@@ -1,8 +1,8 @@
+import { IconButton } from '@/components/IconButton'
 import { MealPicker } from '@/components/MealPicker'
 import { TopBarTitle } from '@/components/TopBarTitle'
 import { ROUTE_PATHS } from '@/constants/routePaths'
 import { ChevronLeft } from 'lucide-react'
-import { Link } from 'react-router-dom'
 import type { Meal } from '@/services/FoodService/types/Food'
 import { useMealLabel } from '@/hooks/queries/useMeals'
 
@@ -17,13 +17,9 @@ export const SearchHeader = ({ meal, onMeal }: Props) => {
       <TopBarTitle>
         <span className="text-sm text-ink-2">Food / Food search</span>
       </TopBarTitle>
-      <Link
-        to={ROUTE_PATHS.HOME}
-        aria-label="Back"
-        className="-ml-2.5 grid size-11 flex-none place-items-center rounded-xl text-ink-2 hover:bg-surface-2 lg:hidden"
-      >
+      <IconButton label="Back" size="xl" to={ROUTE_PATHS.HOME} className="-ml-2.5 lg:hidden">
         <ChevronLeft size={22} aria-hidden />
-      </Link>
+      </IconButton>
       {/* Screen readers get the full heading; on screen the meal picker is the title. */}
       <h1 className="sr-only">Add to {mealLabel}</h1>
       <div className="flex flex-1 justify-center">

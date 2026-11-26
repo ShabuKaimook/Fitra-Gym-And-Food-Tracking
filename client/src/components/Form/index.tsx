@@ -1,10 +1,10 @@
+import { IconButton } from '@/components/IconButton'
 import { Button } from '@/components/Button'
 import { TopBarTitle } from '@/components/TopBarTitle'
 import { useFullScreen } from '@/hooks/useFullScreen'
 import { useInlineValidation } from '@/hooks/useInlineValidation'
 import { ChevronLeft } from 'lucide-react'
 import type { FormEvent, ReactNode } from 'react'
-import { Link } from 'react-router-dom'
 
 // Inputs and selects (design-system §5 Input). user-invalid: only shows the error after the user
 // touched the field or tried to submit, so an empty form doesn't start out red.
@@ -62,8 +62,6 @@ type FormPageProps = {
   children: ReactNode
 }
 
-const backBtn = 'grid size-11 flex-none place-items-center rounded-full'
-
 // Shell shared by every log page: back + title (optionally on a cover band), the fields, and a
 // submit button that stays in reach at the bottom. Native validation (required, min, max) runs
 // before onSubmit is called.
@@ -90,13 +88,15 @@ export const FormPage = ({
 
   const header = (
     <header className="relative flex items-center gap-2">
-      <Link
+      <IconButton
+        label="Back"
+        size="xl"
         to={backTo}
-        aria-label="Back"
-        className={`${backBtn} ${cover ? 'bg-surface/70 text-ink backdrop-blur-sm' : '-ml-2.5 text-ink-2 hover:bg-surface-2'}`}
+        // Over the cover photo: a frosted circle so it shows on any picture.
+        className={cover ? 'bg-surface/70 text-ink backdrop-blur-sm hover:bg-surface' : '-ml-2.5'}
       >
         <ChevronLeft size={22} aria-hidden />
-      </Link>
+      </IconButton>
       <h1
         className={`m-0 text-2xl leading-7.5 font-extrabold tracking-[-0.4px] lg:hidden ${headerCenter ? 'sr-only' : ''}`}
       >

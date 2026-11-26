@@ -1,3 +1,4 @@
+import { IconButton } from '@/components/IconButton'
 import { ROUTE_PATHS } from '@/constants/routePaths'
 import { Activity, Dumbbell, House, Images, Moon, Settings, TrendingUp, Utensils } from 'lucide-react'
 import { Link, NavLink } from 'react-router-dom'
@@ -63,13 +64,9 @@ export const Sidebar = () => (
         <div className="text-[13px] leading-tight font-bold">{USER.name}</div>
         <div className="text-xs leading-[1.3] text-ink-2">{USER.plan}</div>
       </div>
-      <Link
-        to={ROUTE_PATHS.PROFILE}
-        className="ml-auto grid size-11 place-items-center rounded-xl text-ink-2 hover:bg-surface-2"
-        aria-label="Settings"
-      >
+      <IconButton label="Settings" size="xl" to={ROUTE_PATHS.PROFILE} className="ml-auto">
         <Settings size={16} aria-hidden />
-      </Link>
+      </IconButton>
     </div>
   </aside>
 )

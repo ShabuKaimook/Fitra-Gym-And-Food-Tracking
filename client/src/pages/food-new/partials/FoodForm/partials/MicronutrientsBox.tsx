@@ -1,3 +1,4 @@
+import { IconButton } from '@/components/IconButton'
 import { Select, SelectContent, SelectItem, SelectTrigger } from '@/components/ui/select'
 import { MICROS } from '@/constants/nutrients'
 import type { MicroKey } from '@/services/FoodService/types/Food'
@@ -68,14 +69,9 @@ export const MicronutrientsBox = ({ values, onChange }: Props) => {
             className="h-10 w-24 rounded-xl border border-line bg-surface-2 px-2.5 text-right text-base font-semibold tabular-nums placeholder:text-ink-3 user-invalid:border-2 user-invalid:border-danger"
           />
           <span className="w-6 text-[13px] text-ink-2">{unit}</span>
-          <button
-            type="button"
-            aria-label={`Remove ${label}`}
-            onClick={() => remove(key)}
-            className="-mr-2 grid size-10 flex-none place-items-center rounded-xl text-ink-3 hover:bg-surface-2"
-          >
+          <IconButton label={`Remove ${label}`} size="lg" tone="muted" onClick={() => remove(key)} className="-mr-2">
             <X size={16} aria-hidden />
-          </button>
+          </IconButton>
         </div>
       ))}
 

@@ -1,3 +1,4 @@
+import { IconButton } from '@/components/IconButton'
 import { inputBase } from '@/components/Form'
 import type { Exercise, SplitDay } from '@/services/WorkoutService/types/Workout'
 import { WEEKDAYS } from '@/utils/date'
@@ -102,14 +103,9 @@ export const DayEditor = ({
                       </span>
                     )}
                   </span>
-                  <button
-                    type="button"
-                    aria-label={`Remove ${ex?.name ?? id}`}
-                    onClick={() => onRemove(id)}
-                    className="grid size-9 place-items-center rounded-full text-ink-3 hover:bg-surface-2 hover:text-ink"
-                  >
+                  <IconButton label={`Remove ${ex?.name ?? id}`} tone="muted" onClick={() => onRemove(id)}>
                     <X size={16} aria-hidden />
-                  </button>
+                  </IconButton>
                 </li>
               )
             })}

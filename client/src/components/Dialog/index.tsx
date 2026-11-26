@@ -1,3 +1,4 @@
+import { IconButton } from '@/components/IconButton'
 import { cn } from 'cn'
 import { X } from 'lucide-react'
 import { useEffect, useId, useLayoutEffect, useState, type ReactNode } from 'react'
@@ -68,14 +69,9 @@ export const Dialog = ({ title, subtitle, onClose, children, className }: Props)
             </h2>
             {subtitle && <p className="m-0 text-[13px] text-ink-2">{subtitle}</p>}
           </div>
-          <button
-            type="button"
-            aria-label="Close"
-            className="-mr-2 grid size-9 flex-none place-items-center rounded-full text-ink-2 hover:bg-surface-2"
-            onClick={close}
-          >
+          <IconButton label="Close" onClick={close} className="-mr-2">
             <X size={18} aria-hidden />
-          </button>
+          </IconButton>
         </div>
         {typeof children === 'function' ? children(close) : children}
       </div>
