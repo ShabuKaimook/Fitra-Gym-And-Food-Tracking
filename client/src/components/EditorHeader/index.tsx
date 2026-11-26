@@ -37,9 +37,9 @@ export const EditorHeader = ({ title, crumb, backTo, formId, saving, saveLabel }
       <Button variant="outline" to={backTo} className="ml-auto max-lg:hidden">
         Cancel
       </Button>
-      <Button type="submit" form={formId} disabled={saving} className="max-lg:min-h-10">
+      <Button type="submit" form={formId} loading={saving} className="max-lg:min-h-10">
         {saving ? (
-          'Saving…'
+          'Saving'
         ) : (
           <>
             <span className="max-lg:hidden">{saveLabel}</span>

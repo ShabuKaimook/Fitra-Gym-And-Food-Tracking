@@ -126,7 +126,7 @@ export const FormDialog = ({ title, rows, initial = {}, submitLabel = 'Save', sa
           <Button variant="outline" onClick={close}>
             Cancel
           </Button>
-          <Button type="submit" disabled={saving}>
+          <Button type="submit" loading={saving}>
             {submitLabel}
           </Button>
         </div>

@@ -20,5 +20,6 @@ export const useTodayWater = () => {
       onError: () => toast.error('Water not saved, try again'),
     })
 
-  return { status, add: addMl, adding: add.isPending }
+  // addingMl: the amount being saved, so only the button that added it shows the spinner.
+  return { status, add: addMl, adding: add.isPending, addingMl: add.isPending ? add.variables : undefined }
 }

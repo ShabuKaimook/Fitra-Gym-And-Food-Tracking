@@ -2,6 +2,7 @@ import { ROUTE_PATHS } from '@/constants/routePaths'
 import { Bike, Droplets, Dumbbell, Moon, Plus, Scale, Utensils, type LucideIcon } from 'lucide-react'
 import { useEffect, useRef } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { Button } from '@/components/Button'
 import { useTodayWater } from './useTodayWater'
 
 // shortcut: items without a log form yet open their module's page; link each to its form once built.
@@ -19,14 +20,14 @@ const kbd = 'rounded-[5px] border border-line bg-surface-2 px-1.5 text-[11px] fo
 const menuMotion =
   'animate-menu-in opacity-0 -translate-y-1.5 open:opacity-100 open:translate-y-0 transition-[opacity,translate,overlay,display] transition-discrete duration-150 ease-out motion-reduce:animate-none motion-reduce:transition-none'
 
-const waterChip = 'min-h-8 rounded-full bg-water-tint px-3 text-xs font-bold text-water-ink disabled:opacity-60'
+const waterChip = 'min-h-8 rounded-full bg-water-tint px-3 text-xs font-bold text-water-ink hover:bg-water-tint'
 
 // Desktop logging hub (1d): the top bar's Log button opens a popover. The native popover API
 // gives light dismiss and Esc. L toggles it; while open, each item's letter opens it.
 export const LogMenu = () => {
   const menuRef = useRef<HTMLDivElement>(null)
   const navigate = useNavigate()
-  const { status, add, adding } = useTodayWater()
+  const { status, add, adding, addingMl } = useTodayWater()
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -99,12 +100,20 @@ export const LogMenu = () => {
               {status}
             </div>
           </div>
-          <button type="button" className={waterChip} disabled={adding} onClick={() => add(250)}>
-            +250
-          </button>
-          <button type="button" className={waterChip} disabled={adding} onClick={() => add(500)}>
-            +500
-          </button>
+          {[250, 500].map((ml) => (
+            <Button
+              key={ml}
+              variant="soft"
+              size="sm"
+              className={waterChip}
+              loading={addingMl === ml}
+              spinner="only"
+              disabled={adding}
+              onClick={() => add(ml)}
+            >
+              +{ml}
+            </Button>
+          ))}
         </div>
       </div>
     </>

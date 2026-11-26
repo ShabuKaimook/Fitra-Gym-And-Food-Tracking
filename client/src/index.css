@@ -55,6 +55,20 @@
   --animate-spin-45: spin-45 200ms ease-out forwards;
   --animate-bump: bump 400ms ease-in-out;
   --animate-unspin-45: unspin-45 200ms ease-out;
+  /* Spinner: the dumbbell rises and lowers; its floor shadow shrinks as it goes up. */
+  --animate-lift: lift 1s ease-in-out infinite;
+  --animate-lift-shadow: lift-shadow 1s ease-in-out infinite;
+  @keyframes lift {
+    50% {
+      translate: 0 -10px;
+    }
+  }
+  @keyframes lift-shadow {
+    50% {
+      scale: 0.6 1;
+      opacity: 0.4;
+    }
+  }
   @keyframes spin-45 {
     to {
       rotate: 45deg;

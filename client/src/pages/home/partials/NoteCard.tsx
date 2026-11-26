@@ -39,8 +39,8 @@ export const NoteCard = ({ note, saving, onSave }: Props) => {
           <Button variant="outline" size="sm" onClick={() => setText(note)}>
             Discard
           </Button>
-          <Button type="submit" size="sm" disabled={saving}>
-            {saving ? 'Saving…' : 'Save note'}
+          <Button type="submit" size="sm" loading={saving}>
+            {saving ? 'Saving' : 'Save note'}
           </Button>
         </div>
       )}

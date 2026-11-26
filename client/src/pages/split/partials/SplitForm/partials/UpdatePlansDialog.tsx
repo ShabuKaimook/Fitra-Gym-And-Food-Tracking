@@ -30,6 +30,8 @@ export const UpdatePlansDialog = ({ splitName, plans, saving, onSave, onClose }:
   const ref = useRef<HTMLDialogElement>(null)
   const titleId = useId()
   const [picked, setPicked] = useState<string[]>([])
+  // Which button saved, so only that one shows the spinner.
+  const [withPlans, setWithPlans] = useState(false)
   useEffect(() => ref.current?.showModal(), [])
   const close = () => ref.current?.close()
 
@@ -97,11 +99,30 @@ export const UpdatePlansDialog = ({ splitName, plans, saving, onSave, onClose }:
         </fieldset>
 
         <div className="grid grid-cols-2 gap-2">
-          <Button variant="outline" disabled={saving} onClick={() => onSave([])} className="whitespace-normal">
-            Save split only
+          <Button
+            variant="outline"
+            loading={saving && !withPlans}
+            disabled={saving}
+            onClick={() => {
+              setWithPlans(false)
+              onSave([])
+            }}
+            className="whitespace-normal"
+          >
+            {saving && !withPlans ? 'Saving' : 'Save split only'}
           </Button>
-          <Button disabled={saving || picked.length === 0} onClick={() => onSave(picked)} className="whitespace-normal">
-            {saving ? 'Saving…' : `Save and update ${picked.length || ''} plan${picked.length === 1 ? '' : 's'}`}
+          <Button
+            loading={saving && withPlans}
+            disabled={saving || picked.length === 0}
+            onClick={() => {
+              setWithPlans(true)
+              onSave(picked)
+            }}
+            className="whitespace-normal"
+          >
+            {saving && withPlans
+              ? 'Saving'
+              : `Save and update ${picked.length || ''} plan${picked.length === 1 ? '' : 's'}`}
           </Button>
         </div>
       </div>

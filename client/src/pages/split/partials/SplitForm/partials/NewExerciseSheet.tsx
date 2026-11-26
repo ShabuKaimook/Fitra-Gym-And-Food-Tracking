@@ -53,8 +53,8 @@ export const NewExerciseSheet = ({ target, onCreated, onClose }: Props) => {
                 <h2 className="m-0 truncate text-xl font-extrabold tracking-[-0.4px]">New exercise</h2>
                 <p className="m-0 truncate text-xs text-ink-2">Saved to your library and added to {target}</p>
               </div>
-              <Button type="submit" form={FORM_ID} disabled={saving} className="min-h-10">
-                {saving ? 'Saving…' : 'Save'}
+              <Button type="submit" form={FORM_ID} loading={saving} className="min-h-10">
+                {saving ? 'Saving' : 'Save'}
               </Button>
             </header>
           )}

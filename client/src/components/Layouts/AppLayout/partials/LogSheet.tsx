@@ -1,3 +1,4 @@
+import { Button } from '@/components/Button'
 import { FormDialog } from '@/components/FormDialog'
 import { ROUTE_PATHS } from '@/constants/routePaths'
 import { Bike, Droplets, Dumbbell, Footprints, Moon, Scale, Utensils, type LucideIcon } from 'lucide-react'
@@ -31,13 +32,13 @@ const closeSheet = (dialog: HTMLDialogElement | null) => {
 }
 
 const waterBtn = 'min-h-11 rounded-xl text-[13px] font-bold disabled:opacity-60'
-const waterQuick = `${waterBtn} bg-water-tint text-water-ink`
+const waterQuick = 'min-h-11 rounded-xl px-2 text-[13px] font-bold bg-water-tint text-water-ink hover:bg-water-tint'
 const waterPlain = `${waterBtn} border border-line bg-surface-2 text-ink`
 
 // Mobile logging hub (1d): a bottom sheet opened by the centre + button. Native <dialog> gives
 // focus trapping, Esc to close and an inert page behind it.
 export const LogSheet = ({ ref }: { ref: Ref<HTMLDialogElement> }) => {
-  const { status, add, adding } = useTodayWater()
+  const { status, add, adding, addingMl } = useTodayWater()
   const [custom, setCustom] = useState(false)
 
   return (
@@ -85,12 +86,19 @@ export const LogSheet = ({ ref }: { ref: Ref<HTMLDialogElement> }) => {
             </span>
           </div>
           <div className="grid grid-cols-3 gap-2">
-            <button type="button" className={waterQuick} disabled={adding} onClick={() => add(250)}>
-              +250 ml
-            </button>
-            <button type="button" className={waterQuick} disabled={adding} onClick={() => add(500)}>
-              +500 ml
-            </button>
+            {[250, 500].map((ml) => (
+              <Button
+                key={ml}
+                variant="soft"
+                className={waterQuick}
+                loading={addingMl === ml}
+                spinner="only"
+                disabled={adding}
+                onClick={() => add(ml)}
+              >
+                +{ml} ml
+              </Button>
+            ))}
             <button type="button" className={waterPlain} onClick={() => setCustom(true)}>
               Custom
             </button>

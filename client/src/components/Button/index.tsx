@@ -2,6 +2,7 @@ import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from 'cn'
 import type { ComponentProps } from 'react'
 import { Link, type LinkProps } from 'react-router-dom'
+import { Spinner } from '@/components/Spinner'
 
 const buttonVariants = cva(
   'inline-flex flex-none items-center justify-center gap-1.5 font-extrabold whitespace-nowrap disabled:pointer-events-none disabled:opacity-60',
@@ -29,12 +30,37 @@ const buttonVariants = cva(
 )
 
 type Variants = VariantProps<typeof buttonVariants>
+type ButtonProps = ComponentProps<'button'> & {
+  to?: undefined
+  /** Saving or sending: disabled, and shows a spinner (see `spinner`). The label can say "Saving…". */
+  loading?: boolean
+  /** How loading looks. "label" (default): spinner before the label. "only": spinner in place of the
+   * label, keeping the button's width. "none": disabled with no spinner. */
+  spinner?: 'label' | 'only' | 'none'
+}
 // With `to` it's a router Link that looks like a button; without, a <button>.
-type Props = Variants & ((ComponentProps<'button'> & { to?: undefined }) | LinkProps)
+type Props = Variants & (ButtonProps | (LinkProps & { loading?: undefined; spinner?: undefined }))
 
 // The app's button. type defaults to "button" so one inside a form doesn't submit it by accident.
-export const Button = ({ variant, size, className, ...props }: Props) => {
-  const classes = cn(buttonVariants({ variant, size }), className)
+export const Button = ({ variant, size, className, loading, spinner = 'label', ...props }: Props) => {
+  const showSpinner = loading && spinner !== 'none'
+  // Loading keeps full colour, so the spinner doesn't look faded like a disabled button.
+  const classes = cn(buttonVariants({ variant, size }), showSpinner && 'relative disabled:opacity-100', className)
   if (props.to !== undefined) return <Link {...props} className={classes} />
-  return <button type="button" {...props} className={classes} />
+  const { disabled, children, ...rest } = props
+  const icon = <Spinner className="size-[1.4em]" label="" />
+  return (
+    <button type="button" {...rest} disabled={disabled || loading} aria-busy={loading} className={classes}>
+      {showSpinner && spinner === 'label' && icon}
+      {showSpinner && spinner === 'only' ? (
+        <>
+          {/* Hidden but still there: it keeps the width and the name screen readers read. */}
+          <span className="inline-flex items-center gap-1.5 opacity-0">{children}</span>
+          <span className="absolute inset-0 grid place-items-center">{icon}</span>
+        </>
+      ) : (
+        children
+      )}
+    </button>
+  )
 }

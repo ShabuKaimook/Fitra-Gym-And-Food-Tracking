@@ -130,8 +130,8 @@ export const FormPage = ({
           {message}
         </p>
       )}
-      <Button type="submit" size="lg" disabled={pending} className="shadow-[0_8px_24px_-6px_rgba(255,122,26,0.45)]">
-        {pending ? 'Saving…' : submitLabel}
+      <Button type="submit" size="lg" loading={pending} className="shadow-[0_8px_24px_-6px_rgba(255,122,26,0.45)]">
+        {pending ? 'Saving' : submitLabel}
       </Button>
     </div>
   )
