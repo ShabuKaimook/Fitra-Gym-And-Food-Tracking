@@ -1,3 +1,4 @@
+import { Card } from '@/components/Card'
 import { ExerciseThumb } from '@/components/ExerciseThumb'
 import type { Equipment, Muscle, RecordType, WeightUnit } from '@/services/WorkoutService/types/Workout'
 
@@ -21,10 +22,7 @@ export const ExercisePreview = ({ name, muscle, equipment, record, weightUnit, w
   const title = name.trim() || 'Exercise name'
   const columns = record === 'weight-reps' ? [weightUnit, 'reps' as const] : [record]
   return (
-    <aside
-      aria-label="Preview"
-      className="sticky top-20 flex flex-col gap-3 rounded-[20px] border border-line/80 bg-surface-2 p-3.5 max-lg:hidden"
-    >
+    <Card as="aside" tone="muted" aria-label="Preview" className="sticky top-20 flex flex-col gap-3 max-lg:hidden">
       <h2 className="m-0 text-[13px] font-bold text-ink-2">Preview</h2>
 
       <div className="flex flex-col gap-1.5">
@@ -47,9 +45,7 @@ export const ExercisePreview = ({ name, muscle, equipment, record, weightUnit, w
           <div>
             <div className="truncate text-[13px] font-extrabold">{title}</div>
             {record === 'weight-reps' && (
-              <div className="text-xs text-ink-2">
-                Weight unit: {weightUnitLabel.toLowerCase()}
-              </div>
+              <div className="text-xs text-ink-2">Weight unit: {weightUnitLabel.toLowerCase()}</div>
             )}
           </div>
           <table className="w-full border-collapse text-xs tabular-nums">
@@ -78,6 +74,6 @@ export const ExercisePreview = ({ name, muscle, equipment, record, weightUnit, w
           </table>
         </div>
       </div>
-    </aside>
+    </Card>
   )
 }

@@ -1,7 +1,8 @@
+import { Card } from '@/components/Card'
 import { Button } from '@/components/Button'
 import { ProgressBar } from '@/components/ProgressBar'
 import type { TrainingPlan } from '@/services/WorkoutService/types/Workout'
-import { card, cardSurface, muted } from '@/pages/home/partials/ui'
+import { muted } from '@/pages/home/partials/ui'
 import { tag } from './ui'
 
 // The active plan (1e) and how far through it you are. Mobile: stacked. Desktop: one row.
@@ -9,18 +10,22 @@ import { tag } from './ui'
 export const PlanCard = ({ plan }: { plan: TrainingPlan | null }) => {
   if (!plan) {
     return (
-      <section className={`${card} ${cardSurface} lg:flex-row lg:items-center`}>
+      <Card as="section" className="flex min-w-0 flex-col gap-2 lg:flex-row lg:items-center">
         <p className={`${muted} m-0 flex-1`}>No active plan. A plan runs a split for a set number of weeks.</p>
         <Button variant="soft" size="sm" className="self-start">
           Create plan
         </Button>
-      </section>
+      </Card>
     )
   }
 
   const progress = `Week ${plan.currentWeek} of ${plan.weeks}`
   return (
-    <section aria-label="Active plan" className={`${card} ${cardSurface} lg:flex-row lg:items-center lg:gap-4 lg:px-5`}>
+    <Card
+      as="section"
+      aria-label="Active plan"
+      className="flex min-w-0 flex-col gap-2 lg:flex-row lg:items-center lg:gap-4 lg:px-5"
+    >
       <div className="flex items-center justify-between">
         <span className={`${tag} bg-activity-tint text-activity-ink`}>Active plan</span>
         <Button variant="ghost" size="sm" className="px-1 text-ink-2 hover:bg-transparent hover:text-ink lg:hidden">
@@ -40,6 +45,6 @@ export const PlanCard = ({ plan }: { plan: TrainingPlan | null }) => {
       <Button variant="outline" size="sm" className="ml-auto max-lg:hidden">
         Edit plan
       </Button>
-    </section>
+    </Card>
   )
 }

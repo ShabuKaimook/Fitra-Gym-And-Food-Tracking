@@ -1,3 +1,4 @@
+import { Card } from '@/components/Card'
 import { ToggleChip } from '@/components/ToggleChip'
 import { Button } from '@/components/Button'
 import { inputBase } from '@/components/Form'
@@ -89,9 +90,10 @@ export const ExercisePicker = ({ target, exercises = [], inDay, onAdd, onCustom,
       </div>
 
       {/* data-scroll-area: the one place that scrolls while the mobile sheet locks the page. */}
-      <ul
+      <Card
+        as="ul"
         data-scroll-area
-        className="m-0 min-h-0 flex-1 list-none overflow-y-auto overscroll-contain rounded-[20px] border border-line/80 bg-surface px-3.5 py-1"
+        className="m-0 min-h-0 flex-1 list-none overflow-y-auto overscroll-contain px-3.5 py-1"
       >
         {shown.length === 0 && <li className="py-4 text-center text-[13px] text-ink-2">No exercises match</li>}
         {shown.map((e) => {
@@ -124,7 +126,7 @@ export const ExercisePicker = ({ target, exercises = [], inDay, onAdd, onCustom,
             </li>
           )
         })}
-      </ul>
+      </Card>
 
       <div className="flex items-center gap-3">
         <span className="text-[13px] text-ink-2 tabular-nums" aria-live="polite">

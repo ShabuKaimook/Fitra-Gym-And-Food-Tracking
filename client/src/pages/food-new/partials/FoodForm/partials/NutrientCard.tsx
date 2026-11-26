@@ -1,3 +1,4 @@
+import { Card } from '@/components/Card'
 import { capAtMax, numbersOnly } from '@/utils/numbersOnly'
 import type { InputHTMLAttributes, ReactNode } from 'react'
 
@@ -12,7 +13,7 @@ type Props = {
 // A card that is one number input: icon + label, then a big value and its unit. The whole card
 // shows focus (ring) and errors (red border), so the input itself has no outline.
 export const NutrientCard = ({ icon, label, unit, action, ...inputProps }: Props) => (
-  <div className="flex min-w-0 items-start gap-2 rounded-[20px] border border-line/80 bg-surface p-3.5 focus-within:ring-2 focus-within:ring-primary has-user-invalid:border-danger">
+  <Card className="flex min-w-0 items-start gap-2 focus-within:ring-2 focus-within:ring-primary has-user-invalid:border-danger">
     <label className="flex min-w-0 flex-1 flex-col gap-1">
       <span className="flex items-center gap-1.5 text-[13px] font-semibold text-ink-2">
         {icon}
@@ -33,5 +34,5 @@ export const NutrientCard = ({ icon, label, unit, action, ...inputProps }: Props
       </span>
     </label>
     {action}
-  </div>
+  </Card>
 )

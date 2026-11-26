@@ -1,8 +1,9 @@
+import { Card } from '@/components/Card'
 import { IconButton } from '@/components/IconButton'
 import { Button } from '@/components/Button'
 import { SquarePen, Plus, type LucideIcon } from 'lucide-react'
 import { ProgressBar } from '@/components/ProgressBar'
-import { card, cardSurface, muted } from './ui'
+import { muted } from './ui'
 
 type Tone = 'activity' | 'water' | 'sleep'
 
@@ -46,7 +47,7 @@ export const StatTile = ({
   const iconClass = tone && !empty ? ICON_TONE[tone] : 'bg-surface text-ink-2'
 
   return (
-    <section className={`${card} ${empty ? 'border-dashed border-ink-3 bg-surface-2' : cardSurface} ${className}`}>
+    <Card as="section" tone={empty ? 'dashed' : 'default'} className={`flex min-w-0 flex-col gap-2 ${className}`}>
       <h2 className="m-0 flex items-center gap-2 text-[13px] font-bold">
         <span className={`grid size-7.5 flex-none place-items-center rounded-[10px] ${iconClass}`}>
           <Icon size={15} aria-hidden />
@@ -83,6 +84,6 @@ export const StatTile = ({
           {progress && <ProgressBar {...progress} color={`var(--color-${tone ?? 'primary'})`} />}
         </>
       )}
-    </section>
+    </Card>
   )
 }

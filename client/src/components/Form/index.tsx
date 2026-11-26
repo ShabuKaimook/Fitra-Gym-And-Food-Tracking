@@ -13,9 +13,6 @@ export const inputBase =
   'min-h-11 w-full min-w-0 rounded-[14px] border border-line bg-surface-2 px-3 text-ink tabular-nums placeholder:text-ink-3 focus-visible:outline-2 focus-visible:outline-offset-0 user-invalid:border-2 user-invalid:border-danger'
 export const input = `${inputBase} text-base`
 
-// A white card grouping related fields.
-export const formCard = 'flex flex-col gap-3 rounded-[20px] border border-line/80 bg-surface p-4'
-
 type FieldProps = {
   label: ReactNode
   unit?: string

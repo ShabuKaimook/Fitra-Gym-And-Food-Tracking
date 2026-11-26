@@ -1,7 +1,8 @@
+import { Card } from '@/components/Card'
 import type { Micronutrient } from '@/services/FoodService/types/Food'
 import { ChevronDown, ListChecks } from 'lucide-react'
 import { useState } from 'react'
-import { card, cardLabel, cardSurface, muted } from './ui'
+import { cardLabel, muted } from './ui'
 
 type Props = { micros: Micronutrient[] }
 
@@ -28,9 +29,10 @@ export const MicronutrientsCard = ({ micros }: Props) => {
   const collapsed = canExpand && !expanded
 
   return (
-    <section
+    <Card
+      as="section"
       // lg:h-0 + min-h-full: the card fills its row but doesn't grow it, so the list scrolls instead.
-      className={`${card} ${cardSurface} [grid-area:micro] lg:h-0 lg:min-h-full lg:px-4.5 lg:[grid-area:auto]`}
+      className="flex min-w-0 flex-col gap-2 [grid-area:micro] lg:h-0 lg:min-h-full lg:px-4.5 lg:[grid-area:auto]"
       aria-labelledby="micros-title"
     >
       <h2 id="micros-title" className={cardLabel}>
@@ -67,6 +69,6 @@ export const MicronutrientsCard = ({ micros }: Props) => {
           />
         </button>
       )}
-    </section>
+    </Card>
   )
 }

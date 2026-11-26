@@ -1,3 +1,4 @@
+import { Card } from '@/components/Card'
 import { IconButton } from '@/components/IconButton'
 import { inputBase } from '@/components/Form'
 import type { Exercise, SplitDay } from '@/services/WorkoutService/types/Workout'
@@ -62,7 +63,7 @@ export const DayEditor = ({
         )}
       </ScrollRail>
 
-      <div className="flex flex-col rounded-[20px] border border-line/80 bg-surface px-3.5 py-1">
+      <Card className="flex flex-col px-3.5 py-1">
         <div className="flex flex-col gap-1.5 border-b border-line-soft py-2.5">
           <div className="flex items-center justify-between">
             <label htmlFor={nameId} className="text-[13px] font-bold text-ink-2">
@@ -111,7 +112,7 @@ export const DayEditor = ({
             })}
           </ul>
         )}
-      </div>
+      </Card>
 
       <button
         type="button"

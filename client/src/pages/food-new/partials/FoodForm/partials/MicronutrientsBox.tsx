@@ -1,3 +1,4 @@
+import { Card } from '@/components/Card'
 import { IconButton } from '@/components/IconButton'
 import { Select, SelectContent, SelectItem, SelectTrigger } from '@/components/ui/select'
 import { MICROS } from '@/constants/nutrients'
@@ -36,10 +37,7 @@ export const MicronutrientsBox = ({ values, onChange }: Props) => {
   }
 
   return (
-    <section
-      aria-labelledby={`${idPrefix}-title`}
-      className="flex flex-col rounded-[20px] border border-line/80 bg-surface px-3.5 pt-3 pb-1.5"
-    >
+    <Card as="section" aria-labelledby={`${idPrefix}-title`} className="flex flex-col px-3.5 pt-3 pb-1.5">
       <h3 id={`${idPrefix}-title`} className="m-0 flex items-center gap-1.5 pb-1 text-[13px] font-semibold text-ink-2">
         <ListChecks size={15} aria-hidden />
         Micronutrients
@@ -106,6 +104,6 @@ export const MicronutrientsBox = ({ values, onChange }: Props) => {
           </SelectContent>
         </Select>
       )}
-    </section>
+    </Card>
   )
 }

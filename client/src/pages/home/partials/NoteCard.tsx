@@ -1,7 +1,8 @@
+import { Card } from '@/components/Card'
 import { Button } from '@/components/Button'
 import { NotebookPen } from 'lucide-react'
 import { useId, useState } from 'react'
-import { card, cardLabel, cardSurface } from './ui'
+import { cardLabel } from './ui'
 
 type Props = { note: string; saving: boolean; onSave: (note: string) => void }
 
@@ -14,8 +15,9 @@ export const NoteCard = ({ note, saving, onSave }: Props) => {
   const changed = text.trim() !== note
 
   return (
-    <form
-      className={`${card} ${cardSurface} [grid-area:note] lg:[grid-area:auto] lg:first:[grid-column:1/-1]`}
+    <Card
+      as="form"
+      className="flex min-w-0 flex-col gap-2 [grid-area:note] lg:[grid-area:auto] lg:first:[grid-column:1/-1]"
       onSubmit={(e) => {
         e.preventDefault()
         onSave(text.trim())
@@ -44,6 +46,6 @@ export const NoteCard = ({ note, saving, onSave }: Props) => {
           </Button>
         </div>
       )}
-    </form>
+    </Card>
   )
 }

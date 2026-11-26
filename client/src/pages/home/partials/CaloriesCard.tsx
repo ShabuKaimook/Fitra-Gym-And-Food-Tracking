@@ -1,17 +1,19 @@
+import { Card } from '@/components/Card'
 import type { Macros } from '@/hooks/queries/useMacros'
 import { MACROS } from '@/constants/nutrients'
 import { Flame } from 'lucide-react'
 import { ProgressBar } from '@/components/ProgressBar'
 import { ProgressRing } from '@/components/ProgressRing'
-import { card, cardLabel, cardSurface, muted } from './ui'
+import { cardLabel, muted } from './ui'
 
 /** null = nothing logged that day. */
 type Props = { calories: { eaten: number; target: number } | null; macros: Macros | null }
 
 export const CaloriesCard = ({ calories, macros }: Props) => {
   return (
-    <section
-      className={`${card} ${cardSurface} [grid-area:cal] lg:px-5.5 lg:py-4.5 lg:[grid-area:auto]`}
+    <Card
+      as="section"
+      className="flex min-w-0 flex-col gap-2 [grid-area:cal] lg:px-5.5 lg:py-4.5 lg:[grid-area:auto]"
       aria-labelledby="calories-title"
     >
       <h2 id="calories-title" className={cardLabel}>
@@ -65,6 +67,6 @@ export const CaloriesCard = ({ calories, macros }: Props) => {
           })}
         </div>
       </div>
-    </section>
+    </Card>
   )
 }

@@ -1,3 +1,4 @@
+import { Card } from '@/components/Card'
 import { EditorHeader } from '@/components/EditorHeader'
 import { ROUTE_PATHS } from '@/constants/routePaths'
 import { useExercises } from '@/hooks/queries/useGym'
@@ -73,10 +74,10 @@ export const SplitForm = ({ split }: { split?: Split }) => {
           />
         </form>
 
-        <aside className="sticky top-20 flex h-[calc(100dvh-9.5rem)] flex-col rounded-[20px] border border-line/80 bg-surface-2 p-3.5 max-lg:hidden">
+        <Card as="aside" tone="muted" className="sticky top-20 flex h-[calc(100dvh-9.5rem)] flex-col max-lg:hidden">
           {/* key: a fresh picker (no ticks left over) for each day. */}
           <ExercisePicker key={f.selected} {...picker} />
-        </aside>
+        </Card>
       </div>
 
       {picking && <PickerSheet {...picker} onClose={() => setPicking(false)} />}

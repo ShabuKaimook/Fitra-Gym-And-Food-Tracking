@@ -1,3 +1,4 @@
+import { Card } from '@/components/Card'
 import { Skeleton } from '@/components/Skeleton'
 import type { Food } from '@/services/FoodService/types/Food'
 import { MACROS } from '@/constants/nutrients'
@@ -18,7 +19,7 @@ type Props = {
 // Search results (1j): picture, name, "kcal · basis", then protein / carbs / fat.
 // Tapping the row opens the food's form (amount, edits); + adds one default serving.
 export const FoodList = ({ foods, emptyText, foodUrl, onQuickAdd, adding }: Props) => (
-  <div className="flex min-h-0 flex-1 flex-col rounded-[20px] border border-line/80 bg-surface p-1.5">
+  <Card className="flex min-h-0 flex-1 flex-col p-1.5">
     {!foods ? (
       <div className="flex flex-col gap-1.5 p-1">
         {[0, 1, 2].map((i) => (
@@ -75,7 +76,7 @@ export const FoodList = ({ foods, emptyText, foodUrl, onQuickAdd, adding }: Prop
         ))}
       </ul>
     )}
-  </div>
+  </Card>
 )
 
 // Phase lengths match spin-45, bump and unspin-45 in index.css. Timers, not animationend, so reduced motion
