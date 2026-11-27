@@ -3,7 +3,7 @@ import { Button } from '@/components/Button'
 import { ExerciseForm } from '@/components/ExerciseForm'
 import type { Exercise } from '@/services/WorkoutService/types/Workout'
 import { X } from 'lucide-react'
-import { useEffect, useRef } from 'react'
+import { Sheet } from '@/components/Sheet'
 
 const FORM_ID = 'new-exercise-form'
 
@@ -16,19 +16,10 @@ type Props = {
 
 // The new exercise form (1n) over the split builder, so the split being built isn't lost. Full screen on
 // phones, a large dialog on desktop. Mount it only while open: it opens on mount.
-export const NewExerciseSheet = ({ target, onCreated, onClose }: Props) => {
-  const ref = useRef<HTMLDialogElement>(null)
-  useEffect(() => ref.current?.showModal(), [])
-  const close = () => ref.current?.close()
-
-  return (
-    <dialog
-      ref={ref}
-      aria-label="New exercise"
-      onClose={onClose}
-      className="m-0 h-dvh max-h-none w-full max-w-none bg-canvas p-0 text-ink backdrop:bg-ink/40 lg:m-auto lg:h-[90dvh] lg:max-w-5xl lg:rounded-[26px]"
-    >
-      {/* data-scroll-area: the one place that scrolls while the sheet locks the page. */}
+export const NewExerciseSheet = ({ target, onCreated, onClose }: Props) => (
+  <Sheet label="New exercise" onClose={onClose} className="lg:m-auto lg:h-[90dvh] lg:max-w-5xl lg:rounded-[26px]">
+    {(close) => (
+      // data-scroll-area: the one place that scrolls while the sheet locks the page.
       <div
         data-scroll-area
         className="h-full overflow-y-auto overscroll-contain px-4 pb-[calc(16px+env(safe-area-inset-bottom))] lg:px-6 lg:pb-6"
@@ -56,6 +47,6 @@ export const NewExerciseSheet = ({ target, onCreated, onClose }: Props) => {
           )}
         />
       </div>
-    </dialog>
-  )
-}
+    )}
+  </Sheet>
+)
