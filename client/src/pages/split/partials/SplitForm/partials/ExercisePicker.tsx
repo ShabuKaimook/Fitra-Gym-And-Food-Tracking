@@ -1,3 +1,4 @@
+import { Badge } from '@/components/Badge'
 import { ExerciseThumb } from '@/components/ExerciseThumb'
 import { ListItem } from '@/components/ListItem'
 import { Card } from '@/components/Card'
@@ -97,13 +98,7 @@ export const ExercisePicker = ({ target, exercises = [], inDay, onAdd, onCustom,
                 title={e.name}
                 subtitle={`${e.muscle}, ${e.equipment.toLowerCase()}`}
                 className={already ? 'opacity-60' : 'cursor-pointer'}
-                badge={
-                  already && (
-                    <span className="flex-none rounded-full bg-surface-2 px-1.5 py-0.5 text-[10px] font-bold text-ink-2">
-                      In day
-                    </span>
-                  )
-                }
+                badge={already && <Badge>In day</Badge>}
                 end={
                   <input
                     type="checkbox"

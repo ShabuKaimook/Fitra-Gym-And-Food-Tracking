@@ -1,9 +1,9 @@
+import { Badge } from '@/components/Badge'
 import { Card } from '@/components/Card'
 import { Button } from '@/components/Button'
 import { ProgressBar } from '@/components/ProgressBar'
 import type { TrainingPlan } from '@/services/WorkoutService/types/Workout'
 import { muted } from '@/pages/home/partials/ui'
-import { tag } from './ui'
 
 // The active plan (1e) and how far through it you are. Mobile: stacked. Desktop: one row.
 // plan null = no plan yet.
@@ -27,7 +27,7 @@ export const PlanCard = ({ plan }: { plan: TrainingPlan | null }) => {
       className="flex min-w-0 flex-col gap-2 lg:flex-row lg:items-center lg:gap-4 lg:px-5"
     >
       <div className="flex items-center justify-between">
-        <span className={`${tag} bg-activity-tint text-activity-ink`}>Active plan</span>
+        <Badge tone="activity">Active plan</Badge>
         <Button variant="ghost" size="sm" className="px-1 text-ink-2 hover:bg-transparent hover:text-ink lg:hidden">
           Edit<span className="sr-only"> plan</span>
         </Button>

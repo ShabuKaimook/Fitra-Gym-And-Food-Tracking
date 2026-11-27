@@ -1,9 +1,9 @@
+import { Badge } from '@/components/Badge'
 import type { Split } from '@/services/WorkoutService/types/Workout'
 import { ScrollRail } from '@/components/ScrollRail'
 import { splitEditPath } from '@/constants/routePaths'
 import { Link } from 'react-router-dom'
 import { WEEKDAYS } from '@/utils/date'
-import { tag } from './ui'
 
 // The splits as cards in a row that scrolls sideways (1e); the next card peeks in so it's clear there's more.
 export const SplitsRail = ({ splits }: { splits: Split[] }) => (
@@ -32,11 +32,9 @@ const SplitCard = ({ split }: { split: Split }) => {
       to={splitEditPath(split.id)}
       className="flex h-24 w-33 flex-col justify-between rounded-[18px] border border-line/80 bg-surface p-3 text-left hover:border-primary-100 lg:h-26 lg:w-46.5 lg:p-3.5"
     >
-      <span
-        className={`${tag} ${split.kind === 'custom' ? 'bg-primary-50 text-primary-ink' : 'bg-surface-2 text-ink-2'}`}
-      >
+      <Badge tone={split.kind === 'custom' ? 'primary' : 'neutral'}>
         {split.kind === 'custom' ? 'Custom' : 'Built-in'}
-      </span>
+      </Badge>
       <span className="flex flex-col gap-0.5">
         <span className="truncate text-sm font-extrabold">{split.name}</span>
         <span className="text-xs text-ink-2">

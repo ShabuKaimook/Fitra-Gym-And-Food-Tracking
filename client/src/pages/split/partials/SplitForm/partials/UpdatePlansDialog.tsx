@@ -1,3 +1,4 @@
+import { Badge } from '@/components/Badge'
 import { ListItem } from '@/components/ListItem'
 import { Button } from '@/components/Button'
 import type { TrainingPlan } from '@/services/WorkoutService/types/Workout'
@@ -57,13 +58,7 @@ export const UpdatePlansDialog = ({ splitName, plans, saving, onSave, onClose }:
                 />
               }
               title={p.name}
-              badge={
-                p.status === 'active' && (
-                  <span className="flex-none rounded-full bg-activity-tint px-1.5 py-0.5 text-[10px] font-bold text-activity-ink">
-                    Active
-                  </span>
-                )
-              }
+              badge={p.status === 'active' && <Badge tone="activity">Active</Badge>}
               subtitle={effect(p)}
             />
           )
