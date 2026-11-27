@@ -1,3 +1,5 @@
+import { ExerciseThumb } from '@/components/ExerciseThumb'
+import { ListItem } from '@/components/ListItem'
 import { Card } from '@/components/Card'
 import { ToggleChip } from '@/components/ToggleChip'
 import { Button } from '@/components/Button'
@@ -6,7 +8,6 @@ import { useExerciseOptions } from '@/hooks/queries/useGym'
 import type { Equipment, Exercise, Muscle } from '@/services/WorkoutService/types/Workout'
 import { Plus, Star } from 'lucide-react'
 import { useState, type ReactNode } from 'react'
-import { ExerciseThumb } from '@/components/ExerciseThumb'
 
 type Props = {
   /** "Mon, Upper" */
@@ -90,29 +91,29 @@ export const ExercisePicker = ({ target, exercises = [], inDay, onAdd, onCustom,
           const already = inDay.includes(e.id)
           return (
             <li key={e.id} className="border-b border-line-soft last:border-b-0">
-              <label className={`flex items-center gap-3 py-2.5 ${already ? 'opacity-60' : 'cursor-pointer'}`}>
-                <ExerciseThumb src={e.photo} />
-                <span className="flex min-w-0 flex-1 flex-col">
-                  <span className="flex items-center gap-1.5 text-[13px] font-extrabold">
-                    <span className="truncate">{e.name}</span>
-                    {already && (
-                      <span className="flex-none rounded-full bg-surface-2 px-1.5 py-0.5 text-[10px] font-bold text-ink-2">
-                        In day
-                      </span>
-                    )}
-                  </span>
-                  <span className="text-xs text-ink-2">
-                    {e.muscle}, {e.equipment.toLowerCase()}
-                  </span>
-                </span>
-                <input
-                  type="checkbox"
-                  className="size-5 flex-none accent-primary"
-                  disabled={already}
-                  checked={already || picked.includes(e.id)}
-                  onChange={() => setPicked((p) => toggle(p, e.id))}
-                />
-              </label>
+              <ListItem
+                as="label"
+                start={<ExerciseThumb src={e.photo} />}
+                title={e.name}
+                subtitle={`${e.muscle}, ${e.equipment.toLowerCase()}`}
+                className={already ? 'opacity-60' : 'cursor-pointer'}
+                badge={
+                  already && (
+                    <span className="flex-none rounded-full bg-surface-2 px-1.5 py-0.5 text-[10px] font-bold text-ink-2">
+                      In day
+                    </span>
+                  )
+                }
+                end={
+                  <input
+                    type="checkbox"
+                    className="size-5 flex-none accent-primary"
+                    disabled={already}
+                    checked={already || picked.includes(e.id)}
+                    onChange={() => setPicked((p) => toggle(p, e.id))}
+                  />
+                }
+              />
             </li>
           )
         })}

@@ -1,3 +1,4 @@
+import { ListItem } from '@/components/ListItem'
 import { Button } from '@/components/Button'
 import type { TrainingPlan } from '@/services/WorkoutService/types/Workout'
 import { Dialog } from '@/components/Dialog'
@@ -42,29 +43,29 @@ export const UpdatePlansDialog = ({ splitName, plans, saving, onSave, onClose }:
         {plans.map((p) => {
           const can = canUpdate(p)
           return (
-            <label
+            <ListItem
               key={p.id}
-              className={`flex min-h-14 items-center gap-3 border-b border-line-soft py-2 last:border-b-0 ${can ? 'cursor-pointer' : 'opacity-60'}`}
-            >
-              <input
-                type="checkbox"
-                className="size-5 flex-none accent-primary"
-                disabled={!can}
-                checked={picked.includes(p.id)}
-                onChange={() => setPicked((ps) => (ps.includes(p.id) ? ps.filter((x) => x !== p.id) : [...ps, p.id]))}
-              />
-              <span className="flex min-w-0 flex-1 flex-col">
-                <span className="flex items-center gap-1.5 text-sm font-extrabold">
-                  <span className="truncate">{p.name}</span>
-                  {p.status === 'active' && (
-                    <span className="flex-none rounded-full bg-activity-tint px-1.5 py-0.5 text-[10px] font-bold text-activity-ink">
-                      Active
-                    </span>
-                  )}
-                </span>
-                <span className="text-xs text-ink-2">{effect(p)}</span>
-              </span>
-            </label>
+              as="label"
+              className={`min-h-14 border-b border-line-soft last:border-b-0 ${can ? 'cursor-pointer' : 'opacity-60'}`}
+              start={
+                <input
+                  type="checkbox"
+                  className="size-5 flex-none accent-primary"
+                  disabled={!can}
+                  checked={picked.includes(p.id)}
+                  onChange={() => setPicked((ps) => (ps.includes(p.id) ? ps.filter((x) => x !== p.id) : [...ps, p.id]))}
+                />
+              }
+              title={p.name}
+              badge={
+                p.status === 'active' && (
+                  <span className="flex-none rounded-full bg-activity-tint px-1.5 py-0.5 text-[10px] font-bold text-activity-ink">
+                    Active
+                  </span>
+                )
+              }
+              subtitle={effect(p)}
+            />
           )
         })}
       </fieldset>

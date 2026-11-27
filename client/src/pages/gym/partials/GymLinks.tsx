@@ -1,3 +1,4 @@
+import { ListItem } from '@/components/ListItem'
 import type { WorkoutSession } from '@/services/WorkoutService/types/Workout'
 import { ChevronRight, History, LayoutList, Library, type LucideIcon } from 'lucide-react'
 
@@ -37,17 +38,18 @@ export const GymLinks = ({ templates, lastSession }: Props) => (
 type RowProps = { icon: LucideIcon; title: string; detail: string; className?: string }
 
 const LinkRow = ({ icon: Icon, title, detail, className = '' }: RowProps) => (
-  <button
+  <ListItem
+    as="button"
     type="button"
-    className={`flex min-h-16 items-center gap-3 rounded-[18px] border border-line/80 bg-surface px-3.5 py-3 text-left hover:bg-surface-2 ${className}`}
-  >
-    <span className="grid size-9 flex-none place-items-center rounded-xl bg-primary-50 text-primary-ink">
-      <Icon size={17} aria-hidden />
-    </span>
-    <span className="flex min-w-0 flex-1 flex-col gap-0.5">
-      <span className="text-sm font-extrabold">{title}</span>
-      <span className="min-h-4.5 truncate text-[13px] text-ink-2">{detail}</span>
-    </span>
-    <ChevronRight size={18} className="flex-none text-ink-3" aria-hidden />
-  </button>
+    variant="card"
+    className={`hover:bg-surface-2 ${className}`}
+    start={
+      <span className="grid size-9 flex-none place-items-center rounded-xl bg-primary-50 text-primary-ink">
+        <Icon size={17} aria-hidden />
+      </span>
+    }
+    title={title}
+    subtitle={detail}
+    end={<ChevronRight size={18} className="flex-none text-ink-3" aria-hidden />}
+  />
 )

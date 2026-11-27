@@ -1,3 +1,5 @@
+import { ExerciseThumb } from '@/components/ExerciseThumb'
+import { ListItem } from '@/components/ListItem'
 import { Card } from '@/components/Card'
 import { IconButton } from '@/components/IconButton'
 import { inputBase } from '@/components/Form'
@@ -8,7 +10,6 @@ import { Copy, Plus, X } from 'lucide-react'
 import { useId, useState } from 'react'
 import { dayLabel } from '@/pages/split/split'
 import { CopyDayDialog } from './CopyDayDialog'
-import { ExerciseThumb } from '@/components/ExerciseThumb'
 
 type Props = {
   days: (SplitDay | null)[]
@@ -94,20 +95,20 @@ export const DayEditor = ({
             {day.exerciseIds.map((id) => {
               const ex = exercises.get(id)
               return (
-                <li key={id} className="flex items-center gap-3 border-b border-line-soft py-2.5 last:border-b-0">
-                  <ExerciseThumb src={ex?.photo} />
-                  <span className="flex min-w-0 flex-1 flex-col">
-                    <span className="truncate text-[13px] font-extrabold">{ex?.name ?? id}</span>
-                    {ex && (
-                      <span className="text-xs text-ink-2">
-                        {ex.muscle}, {ex.equipment.toLowerCase()}
-                      </span>
-                    )}
-                  </span>
-                  <IconButton label={`Remove ${ex?.name ?? id}`} tone="muted" onClick={() => onRemove(id)}>
-                    <X size={16} aria-hidden />
-                  </IconButton>
-                </li>
+                <ListItem
+                  key={id}
+                  as="li"
+                  start={<ExerciseThumb src={ex?.photo} />}
+                  // Not loaded yet (or deleted): show the id rather than nothing.
+                  title={ex?.name ?? id}
+                  subtitle={ex && `${ex.muscle}, ${ex.equipment.toLowerCase()}`}
+                  className="border-b border-line-soft last:border-b-0"
+                  end={
+                    <IconButton label={`Remove ${ex?.name ?? id}`} tone="muted" onClick={() => onRemove(id)}>
+                      <X size={16} aria-hidden />
+                    </IconButton>
+                  }
+                />
               )
             })}
           </ul>
